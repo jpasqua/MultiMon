@@ -141,27 +141,26 @@ Once you have connected to *MultiMon* with your browser, you'll need to configur
 <a name="configuring-multimon"></a>
 ## Configuring MultiMon
 
-Once connected, you can use the web interface to configure and change settings regarding your printers, how information is displayed, the weather configuration, and more. You get to the settings by selecting an item from the hamburger menu in the top left of the web page. The image in the [Home Page](#home-page) section illustrates the overall structure of all of the pages. Before getting to settings that are specific to MultiMon, you need to configure some general information for your web-connected device including a username / password. You do this using the [General Settings](#general-settings) menu item.
+Once connected, you can use the web interface to configure and change settings regarding your printers, how information is displayed, the weather configuration, and more. You get to the settings by selecting an item from the [hamburger menu](https://en.wikipedia.org/wiki/Hamburger_button) in the top left of the web page. The image in the [Home Page](#home-page) section illustrates the overall structure of all of the pages. Before getting to settings that are specific to MultiMon, you need to configure some general information for your web-connected device including a username / password. You do this using the [General Settings](#general-settings) menu item.
 
 **Note**: If you have mounted your display in an enclosure in a way that is upside-down relative to the default configuration, you're image will be upside down until you get around to the [Configure Display](#configure-display) menu. This isn't a problem since the configuration will be happening in the Web UI, not on the display, but if it bothers you, you can skip to that step to flip the display orientation and then come back here.
 
 <a name="general-settings"></a>
 ![](doc/images/GeneralSettings.png)  
-These settings are common to many network connected devices and are encapsulated by the [*WebThing*](https://github.com/jpasqua/WebThing) library. The settings you must configure are listed below in the order you will want to enter them on a new device. This differs from how they are laid out on the page. In general, once you have entered the General Settings once, you won't need to change them again. When you are setting up your device for the first time, you will need to enter some of the settings, save, and reboot before you can enter the rest.
+These settings are common to many network connected devices and are encapsulated by the [*WebThing*](https://github.com/jpasqua/WebThing) library. The settings you must configure are listed below in the order you will want to enter them on a new device. In general, once you have entered the General Settings once, you won't need to change them again. When you are setting up your device for the first time, you will need to enter some of the settings, save, and reboot before you can enter the rest. In particular, you'll need to enter the API keys before you can geolocate your address.
 
 * API Keys: You need these keys to be entered in order to use the location options below and to have the time set.
 	* [Google Maps](https://developers.google.com/maps/documentation/javascript/get-api-key): Fill in the api key you acquired from for the Google Maps service
 	* [TimeZoneDB](https://timezonedb.com/api): Fill in the api key you acquired from for the TimezoneDB service. Note: NTP is perhaps a more natural choice for a time service, but it does not incorporate a mechanism for time zone determination. TimeZoneDB allows WebThing to get the time, time zone, and local time without need for another mechanism. **Note** that these keys will not be active until after you have saved them and rebooted the device.
 * Username / Password: The username / password you'll use when you connect to *MultiMon*. This is not the same as any username/password you use to log into your printers. It defaults to admin/password. ***You should change these*** the first time you configure *MultiMon*.
-* Location Settings: For *MultiMon* the location settings are used to determine the proper time zone. The city for which weather is shown may be anywhere and is not required to be the same location as you enter here.
-	* Latitude, Longitude, Elevation: These are the values that are used to determine your time zone (for this purpose elevation is not important).
-	* Address / Geocode: Since you probably don't know your lat/lon and elevation, enter an address in the Address field and press the Geocode button. Assuming you have already saved your Google Maps API key, the address will be translated to lat/lon and elevation.
 * Web Server Settings:
 	* Hostname: A network name for your *MultiMon* device. If you configure a name such as `MyMonitor`, then you can access your device from a browser using the address `http://MyMonitor.local` rather than using the IP address. This only works on systems that have support for mDNS. This is native on Macs but can be added to Linux and Windows with software such as [Avahi](https://github.com/lathiat/avahi).
 	* Port: The port that *multiMon* will listen on. Usually 80 unless you've got a good reason.
-	* Theme Color: Choose a theme for the Web UI that suits your style. The themes are all from the [W3.CSS](https://www.w3schools.com/w3css/w3css_color_themes.asp) set.
-* Other
-	* Indicator LED: Ignore this section. The Indicator LED functionality is not used by *MultiMon*.
+* Location Settings: For *MultiMon* the location settings are used to determine the proper time zone. The city for which weather is shown may be anywhere and is not required to be the same location as you enter here.
+	* Latitude, Longitude, Elevation: In *MultiMon*, these are only used to determine your time zone (for this purpose elevation is not important).
+	* Address / Geocode: Since you probably don't know your lat/lon and elevation, enter an address in the Address field and press the Geocode button. Assuming you have already saved your Google Maps API key, the address will be translated to lat/lon and elevation. If you prefer not to create a Google Maps key, you can find your lat/lon manually as [described here](https://support.google.com/maps/answer/18539?co=GENIE.Platform%3DDesktop&hl=en).
+* Theme Color: Choose a theme for the Web UI that suits your style. The themes are all from the [W3.CSS](https://www.w3schools.com/w3css/w3css_color_themes.asp) set.
+* Indicator LED: Ignore this section. The Indicator LED functionality is not used by *MultiMon*.
 
 <a name="configure-printers"></a>
 ![](doc/images/ConfigurePrinters.png)  
