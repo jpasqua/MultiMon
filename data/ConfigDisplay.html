@@ -1,0 +1,43 @@
+<script>
+  function activate(controller, controlled) {
+    var isActiveElement = document.getElementsByName(controller)[0];
+    if (isActiveElement.checked) showHide(controlled);
+  }
+
+  function showHide(elementID) {
+  var x = document.getElementById(elementID);
+  if (x.style.display === "none") { x.style.display = "block"; } else { x.style.display = "none"; }
+  }
+
+  function alertRecalibrate() {
+    alert('Remember to recalibrate the screen.\\nTo do so, long-press while on the Info Screen.');
+  }
+</script>
+
+
+<form class='w3-container' action='/updateDisplayConfig' method='get'>
+  <h2>Display Options</h2>
+
+  <p><input name='scheduleEnabled' class='w3-check' type='checkbox' onclick='showHide("schedules")' %SCHED_ENABLED% checked> Enable schedules</p>
+    <div id="schedules" style='display:none'>
+      <p>
+        <label>Morning begins at: </label><input type='time' name='morning' value='%MORN%' pattern="(([01]?[0-9])|(2[0-3])):[0-5][0-9]" placeholder="08:00" size='6'>
+        <label> Brightness: </label><input type='text' name='mBright' value='%M_BRIGHT%' placeholder="100" size='6'>\%</p>
+      </p>
+      <p>
+        <label>Evening begins at: </label><input type='time' name='evening' value='%EVE%' pattern="(([01]?[0-9])|(2[0-3])):[0-5][0-9]" placeholder="22:15" size='6'>
+        <label> Brightness: </label><input type='text' name='eBright' value='%E_BRIGHT%' placeholder="100" size='6'>\%</p>
+      </p>
+  </div>
+
+  <hr>
+
+  <p><input name='is24hour' class='w3-check' type='checkbox' %USE_24HOUR%> Use 24 Hour Clock (13:30 vs 1:30)</p>
+  <p><input name='invDisp' class='w3-check' type='checkbox' %INVERT_DISPLAY% onchange='alertRecalibrate()'> Flip display orientation</p>
+
+  <button class='w3-button w3-block w3-round-large w3-grey w3-section w3-padding' type='submit'>Save</button>
+
+  <script>
+    activate('scheduleEnabled', 'schedules');
+  </script>
+</form>

@@ -1,0 +1,143 @@
+<script>
+  function showHide(button, elementID) {
+    button.classList.toggle("active"); 
+    var x = document.getElementById(elementID);
+    if (x.style.display === "none") { x.style.display = "block"; } else { x.style.display = "none"; }
+  }
+
+  function isNumberKey(e) { var h = e.which ? e.which : event.keyCode; return !(h > 31 && (h < 48 || h > 57)) }
+  
+  function duetOrOcto(s, prefix) {
+    var value = s.options[s.selectedIndex].value;
+    var duetElement = document.getElementById(prefix+"DSettings");
+    var octoElement = document.getElementById(prefix+"OSettings");
+    if (value == "Duet3D") { octoElement.style.display = "none"; duetElement.style.display = "block"; } 
+    else { duetElement.style.display = "none"; octoElement.style.display = "block"; } 
+  }
+</script>
+<style type="text/css">
+.collapsible {
+  cursor: pointer;
+  padding: 18px;
+  width: 100\%;
+  border: 1px solid white;
+  text-align: left;
+}
+
+.collapsible:before {
+  content: '\\02795';
+  float: left;
+  margin-right: 5px;
+}
+
+.active:before {
+  content: "\\02796";
+}
+</style>
+<form class='w3-container' action='/updatePrinterConfig' method='get'>
+  <h2>Print Monitor Configuration</h2>
+  <div>
+    <button type="button" class='collapsible w3-button w3-block w3-theme-l4 w3-padding w3-round w3-round-large' onclick='showHide(this, "_P0_Settings")'>Configure Printer 1</button>
+    <div id="_P0_Settings" style='display:none' class='w3-card-4 w3-round-large'>
+      <div class='w3-container w3-margin-bottom'>
+        <div class='w3-row w3-margin-bottom'><input name='_p0_enabled' class='w3-check' type='checkbox' %_P0_ENABLED%> Active</div>
+        <label>Nickname</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p0_nick' value='%_P0_NICK%' maxlength='60'>
+        <label>Server</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p0_server' value='%_P0_HOST%' maxlength='60'>
+        <label>Port</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p0_port' value='%_P0_PORT%' maxlength='5' onkeypress='return isNumberKey(event)'>
+        <p>Printer Type: <select class='w3-option w3-padding' name='_p0_type' onchange='duetOrOcto(this, "_P0_")'>
+            <option %_P0_T_OctoPrint%>OctoPrint</option>
+            <option %_P0_T_Duet3D%>Duet3D</option>
+          </select>
+        </p>
+        <div id="_P0_OSettings" style='display:none'>
+          <label>User</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p0_user' value='%_P0_USER%' maxlength='30'>
+          <label>Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p0_pass' value='%_P0_PASS%'>
+          <label>API Key</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p0_key' value='%_P0_KEY%' maxlength='60'>
+        </div>
+        <div id="_P0_DSettings" style='display:none'>
+          <label>Password (leave empty for default)</label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p0_pass' value='%_P0_PASS%'>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button type="button" class='collapsible w3-button w3-block w3-theme-l4 w3-padding w3-round w3-round-large' onclick='showHide(this, "_P1_Settings")'>Configure Printer 2</button>
+    <div id="_P1_Settings" class='w3-card-4 w3-round-large' style='display:none'>
+      <div class='w3-container w3-margin-bottom'>
+        <div class='w3-row w3-margin-bottom'><input name='_p1_enabled' class='w3-check' type='checkbox' %_P1_ENABLED%> Active</div>
+        <label>Nickname</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p1_nick' value='%_P1_NICK%' maxlength='60'>
+        <label>Server</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p1_server' value='%_P1_HOST%' maxlength='60'>
+        <label>Port</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p1_port' value='%_P1_PORT%' maxlength='5' onkeypress='return isNumberKey(event)'>
+        <p>Printer Type: <select class='w3-option w3-padding' name='_p1_type' onchange='duetOrOcto(this, "_P1_")'>
+            <option %_P1_T_OctoPrint%>OctoPrint</option>
+            <option %_P1_T_Duet3D%>Duet3D</option>
+          </select>
+        </p>
+        <div id="_P1_OSettings" style='display:none'>
+          <label>User</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p1_user' value='%_P1_USER%' maxlength='30'>
+          <label>Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p1_pass' value='%_P1_PASS%'>
+          <label>API Key</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p1_key' value='%_P1_KEY%' maxlength='60'>
+        </div>
+        <div id="_P1_DSettings" style='display:none'>
+          <label>Password (leave empty for default)</label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p1_pass' value='%_P1_PASS%'>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button type="button" class='collapsible w3-button w3-block w3-theme-l4 w3-padding w3-round w3-round-large' onclick='showHide(this, "_P2_Settings")'>Configure Printer 3</button>
+    <div id="_P2_Settings" class='w3-card-4 w3-round-large' style='display:none'>
+      <div class='w3-container w3-margin-bottom'>
+        <div class='w3-row w3-margin-bottom'><input name='_p2_enabled' class='w3-check' type='checkbox' %_P2_ENABLED%> Active</div>
+        <label>Nickname</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p2_nick' value='%_P2_NICK%' maxlength='60'>
+        <label>Server</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p2_server' value='%_P2_HOST%' maxlength='60'>
+        <label>Port</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p2_port' value='%_P2_PORT%' maxlength='5' onkeypress='return isNumberKey(event)'>
+        <p>Printer Type: <select class='w3-option w3-padding' name='_p2_type' onchange='duetOrOcto(this, "_P2_")'>
+            <option %_P2_T_OctoPrint%>OctoPrint</option>
+            <option %_P2_T_Duet3D%>Duet3D</option>
+          </select>
+        </p>
+        <div id="_P2_OSettings" style='display:none'>
+          <label>User</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p2_user' value='%_P2_USER%' maxlength='30'>
+          <label>Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p2_pass' value='%_P2_PASS%'>
+          <label>API Key</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p2_key' value='%_P2_KEY%' maxlength='60'>
+        </div>
+        <div id="_P2_DSettings" style='display:none'>
+          <label>Password (leave empty for default)</label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p2_pass' value='%_P2_PASS%'>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button type="button" class='collapsible w3-button w3-block w3-theme-l4 w3-padding w3-round w3-round-large' onclick='showHide(this, "_P3_Settings")'>Configure Printer 4</button>
+    <div id="_P3_Settings" class='w3-card-4 w3-round-large' style='display:none'>
+      <div class='w3-container w3-margin-bottom'>
+        <div class='w3-row w3-margin-bottom'><input name='_p3_enabled' class='w3-check' type='checkbox' %_P3_ENABLED%> Active</div>
+        <label>Nickname</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p3_nick' value='%_P3_NICK%' maxlength='60'>
+        <label>Server</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p3_server' value='%_P3_HOST%' maxlength='60'>
+        <label>Port</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p3_port' value='%_P3_PORT%' maxlength='5' onkeypress='return isNumberKey(event)'>
+        <p>Printer Type: <select class='w3-option w3-padding' name='_p3_type' onchange='duetOrOcto(this, "_P3_")'>
+            <option %_P3_T_OctoPrint%>OctoPrint</option>
+            <option %_P3_T_Duet3D%>Duet3D</option>
+          </select>
+        </p>
+        <div id="_P3_OSettings" style='display:none'>
+          <label>User</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p3_user' value='%_P3_USER%' maxlength='30'>
+          <label>Password </label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p3_pass' value='%_P3_PASS%'>
+          <label>API Key</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='_p3_key' value='%_P3_KEY%' maxlength='60'>
+        </div>
+        <div id="_P3_DSettings" style='display:none'>
+          <label>Password (leave empty for default)</label><input class='w3-input w3-border w3-margin-bottom' type='password' name='_p3_pass' value='%_P3_PASS%'>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  <button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Save</button>
+</form>
+<script>
+  duetOrOcto(document.getElementsByName('_p0_type')[0], '_P0_');
+  duetOrOcto(document.getElementsByName('_p1_type')[0], '_P1_');
+  duetOrOcto(document.getElementsByName('_p2_type')[0], '_P2_');
+  duetOrOcto(document.getElementsByName('_p3_type')[0], '_P3_');
+</script>

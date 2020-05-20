@@ -1,0 +1,99 @@
+<div class='w3-cell-row' style='width:100\%'>
+  <h2>Printers</h2>
+</div>
+<div class='w3-cell-row' style='width:100\%; display: %_P0_VIS%'>
+  <div class='w3-cell w3-container' style='width:100\%'>
+    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P0_AUTH%%_P0_HOST%:%_P0_PORT%'>Connect to %_P0_NICK%</a>
+  </div>
+</div>
+
+<div class='w3-cell-row' style='width:100\%; display: %_P1_VIS%'>
+  <div class='w3-cell w3-container' style='width:100\%'>
+    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P1_AUTH%%_P1_HOST%:%_P1_PORT%'>Connect to %_P1_NICK%</a>
+  </div>
+</div>
+
+<div class='w3-cell-row' style='width:100\%; display: %_P2_VIS%'>
+  <div class='w3-cell w3-container' style='width:100\%'>
+    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P2_AUTH%%_P2_HOST%:%_P2_PORT%'>Connect to %_P2_NICK%</a>
+  </div>
+</div>
+
+<div class='w3-cell-row' style='width:100\%; display: %_P3_VIS%'>
+  <div class='w3-cell w3-container' style='width:100\%'>
+    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P3_AUTH%%_P3_HOST%:%_P3_PORT%'>Connect to %_P3_NICK%</a>
+  </div>
+</div>
+
+<script>
+function UserAction() {
+    var brightness = document.getElementById('bSlider').value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+             console.log("setBrigness result = "+this.responseText);
+         }
+    };
+    xhttp.open("GET", "/setBrightness?brightness="+brightness, true);
+    xhttp.send();
+}
+</script>
+
+<style>
+.slider {
+  -webkit-appearance: none;
+  width: 100\%;
+  height: 15px;
+  border-radius: 5px;   
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50\%; 
+  background: #4CAF50;
+  cursor: pointer;
+}
+</style>
+
+<h2>Display Brightness</h2>
+<div class='w3-container'>
+  <script>
+    function showVal(val) {
+      var sb = document.getElementById('sliderButton');
+      sb.innerHTML = 'Set Brightness <small>(' + val + ')</small>';
+    }
+  </script>
+  <div class='w3-half w3-margin-right'>
+    <input type="range" min="1" max="100" value="%BRIGHT%" class='slider w3-theme-l4' id='bSlider' oninput='showVal(this.value)'>
+  </div>
+  <div class='w3-quarter'>
+    <button type="button" id='sliderButton' onclick="UserAction()">Set Brightness</button>
+  </div>
+    <script>showVal(document.getElementById('bSlider').value)</script>
+</div>
+
+<div class='w3-cell-row' style='width:100\%'>
+  <h2>Forecast</h2>
+</div>
+
+<div id="openweathermap-widget-11"></div>
+<script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
+
+<script>
+window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
+window.myWidgetParam.push({ id: 11, cityid: '%CITYID%', appid: '%WEATHER_KEY%', units: '%UNITS%', containerid: 'openweathermap-widget-11', });
+(function() { var script = document.createElement('script');
+  script.async = true;
+  script.charset = "utf-8";
+  script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js"; var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(script, s); })();
+</script>
+
+

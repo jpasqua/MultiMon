@@ -1,0 +1,5 @@
+.DS_Store
+resources/image_sources
+data/wt
+data/settings.json
+data/SAMPLE-settings.json
