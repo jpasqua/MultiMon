@@ -44,9 +44,9 @@ static const uint16_t TextVPad = (TileHeight - (2*ReadingsFontHeight))/2;
  *----------------------------------------------------------------------------*/
 
 ForecastScreen::ForecastScreen() {
-  auto buttonHandler =[&](int id, PressType type) -> void {
+  auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose("In ForecastScreen Button Handler, id = %d, type = %d", id, type);
-    if (type > NormalPress) GUI::displayWeatherScreen();
+    if (type > Button::PressType::NormalPress) GUI::displayWeatherScreen();
     GUI::displayHomeScreen();
   };
 

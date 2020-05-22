@@ -52,7 +52,7 @@ private:
   enum {pre, post, complete} state;
 
   void init() {
-    auto buttonHandler =[&](int id, PressType type) -> void {
+    auto buttonHandler =[&](int id, Button::PressType type) -> void {
       Log.verbose("In CalibrationScreenButtonHandler, id = %d", id);
       switch (state) {
         case pre:

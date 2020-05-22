@@ -53,10 +53,10 @@ static const uint16_t DetailYOrigin = Screen::Height - DetailHeight - DetailYBot
  *----------------------------------------------------------------------------*/
 
 DetailScreen::DetailScreen() {
-  auto buttonHandler =[&](int id, PressType type) -> void {
+  auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose("In DetailScreen ButtonHandler, id = %d", id);
     PrintClient *p = MultiMon::printer[index];
-    if (type > NormalPress && p->getState() == PrintClient::State::Complete) {
+    if (type > Button::PressType::NormalPress && p->getState() == PrintClient::State::Complete) {
       p->acknowledgeCompletion();
     }
     GUI::displayHomeScreen();

@@ -32,9 +32,9 @@ static const uint8_t CancelButtonID = 1;
 class RebootScreen : public Screen {
 public:
   RebootScreen() {
-    auto buttonHandler =[&](int id, PressType type) -> void {
+    auto buttonHandler =[&](int id, Button::PressType type) -> void {
       Log.verbose("In RebootScreen ButtonHandler, id = %d", id);
-      if (id == RebootButtonID && type > NormalPress) { ESP.restart(); }
+      if (id == RebootButtonID && type > Button::PressType::NormalPress) { ESP.restart(); }
       if (id == CancelButtonID) GUI::displayHomeScreen();
     };
 
