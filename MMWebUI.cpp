@@ -150,6 +150,16 @@ namespace MMWebUI {
       MM::Protected::configMayHaveChanged();
       WebUI::redirectHome();
     }
+
+    void yieldSettings() {
+      Log.trace("Web Request: /dev/settings");
+      if (!WebUI::authenticationOK()) { return; }
+
+      DynamicJsonDocument *doc = MultiMon::settings.asJSON();
+      WebUI::sendJSONContent(doc);
+      doc->clear();
+      delete doc;
+    }
   }   // ----- END: MMWebUI::Endpoints
 
 
@@ -259,7 +269,7 @@ namespace MMWebUI {
     }
 
     void presentDevConfig() {
-      Log.trace("Web Request: Handle Display Configure");
+      Log.trace("Web Request: Handle Dev Configure");
       if (!WebUI::authenticationOK()) { return; }
 
       auto mapper =[](String &key) -> String {
@@ -298,6 +308,7 @@ namespace MMWebUI {
     WebUI::registerHandler("/setBrightness",          Endpoints::setBrightness);
     WebUI::registerHandler("/updateDevData",          Endpoints::updateDevData);
     WebUI::registerHandler("/reboot",                 Endpoints::reboot);
+    WebUI::registerHandler("/dev/settings",           Endpoints::yieldSettings);
 
     templateHandler = WebUI::getTemplateHandler();
   }
