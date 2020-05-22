@@ -103,7 +103,7 @@ This project requires an ESP8266 and a 320x240 touch screen display. It has been
 		* [this_project]/Assets/TFT_eSPI/User_Setup_Select.h -> library/TFT_eSPI [*Note*: This will overwrite the file in the destination]
 		* [this_project]/Assets/TFT_eSPI/User_Setups/D1Mini_ILI9341.h  -> library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h [*Note*: This will create a new file in the destination]
 
-![](doc/images/TFTBackside.jpg)
+![](doc/images/TFTBackSide.jpg)
 ![](doc/images/BrightnessWire.jpg)
 
 <a name="enclosure"></a>
