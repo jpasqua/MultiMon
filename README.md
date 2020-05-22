@@ -24,7 +24,7 @@ The following third party libraries are used within this project. You'll need to
 * [Arduino-Log](https://github.com/thijse/Arduino-Log)
 * [ArduinoJson](https://github.com/bblanchon/ArduinoJson): Minimum version: 6.15
 * [ESPTemplateProcessor](https://github.com/jpasqua/ESPTemplateProcessor)
-* [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI): Minimum version 2.2.7
+* [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI): Minimum version 2.2.7
 * [TimeLib](https://github.com/PaulStoffregen/Time.git)
 * [WebThing](https://github.com/jpasqua/WebThing)
 * [WiFiManager](https://github.com/tzapu/WiFiManager)
@@ -41,6 +41,8 @@ The following services play a role in providing parts of the functionality. You 
 ## Organization
 
 ### Directory Structure
+The directory structure of the project is shown below. You don't need to know this to build and use the project, but if you want to work on it, this will give you an idea of where everything is located.
+
 ````
 	/
 		[Primary Source files including MultiMon.ino]
@@ -57,7 +59,7 @@ The following services play a role in providing parts of the functionality. You 
            /clients
            	[Printer and Weather Clients]
            /gui
-           	[Implemenation of all of the Screens]
+           	[Implementation of all of the Screens]
            	/fonts
            		[Custom fonts]
            	/images
@@ -67,11 +69,11 @@ The following services play a role in providing parts of the functionality. You 
 
 ### Code Structure
 
-The primary functional areas of *MultiMon* are:
+The primary functional areas of *MultiMon* are given below. You don't need to know this to build and use the project, but if you want to work on it, this will give you an idea of where the different functionality is implemented.
 
 * `MultiMon`
 	* The primary logic for the application. It holds the printer client objects and the settings object which are used throughout the application. `MultiMon` use the `WebThing` framework and follows the organization it defines for the setup and loop functions.
-	* `MultiMon` calls the `GUI` as part of it's main loop to give it time to execute.
+	* `MultiMon` calls the `GUI` as part of its main loop to give it time to execute.
 * `MMSettings`
 	* Provides the functionality to read, write, and update settings that are shared throughout the application.
 * `MMWebUI`
@@ -88,20 +90,28 @@ The primary functional areas of *MultiMon* are:
 <a name="building-multimon"></a>
 ## Building MultiMon
 
-*MultiMon has been built and tested with Arduino IDE 1.8.10 and ESP8266 cores 12.6.1 and 2.7.1. Newer versions are likely to work, but I haven't tried other specific combinations.
+*MultiMon* has been built and tested with Arduino IDE 1.8.10 and ESP8266 cores 2.6.1 and 2.7.1. Newer versions are likely to work, but I haven't tried other specific combinations. If you have never built an Arduino project using an ESP8266, you'll need to [prepare your development environment](https://github.com/esp8266/Arduino#installing-with-boards-manager). 
 
 <a name="hardware"></a>
 ### Hardware
 
-This project requires an ESP8266 and a 320x240 touch screen display. It has been tested with:
+This project requires an ESP8266 and a 320x240 touch screen display. It has been tested with a [Wemos D1 Mini](https://docs.wemos.cc/en/latest/d1/d1_mini.html) and a [Wemos D1 Mini 2.4" TFT Shield](https://docs.wemos.cc/en/latest/d1_mini_shiled/tft_2_4.html). They are a nice combination since they require no soldering and only 1 mounting point (the display). However, it should work with virtually any ESP8266 with sufficient storage space and any 320x240 screen with an ILI9341 display controller and an XPT2046 touch screen controller.
 
-* ESP8266: [Wemos D1 Mini](https://docs.wemos.cc/en/latest/d1/d1_mini.html)
-* Display: [Wemos D1 Mini 2.4" TFT Shield](https://docs.wemos.cc/en/latest/d1_mini_shiled/tft_2_4.html). As of 2020-05-16, this device is difficult to find. A [similar display/touchscreen](https://www.aliexpress.com/item/32960934541.html) combination can be purchased without the shield form-factor.
-	* To enable brightness control you must connect pin D4 on the ESP8266 to the LED line on the display board. See the areas highlighted in red in the first image below.
-	* If you use a different display, it must be supported by the [TFT_eSPI](https://github.com/Bodmer/TFT_eSPI) library and have dimensions 320x240. The physical size does not need to be 2.4".
-	* TFT_eSPI requires hardware configuration information. If you use the D1 Mini and D1 Mini TFT Shield, you may use the HW configurations supplied by this project. In particular, copy files from this project to the TFT_eSPI library:
-		* [this_project]/Assets/TFT_eSPI/User_Setup_Select.h -> library/TFT_eSPI [*Note*: This will overwrite the file in the destination]
-		* [this_project]/Assets/TFT_eSPI/User_Setups/D1Mini_ILI9341.h  -> library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h [*Note*: This will create a new file in the destination]
+
+
+#### Configuring the `TFT_eSPI` library for your display
+
+`TFT_eSPI` needs to know how your display is connected to your ESP8266 including which pins are used for which signals. If you use the D1 Mini and D1 Mini TFT Shield, you can use the HW configurations supplied by this project (see below). If you use a different display, please refer to the [`TFT_eSPI`](https://github.com/Bodmer/TFT_eSPI) documentation. The library itself provides many configurations you can choose from, or you can create your own custom configuration.
+
+To configure for the D1 Mini TFT Shield, just copy the two files listed below into the `TFT_eSPI` directory:
+
+* `MultiMon/resources/TFT_eSPI/User_Setup_Select.h` -> `library/TFT_eSPI` 
+	+ *Note*: This will overwrite the file in the destination, so you may wish to save the original.
+* `MultiMon/resources/TFT_eSPI/User\_Setups/D1Mini_ILI9341.h`  -> `library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`
+
+#### Enabling brightness control
+
+Many displays allow you to control their brightness. *MultiMon* takes advantage of this by providing an analog output on pin D4 which is proportional to the brightness to be displayed. Identify the input on your display which controls brightness, and connect pin D4 to it. The images below show how this is done for the D1 Mini and TFT Shield. See the areas highlighted in red in the first image below.
 
 ![](doc/images/TFTBackSide.jpg)
 ![](doc/images/BrightnessWire.jpg)
