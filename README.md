@@ -3,6 +3,8 @@
 ![](doc/images/MultiMon512.png)  
 This project lets you monitor the activity of up to four 3D Printers which are being controlled with either [OctoPrint](https://octoprint.org) or [Duet3D RepRap software](https://duet3d.dozuki.com/Wiki/Firmware_Overview). The monitor has a Web UI for configuration and a GUI displayed on a color touch screen. In addition to displaying printer status, it can also display weather information. The code is structured so that it is relatively straightforward to add new screens (information pages) with other types of information.
 
+**NOTE**: This project is in its infancy. There are no prebuilt released versions yet. As it becomes stable, I will tag a stable release version.
+
 For details on using the device, please see the [*MultiMon* GUI documentation](doc/MultiMonGUI.md).
 
 *MultiMon* uses the [WebThing](https://github.com/jpasqua/WebThing) framework and is configured using a web-based UI where the user specifies information such as:  
@@ -17,7 +19,7 @@ Some of this configuration information is specific to *MultiMon* while other inf
 ## Dependencies
 
 ### Libraries
-The following third party libraries are used within this project:
+The following third party libraries are used within this project. You'll need to download them and place them in your Arduino `library` folder before you build the project.
 
 * [Arduino-Log](https://github.com/thijse/Arduino-Log)
 * [ArduinoJson](https://github.com/bblanchon/ArduinoJson): Minimum version: 6.15
