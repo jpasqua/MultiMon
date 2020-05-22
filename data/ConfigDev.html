@@ -12,5 +12,8 @@
   function requestReboot() { if (confirm("Request a reboot?")) { window.location.href = "/reboot"; } }
 </script>
 <div class='w3-container'>
+  <button class='w3-button w3-quarter w3-block w3-round-large w3-pale-green w3-section w3-padding' type='button' onclick='window.location.href = "/dev/settings"'>View Settings as JSON</button>
+</div>
+<div class='w3-container'>
   <button class='w3-button w3-quarter w3-block w3-round-large w3-pale-red w3-section w3-padding' type='button' onclick='requestReboot()'>Request Reboot</button>
 </div>
