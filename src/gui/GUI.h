@@ -60,16 +60,21 @@ namespace GUI {
   void displayWeatherScreen();
   void displayWiFiScreen();
 
+  /**
+   * Overlay the current screen with an icon to indicate that a potentially
+   * long-running update is in progress. this lets the user know that the UI
+   * will be unresponsive in this period. Calling showUpdatingIcon()
+   * when the icon is already displayed is safe and does nothing.
+   * @param   accentColor   An accent color to indicate what's happening
+   */
   void showUpdatingIcon(uint16_t accentColor);
-    // Overlay the current screen with an icon to indicate that a potentially
-    // long-running update is in progress. this lets the user know that the UI
-    // will be unresponsive in this period. Calling showUpdatingIcon()
-    // when the icon is already displayed is safe and does nothing.
 
+  /**
+   * Remove the "updating icon" from the current screen and restore the original
+   * screen content. Calling hideUpdatingIcon() when no icon is displayed
+   * is safe and does nothing.
+   */
   void hideUpdatingIcon();
-    // Remove the "updating icon" from the current screen and restore the original
-    // screen content. Calling hideUpdatingIcon() when no icon is displayed
-    // is safe and does nothing.
 
   extern TFT_eSPI tft;
   extern TFT_eSprite *sprite;
