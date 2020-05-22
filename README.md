@@ -222,7 +222,4 @@ It can sometimes be useful to see all the settings in their JSON representation.
 
 ## Acknowledgements
 
-*MultiMon* was inspired by [Qrome](https://github.com/Qrome)'s great [Octoprint Printer Monitor](https://github.com/Qrome/printer-monitor). You'll will recognize, for example, that the Web UI looks very similar. It should since I followed Qrome's model but took a different implementation path. 
-
-
-``
+*MultiMon* was inspired by [Qrome](https://github.com/Qrome)'s great [Octoprint Printer Monitor](https://github.com/Qrome/printer-monitor). You'll will recognize, for example, that the Web UI looks very similar. It should since I followed Qrome's model but took a different implementation path.
