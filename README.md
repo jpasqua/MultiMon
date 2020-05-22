@@ -44,26 +44,26 @@ The following services play a role in providing parts of the functionality. You 
 The directory structure of the project is shown below. You don't need to know this to build and use the project, but if you want to work on it, this will give you an idea of where everything is located.
 
 ````
-	/
-		[Primary Source files including MultiMon.ino]
-		/data
-			[HTML page templates for MultiMon]
-			/wt
-				[HTML page templates for WebThing]
-		/doc
-			[GUI documentation and images for documentation]
-       /resources
-       	/TFT_eSPI
-				[Sample User Setups for TFT_eSPI]
-       /src
-           /clients
-           	[Printer and Weather Clients]
-           /gui
-           	[Implementation of all of the Screens]
-           	/fonts
-           		[Custom fonts]
-           	/images
-           		[Custom images]
+    MultiMon
+        [Primary Source files including MultiMon.ino]
+        /data
+            [HTML page templates for MultiMon]
+            /wt
+                [HTML page templates for WebThing]
+        /doc
+            [GUI documentation and images for documentation]
+        /resources
+            /TFT_eSPI
+                [Sample User Setups for TFT_eSPI]
+        /src
+            /clients
+                [Printer and Weather Clients]
+            /gui
+                [Implementation of all of the Screens]
+                /fonts
+                    [Custom fonts]
+                /images
+                    [Custom images]
 
 ````
 
@@ -96,8 +96,6 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 ### Hardware
 
 This project requires an ESP8266 and a 320x240 touch screen display. It has been tested with a [Wemos D1 Mini](https://docs.wemos.cc/en/latest/d1/d1_mini.html) and a [Wemos D1 Mini 2.4" TFT Shield](https://docs.wemos.cc/en/latest/d1_mini_shiled/tft_2_4.html). They are a nice combination since they require no soldering and only 1 mounting point (the display). However, it should work with virtually any ESP8266 with sufficient storage space and any 320x240 screen with an ILI9341 display controller and an XPT2046 touch screen controller.
-
-
 
 #### Configuring the `TFT_eSPI` library for your display
 
