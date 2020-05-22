@@ -97,7 +97,7 @@ static const int ClockAreaIndex = 5;
 
 
 TimeScreen::TimeScreen() {
-  auto buttonHandler =[&](int id, PressType type) -> void {
+  auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose("In TimeScreen Button Handler, id = %d", id);
     if (id < MultiMon::MaxServers) {
       if (MultiMon::settings.printer[id].isActive &&
@@ -105,7 +105,7 @@ TimeScreen::TimeScreen() {
         GUI::displayDetailScreen(id);
       return;
     }
-    if (type > NormalPress) { GUI::displayInfoScreen(); return; }
+    if (type > Button::PressType::NormalPress) { GUI::displayInfoScreen(); return; }
     if (id == ClockAreaIndex) { GUI::displayStatusScreen(); return; }
     if (id == WeatherAreaIndex) { GUI::displayWeatherScreen(); return; }
   };
@@ -197,39 +197,10 @@ void TimeScreen::drawClock(bool force) {
 }
 
 void TimeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt) {
-  static const uint8_t BackgroundIndex = 0;
-  static const uint8_t BarIndex = 1;
-  static const uint8_t TextIndex = 2;
-  static const uint8_t FrameIndex = 3;
-  uint16_t cmap[16];
-  cmap[BackgroundIndex] = GUI::Color_Background;
-  cmap[BarIndex] = barColor;
-  cmap[TextIndex] = txtColor;
-  cmap[FrameIndex] = GUI::Color_Border;
-
-  sprite->setColorDepth(4);
-  sprite->createSprite(PB_Width, PB_Height);
-  sprite->createPalette(cmap);
-  sprite->fillSprite(BackgroundIndex);
-
-  // Draw the frame
-  for (int i = 0; i < PB_FrameSize; i++) {
-    sprite->drawRect(0+i, 0+i, PB_Width-(2*i), PB_Height-(2*i), FrameIndex);
-  }
-
-  // Draw the bar
-  sprite->fillRect(PB_FrameSize, PB_FrameSize, pct*PB_BarWidth, PB_BarHeight, BarIndex);
-
-  // Draw the overlay text
-  sprite->setFreeFont(&FreeSansBold9pt7b);
-  sprite->setTextColor(TextIndex);
-  sprite->setTextDatum(MC_DATUM);
-  String note = (txt.isEmpty()) ? String((int)(pct*100)) + "%" : txt;
-  sprite->drawString(note, PB_Width/2, PB_Height/2);
-
-  // Push to the display and cleanup
-  sprite->pushSprite(buttons[i]._x, buttons[i]._y);
-  sprite->deleteSprite();
+  buttons[i].drawProgress(
+        pct, txt, &FreeSansBold9pt7b, PB_FrameSize,
+        txtColor, GUI::Color_Border, barColor, GUI::Color_Background,
+        true);
 }
 
 void TimeScreen::drawWeather(bool force) {

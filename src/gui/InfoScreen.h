@@ -54,7 +54,7 @@ static const uint8_t ReturnButtonIndex = 4;
 class InfoScreen : public Screen {
 public:
   InfoScreen() {
-    auto buttonHandler =[&](int id, PressType type) -> void {
+    auto buttonHandler =[&](int id, Button::PressType type) -> void {
       Log.verbose("In InfoScreenButtonHandler, id = %d", id);
       if (id <= BrightButtonIndex) {
         GUI::setBrightness(id == DimButtonIndex ? 20 : (id == MediumButtonIndex ? 50 : 90));
@@ -62,7 +62,7 @@ public:
       } else if (id == RefreshButtonIndex) {
         MultiMon::Protected::updatePrinterData();
       } else {
-        if (type > NormalPress) GUI::displayCalibrationScreen();
+        if (type > Button::PressType::NormalPress) GUI::displayCalibrationScreen();
         else GUI::displayHomeScreen();
       }
     };
@@ -138,19 +138,10 @@ private:
   }
 
   void drawButton(String label, int i, bool clear = false) {
-    // Draw Button Frame
-    Button *b = &buttons[i];
-    tft.fillRect(b->_x, b->_y, b->_w, ButtonFrameSize, GUI::Color_Border);
-    tft.fillRect(b->_x, b->_y+b->_h-ButtonFrameSize, b->_w, ButtonFrameSize, GUI::Color_Border);
-    tft.fillRect(b->_x, b->_y+ButtonFrameSize, ButtonFrameSize, b->_h-(2*ButtonFrameSize), GUI::Color_Border);
-    tft.fillRect(b->_x+b->_w-ButtonFrameSize, b->_y+ButtonFrameSize, ButtonFrameSize, b->_h-(2*ButtonFrameSize), GUI::Color_Border);
-    if (clear) tft.fillRect(
-      b->_x+ButtonFrameSize, b->_y+ButtonFrameSize,
-      b->_w-(2*ButtonFrameSize), b->_h-(2*ButtonFrameSize), GUI::Color_Background);
-    tft.setFreeFont(ButtonFont);
-    tft.setTextColor(GUI::Color_AlertGood);
-    tft.setTextDatum(MC_DATUM);
-    tft.drawString(label, b->_x + (b->_w/2), b->_y+(b->_h/2));
+    if (clear) buttons[i].clear(GUI::Color_Background);
+    buttons[i].drawSimple(
+        label, ButtonFont, ButtonFrameSize,
+        GUI::Color_AlertGood, GUI::Color_Border, GUI::Color_Background);
   }
 
   // (x, y) represents the bottom left corner of the wifi strength bars
