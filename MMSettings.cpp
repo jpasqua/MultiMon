@@ -148,7 +148,7 @@ void MMSettings::toJSON(JsonDocument &doc) {
   doc["evening"]["min"] = evening.min;
   doc["evening"]["brightness"] = evening.brightness;
 
-  serializeJsonPretty(doc, Serial); Serial.println();
+  // serializeJsonPretty(doc, Serial); Serial.println();
 }
 
 void MMSettings::logSettings() {
