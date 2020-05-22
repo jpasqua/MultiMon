@@ -1,13 +1,19 @@
-<form class='w3-container' action='/updateDevData' method='get'>
-  <h2>Developer Controls</h2>
-  <h3>Mock?</h3>
-  <p><input name='_p0_mock' class='w3-check' type='checkbox' %_P0_MOCK%> %_P0_NICK% (%_P0_SERVER%)</p>
-  <p><input name='_p1_mock' class='w3-check' type='checkbox' %_P1_MOCK%> %_P1_NICK% (%_P1_SERVER%)</p>
-  <p><input name='_p2_mock' class='w3-check' type='checkbox' %_P2_MOCK%> %_P2_NICK% (%_P2_SERVER%)</p>
-  <p><input name='_p3_mock' class='w3-check' type='checkbox' %_P3_MOCK%> %_P3_NICK% (%_P3_SERVER%)</p>
-  <p>Changes will take effect on the next reboot</p>
-  <button class='w3-button w3-block w3-round-large w3-grey w3-section w3-padding' type='submit'>Save</button>
-</form>
+<h2>Developer Controls</h2>
+<div class='w3-card-4 w3-round-large'>
+  <header class="w3-container w3-light-grey">
+    <h3>Mock?</h3>
+  </header>
+  <div class='w3-container w3-margin-bottom'>
+    <form action='/updateDevData' method='get'>
+      <p><input name='_p0_mock' class='w3-check' type='checkbox' %_P0_MOCK%> %_P0_NICK% (%_P0_SERVER%)</p>
+      <p><input name='_p1_mock' class='w3-check' type='checkbox' %_P1_MOCK%> %_P1_NICK% (%_P1_SERVER%)</p>
+      <p><input name='_p2_mock' class='w3-check' type='checkbox' %_P2_MOCK%> %_P2_NICK% (%_P2_SERVER%)</p>
+      <p><input name='_p3_mock' class='w3-check' type='checkbox' %_P3_MOCK%> %_P3_NICK% (%_P3_SERVER%)</p>
+      <p>Changes will take effect on the next reboot</p>
+      <button class='w3-button w3-block w3-round-large w3-grey w3-section w3-padding' type='submit'>Save</button>
+    </form>
+  </div>
+</div>
 <script>
   function requestReboot() { if (confirm("Request a reboot?")) { window.location.href = "/reboot"; } }
 </script>
