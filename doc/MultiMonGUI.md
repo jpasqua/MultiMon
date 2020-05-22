@@ -10,6 +10,8 @@ MultiMon regularly calls out to the printers to get their status. If a printer i
 
 These calls can take a second or two depending  on how many printers are being checked and how responsive they are. During these periods the GUI is not responsive. To let the user know when this is happening, the GUI overlays a small info icon in the upper right hand corner of the screen. It is automatically removed when the calls are complete. When the info icon has a green border it means that MultiMon is talking to a printer. When it has an orange border it means that MultiMon is getting weather information.
 
+*Note: The colors are not very accurate in the pictures below. For example, white looks light blue.*
+
 ## Screens
 
 Index of Screens (alphabetical):
@@ -31,7 +33,7 @@ Index of Screens (alphabetical):
 
 When MultiMon boots, the first thing it displays is the WiFi Screen. This will remain on the screen until a WiFi connection is established. Once the unit is connected to your WiFi network, the display will automatically navigate to the [Splash Screen](#splash-screen).
 
-![](images/WiFiScreen.png)
+![](images/WiFiScreen.jpg)
 
 **Actions**:
 
@@ -45,7 +47,7 @@ The Splash Screen is displayed during the boot process while MultiMon is initial
 
 In the image below you will see the info icon with an orange border which means that at this point in time, MultiMon is getting weather data.
 
-![](images/SplashScreen.png)
+![](images/SplashScreen.jpg)
 
 **Actions**:
 
