@@ -2,36 +2,7 @@
 #define Screen_h
 
 #include "GUI.h"
-
-typedef enum {NormalPress, LongPress, VeryLongPress} PressType;
-typedef std::function<void(int, PressType)> ButtonCallback;
-
-static const uint32_t LongPressInterval = 500;
-static const uint32_t VeryLongPressInterval = 1000;
-
-class Button {
-public:
-  uint16_t _x;
-  uint16_t _y;
-  uint16_t _w;
-  uint16_t _h;
-  ButtonCallback _callback;
-  uint8_t _id;
-
-  Button() { }
-  Button(uint16_t x, uint16_t y, uint16_t w, uint16_t h, ButtonCallback callback, uint8_t id) {
-    init(x, y, w, h, callback, id);
-  }
-
-  void init(uint16_t x, uint16_t y, uint16_t w, uint16_t h, ButtonCallback callback, uint8_t id) {
-    _x = x; _y = y; _w = w; _h = h; _callback = callback; _id = id;
-  }
-
-  bool processTouch(uint16_t tx, uint16_t ty, PressType type) {
-    if ((tx >= _x) && (tx < _x+_w) && (ty >= _y) && (ty < _y+_h)) { _callback(_id, type); return true; }
-    return false;
-  }
-};
+#include "Button.h"
 
 class Screen {
 public:
@@ -69,11 +40,11 @@ public:
       if (wasPressed) {
         // Ok, we got a press/release, see which button (if any) is associated
         uint32_t endOfPress = millis();
-        PressType pt;
+        Button::PressType pt;
         uint32_t pressDuration = (millis() - startOfPress);
-        if (pressDuration >= VeryLongPressInterval) pt = VeryLongPress;
-        else if (pressDuration >= LongPressInterval) pt = LongPress;
-        else pt = NormalPress;
+        if (pressDuration >= Button::VeryLongPressInterval) pt = Button::PressType::VeryLongPress;
+        else if (pressDuration >= Button::LongPressInterval) pt = Button::PressType::LongPress;
+        else pt = Button::PressType::NormalPress;
 
         for (int i = 0; i < nButtons; i++) {
           if (buttons[i].processTouch(lastX, lastY, pt)) break;
