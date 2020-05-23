@@ -160,6 +160,14 @@ namespace MMWebUI {
       doc->clear();
       delete doc;
     }
+
+    void yieldScreenShot() {
+      Log.trace("Web Request: /dev/screenShot");
+      if (!WebUI::authenticationOK()) { return; }
+
+      WebUI::sendArbitraryContent("image/bmp", GUI::getSizeOfScreenShotAsBMP(), GUI::streamScreenShotAsBMP);
+    }
+
   }   // ----- END: MMWebUI::Endpoints
 
 
@@ -309,6 +317,7 @@ namespace MMWebUI {
     WebUI::registerHandler("/updateDevData",          Endpoints::updateDevData);
     WebUI::registerHandler("/reboot",                 Endpoints::reboot);
     WebUI::registerHandler("/dev/settings",           Endpoints::yieldSettings);
+    WebUI::registerHandler("/dev/screenShot",         Endpoints::yieldScreenShot);
 
     templateHandler = WebUI::getTemplateHandler();
   }
