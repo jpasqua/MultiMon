@@ -201,11 +201,12 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
   sprite->drawString(elapsed, DetailXInset, DetailFontHeight);
 
   // ----- Display expected completion time
+  String est = "Complete";
   if (printer->getState() == PrintClient::State::Printing) {
-    String est = "Est: ";
+    est = "Est: ";
     appendDate(now() + printer->getPrintTimeLeft(), est);
-    sprite->drawString(est, Screen::XCenter+DetailXInset, DetailFontHeight);
   }
+  sprite->drawString(est, Screen::XCenter+DetailXInset, DetailFontHeight);
 
   sprite->setBitmapColor(GUI::Color_NormalText, GUI::Color_Background);
   sprite->pushSprite(DetailXOrigin, DetailYOrigin);
