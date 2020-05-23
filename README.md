@@ -222,11 +222,22 @@ The home page for *MultiMon* (see below for screen shot) contains three primary 
 <a name="dev-info"></a>
 ## Operational Info for Developers
 
-Though it is not part of the main menu, a developer can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into their browser.  This page allows you to make any one of the printers a "mock" printer meaning that it will produce artificial values that mimic what a real printer might produce. This can be useful for testing, debugging, and tuning the GUI or WebUI. To make any of the configured printers act as a mock printer, just check the associated box and then `Save`. These settings will not take effect until the next time *MultiMon* boots.
+Though it is not part of the main menu, a developer can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into their browser.  
 
-Speaking of rebooting, the `/dev` page also has a "Request Reboot" button. If you press the button you will get a popup in your browser asking if you are sure. If you confirm, *MultiMon* will go to a "Reboot Screen" that displays a red reboot button and a green cancel button. The user must press and hold the reboot button for 1 second to confirm a reboot. Pressing cancel will resume normal operation. Pressing no button for 1 minute will behave as if the cancel button was pressed.
+### Mock (Simulated) Printer Operation
+
+The `/dev` page allows you to make any one of the printers a "mock" printer meaning that it will produce artificial values that mimic what a real printer might produce. This can be useful for testing, debugging, and tuning the GUI or WebUI. To make any of the configured printers act as a mock printer, just check the associated box and then `Save`. These settings will not take effect until the next time *MultiMon* boots.
+
+### Capturing the Current State
 
 It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings as JSON` button which will go to a page with the JSON content. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`.
+
+Similarly you can get a screen shot of whatever is currently displayed on the device using the `Take a screen shot` button. This will display an image in your browser which corresponds to the current content of the display. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/screenShot`.
+
+### Rebooting
+
+Finally, the `/dev` page also has a `Request Reboot` button. If you press the button you will be presented with a popup in your browser asking if you are sure. If you confirm, *MultiMon* will go to a "Reboot Screen" that displays a red reboot button and a green cancel button. The user must press and hold the reboot button for 1 second to confirm a reboot. Pressing cancel will resume normal operation. Pressing no button for 1 minute will behave as if the cancel button was pressed.
+
 
 ## Acknowledgements
 
