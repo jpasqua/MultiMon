@@ -76,6 +76,14 @@ namespace GUI {
    */
   void hideUpdatingIcon();
 
+  /**
+   * Dump the pixel values from the display to the specified stream in the form
+   * of a BMP image. This can be used to take "screen shots".
+   * @param s     The Stream to which the screen shot in BMP format should be written
+   */
+  void streamScreenShotAsBMP(Stream &s);
+  uint32_t getSizeOfScreenShotAsBMP();
+
   extern TFT_eSPI tft;
   extern TFT_eSprite *sprite;
 }

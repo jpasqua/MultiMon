@@ -208,4 +208,66 @@ namespace GUI {
   void hideUpdatingIcon() { Internal::hideUpdating(); }
 
 
+  uint32_t getSizeOfScreenShotAsBMP() {
+    return (2ul * tft.width() * tft.height() + 54); // pix data + 54 byte hdr
+  }
+
+  void streamScreenShotAsBMP(Stream &s) {
+    // Adapted form https://forum.arduino.cc/index.php?topic=406416.0
+    byte hiByte, loByte;
+    int i, j = 0;
+
+    uint8_t bmFlHdr[14] = {
+      'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0
+    };
+    // 54 = std total "old" Windows BMP file header size = 14 + 40
+    
+    uint8_t bmInHdr[40] = {
+      40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 16, 0
+    };   
+    // 40 = info header size
+    //  1 = num of color planes
+    // 16 = bits per pixel
+    // all other header info = 0, including RI_RGB (no compr), DPI resolution
+
+    uint32_t w = tft.width();
+    uint32_t h = tft.height();
+    unsigned long bmpSize = 2ul * h * w + 54; // pix data + 54 byte hdr
+    
+    bmFlHdr[ 2] = (uint8_t)(bmpSize      ); // all ints stored little-endian
+    bmFlHdr[ 3] = (uint8_t)(bmpSize >>  8); // i.e., LSB first
+    bmFlHdr[ 4] = (uint8_t)(bmpSize >> 16);
+    bmFlHdr[ 5] = (uint8_t)(bmpSize >> 24);
+
+    bmInHdr[ 4] = (uint8_t)(w      );
+    bmInHdr[ 5] = (uint8_t)(w >>  8);
+    bmInHdr[ 6] = (uint8_t)(w >> 16);
+    bmInHdr[ 7] = (uint8_t)(w >> 24);
+    bmInHdr[ 8] = (uint8_t)(h      );
+    bmInHdr[ 9] = (uint8_t)(h >>  8);
+    bmInHdr[10] = (uint8_t)(h >> 16);
+    bmInHdr[11] = (uint8_t)(h >> 24);
+
+    s.write(bmFlHdr, sizeof(bmFlHdr));
+    s.write(bmInHdr, sizeof(bmInHdr));
+
+    for (i = h; i > 0; i--) {
+      byte buf[w*2];
+      byte *ptr = &buf[0];
+      for (j = 0; j < w; j++) {
+        uint16_t rgb = tft.readPixel(j,i);  // Get pixel in rgb565 format
+        
+        hiByte = (rgb & 0xFF00) >> 8;   // High Byte
+        loByte = (rgb & 0x00FF);        // Low Byte
+        
+        // RGB565 to RGB555 conversion... 555 is default for uncompressed BMP
+        loByte = (hiByte << 7) | ((loByte & 0xC0) >> 1) | (loByte & 0x1f);
+        hiByte = (hiByte >> 1);
+        
+        *ptr++ = loByte;
+        *ptr++ = hiByte;
+      }
+      s.write(buf, w*2);
+    }
+  }
 } // ----- END: GUI namespace
