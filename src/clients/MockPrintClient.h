@@ -31,7 +31,7 @@ public:
     else if (timeRegion < 90) minutes = random(120, 300); // 20% of jobs are 2-5   hours
     else minutes = random(300, 12*60);                    // 10% of jobs are 5-12  hours
     totalPrintTime = minutes * 60;
-    // totalPrintTime = random(30, 90); // Short times for quick tests
+    // totalPrintTime = random(5, 10) * 60; // Short times for quick tests
 
     elapsed = random(0, totalPrintTime/2);
     bedTarget = 210;
