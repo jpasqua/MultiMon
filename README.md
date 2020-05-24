@@ -1,9 +1,13 @@
 # MultiMon - Monitor Multiple 3D Printers
 
 ![](doc/images/MultiMon512.png)  
-This project lets you monitor the activity of up to four 3D Printers which are being controlled with either [OctoPrint](https://octoprint.org) or [Duet3D RepRap software](https://duet3d.dozuki.com/Wiki/Firmware_Overview). The monitor has a Web UI for configuration and a GUI displayed on a color touch screen. In addition to displaying printer status, it can also display weather information. The code is structured so that it is relatively straightforward to add new screens (information pages) with other types of information.
 
-**NOTE**: This project is in its infancy. There are no prebuilt released versions yet. As it becomes stable, I will tag a stable release version.
+___
+
+**NOTE**: This project is in its infancy and is a work-in-progress. There are no stable releases. In fact, as of 2020-05-24 it is still being verified that it can be built by anyone other than the author. That verification (and any required changes) should be complete soon. As it becomes stable, I will tag a release version.
+___
+
+This project lets you monitor the activity of up to four 3D Printers which are being controlled with either [OctoPrint](https://octoprint.org) or [Duet3D RepRap software](https://duet3d.dozuki.com/Wiki/Firmware_Overview). The monitor has a Web UI for configuration and a GUI displayed on a color touch screen. In addition to displaying printer status, it can also display weather information. The code is structured so that it is relatively straightforward to add new screens (information pages) with other types of information.
 
 For details on using the device, please see the [*MultiMon* GUI documentation](doc/MultiMonGUI.md).
 
