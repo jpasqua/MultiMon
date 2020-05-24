@@ -10,7 +10,7 @@ MultiMon regularly calls out to the printers to get their status. If a printer i
 
 These calls can take a second or two depending  on how many printers are being checked and how responsive they are. During these periods the GUI is not responsive. To let the user know when this is happening, the GUI overlays a small info icon in the upper right hand corner of the screen. It is automatically removed when the calls are complete. When the info icon has a green border it means that MultiMon is talking to a printer. When it has an orange border it means that MultiMon is getting weather information.
 
-*Note: The colors are not very accurate in the pictures below. For example, white looks light blue.*
+*Note: The screen shots below are image captures from the device.*
 
 ## Screens
 
@@ -33,7 +33,7 @@ Index of Screens (alphabetical):
 
 When MultiMon boots, the first thing it displays is the WiFi Screen. This will remain on the screen until a WiFi connection is established. Once the unit is connected to your WiFi network, the display will automatically navigate to the [Splash Screen](#splash-screen).
 
-![](images/WiFiScreen.jpg)
+![](images/ss/WiFiScreen.png)
 
 **Actions**:
 
@@ -47,7 +47,8 @@ The Splash Screen is displayed during the boot process while MultiMon is initial
 
 In the image below you will see the info icon with an orange border which means that at this point in time, MultiMon is getting weather data.
 
-![](images/SplashScreen.jpg)
+![](images/ss/SplashScreen_IIP.png)
+![](images/ss/SplashScreen_IIW.png)
 
 **Actions**:
 
@@ -57,7 +58,7 @@ In the image below you will see the info icon with an orange border which means 
 <a name="time-screen"></a>
 ### Time Screen (aka Home Screen)
 
-The time screen is the the primary/home screen. It provides a clock, overview status of the printers, and a single line of weather information. The layout, as shown in the image below, is as follows:
+The time screen is the the primary/home screen. It provides a clock, overview status of the printers, and a single line of weather information. The screen shots below capture the home screen in a variety of states. The elements of the scree are as follows:
 
 * The current temperature and weather description for the selected city
 * The next line shows the expected completion time of the next print across all configured printers. If there is no print in progress, then that line will not be displayed.
@@ -68,7 +69,11 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 	* **Printing**: In which case the area displays a progress bar with percent complete
 	* **Unused**: Meaning that printer has not been configured
 
-![](images/HS1.jpg)
+![](images/ss/HomeScreen_3Prints.png)
+![](images/ss/HomeScreen_Mixed.png)
+![](images/ss/HomeScreen_Unused.png)
+![](images/ss/HomeScreen_UIW.png)
+![](images/ss/HomeScreen_UIP.png)
 
 **Actions**:
 
@@ -80,9 +85,10 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 <a name="printer-status-screen"></a>
 ### Printer Status Screen
 
-The Printer Status Screen gives an overview of the status of each printer. It is very similar to what is shown on the [Time Screen](#time-screen), but also shows each printer's nickname and the time remaining in the print (if a print is active).
+The Printer Status Screen gives an overview of the status of each printer. It is very similar to what is shown on the [Time Screen](#time-screen), but also shows each printer's nickname and the time remaining in the print (if a print is active). Below are a couple of examples of what this screen might look like. Note that in the first, weather data is being updated so the Info Icon is being shown.
 
-![](images/PrinterStatusScreen.jpg)
+![](images/ss/StatusScreen1.png)
+![](images/ss/StatusScreen2.png)
 
 **Actions**:
 
@@ -92,20 +98,27 @@ The Printer Status Screen gives an overview of the status of each printer. It is
 <a name="printer-detail-screen"></a>
 ### Printer Detail Screen
 
-The Printer Detail Screen provides more detail about a print in progress. The layout of the screen is:
+The Printer Detail Screen provides more detail about a print in progress. This screen is only available for printers that are either printing or have completed a print. The layout of the screen is:
 
 * The nickname of the printer. If no nickname was specified, the server name will be used.
 * The name of the file being printed. If the name ends with ".gcode", that will be stripped to preserve space. If the name won't fit on a single line, it will occupy two lines - but not more than that.
 * A progress bar shows the percent completion of the print and the time remaining in HH:MM:SS format.
 * The line below the progress bar gives the bed actual and target temperatures as well as the target and actual temperature for tool 1 (labeled E0 for extruder 0). Each pair is given as Actual / Target (e.g. 60.1 / 60.0). These values are always in degrees Celsius.
-* The next line shows the elapsed time of the print (labeled as "Done:") and the estimated completion time (labeled "Est:")
+* The next line shows the elapsed time of the print (labeled as "Done:") and the estimated completion time (labeled "Est:"). When a print is complete, this will show "Complete" rather than an estimate.
 
-![](images/PrinterDetailScreen.jpg)
+![](images/ss/DetailScreen_InProgress.png)
+![](images/ss/DetailScreen_100Pct.png)
 
 **Actions**:
 
 * Pressing anywhere on the screen navigates back to the [Home Screen](#home-screen).
-* If the print is complete (100%), it will continue to show as complete. Sometimes it is preferable to show the printer as Online and ready for a new print. To get into this state, long press anywhere on the screen. That will navigate to the [Home Screen](#home-screen) and set the print to show as Online rather than 100% complete. I sometimes use this distinction to remind myself whether I have already collected the last print so the printer is ready for a new job. 
+* If the print is complete (100%), it will continue to show as 100%, here and on the home screen, until an action is taken.
+	* Sometimes it is preferable to show the printer as Online and ready for a new print. I sometimes use this distinction to remind myself whether I have already collected the last print so the printer is ready for a new job.
+	* To get into this state, long press anywhere on the screen. That will navigate to the [Home Screen](#home-screen) and set the print to show as Online rather than 100% complete.
+	* The screen shots below show the home screen showing "100%" (as it would before a long press here) and "Online" as it would after a long press here.
+
+![](images/ss/PD_HomeScreen_100Pct.png)
+![](images/ss/PD_HomeScreen_Online.png)
 
 <a name="weather-screen"></a>
 ### Weather Screen
@@ -122,8 +135,8 @@ The weather screen shows current weather information form [OpenWeatherMap.org](h
 
 The units (metric or imperial) are configured in the Web UI.
 
-![](images/WeatherScreen.jpg)
-*Note*: This shot shows the info icon in the upper right corner. it is occluding the seconds area of the time display.
+![](images/ss/WeatherScreen_II.png)  
+*Note*: This shot shows the info icon in the upper right corner. It is occluding the seconds area of the time display.
 
 **Actions**:
 
@@ -135,7 +148,7 @@ The units (metric or imperial) are configured in the Web UI.
 
 The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the forecast for the city that was configured using the Web UI. The forecast is arranged in two columns. The left column shows the forecast for the next three 3-hour periods. The right column shows the forecast for the next three days. Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the day and hour of the forecast, and the temperature. The forecast cells for the next 3 days show the high and low predicted temperature for that day.
 
-![](images/ForecastScreen.png)
+![](images/ss/ForecastScreen.png)
 
 **Actions**:
 
@@ -154,7 +167,7 @@ The Info Screen dislpays various low level pieces of information also provides a
 * The next row of buttons allows you to change the brightness of the screen to Dim, Medium, or Bright. The brightness can also be changed from the Web UI interactively or via a schedule. The current brightness level is displayed below the buttons.
 * Finally, there are statistics about how much memory MultiMon is using. This is only of interest to developers.
 
-![](images/InfoScreen.png)
+![](images/ss/InfoScreen.png)
 
 **Actions**:
 
@@ -169,7 +182,7 @@ This screen is only displayed when MultiMon can't connect to the WiFi network. T
 
 In the image shown below, you would connect your phone/tablet/computer to the WiFi station named "MM-a82607". The rest of the configuration happens on your phone/tablet/computer. Once the MultiMon unit is properly configured, it will reboot and connect to the network you specified.
 
-![](images/ConfigScreen.png)
+![](images/ss/ConfigScreen.png)
 
 **Actions**:
 
@@ -180,7 +193,7 @@ In the image shown below, you would connect your phone/tablet/computer to the Wi
 
 The Calibration screen allows you to calibrate the touch hardware built into the display. You need never use this functionality unless you are either finding touch to be inaccurate *or* you have flipped the orientation of the display using the Web UI.
 
-![](images/CalibrationProcess.png)
+![](images/ss/CalibrationProcess.png)  
 
 **Actions**:
 You will be presented with a screen that asks you to touch the screen to begin the calibration process. Once you do, you will be presented with a series of four screens. Each will display an arrow pointing to one corner of the display and asking you to touch that corner. Do so. Once you've done that, it will ask you to touch the screen again to complete the calibration process. At that point you will be taken back to the [Home Screen](#home-screen).
@@ -190,7 +203,7 @@ You will be presented with a screen that asks you to touch the screen to begin t
 
 An advanced user of the Web UI can request a reboot of the device. When they do so, the Reboot Screen will appear regardless of the current state of the GUI.
 
-![](images/RebootScreen.jpg)
+![](images/ss/RebootScreen.png)
 
 **Actions**:
 
