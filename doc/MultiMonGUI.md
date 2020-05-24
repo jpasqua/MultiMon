@@ -69,11 +69,11 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 	* **Printing**: In which case the area displays a progress bar with percent complete
 	* **Unused**: Meaning that printer has not been configured
 
-![](images/ss/HomeScreen_3Prints.png)
-![](images/ss/HomeScreen_Mixed.png)
-![](images/ss/HomeScreen_Unused.png)
-![](images/ss/HomeScreen_UIW.png)
-![](images/ss/HomeScreen_UIP.png)
+<img src="images/ss/HomeScreen_3Prints.png" border="1">
+<img src="images/ss/HomeScreen_Mixed.png" border="1">
+<img src="images/ss/HomeScreen_Unused.png" border="1">
+<img src="images/ss/HomeScreen_UIW.png" border="1">
+<img src="images/ss/HomeScreen_UIP.png" border="1">
 
 **Actions**:
 
@@ -135,7 +135,8 @@ The weather screen shows current weather information form [OpenWeatherMap.org](h
 
 The units (metric or imperial) are configured in the Web UI.
 
-![](images/ss/WeatherScreen_II.png)  
+<img src="images/ss/WeatherScreen_II.png" border="1">  
+
 *Note*: This shot shows the info icon in the upper right corner. It is occluding the seconds area of the time display.
 
 **Actions**:
@@ -148,7 +149,7 @@ The units (metric or imperial) are configured in the Web UI.
 
 The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the forecast for the city that was configured using the Web UI. The forecast is arranged in two columns. The left column shows the forecast for the next three 3-hour periods. The right column shows the forecast for the next three days. Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the day and hour of the forecast, and the temperature. The forecast cells for the next 3 days show the high and low predicted temperature for that day.
 
-![](images/ss/ForecastScreen.png)
+<img src="images/ss/ForecastScreen.png" border="1">  
 
 **Actions**:
 
