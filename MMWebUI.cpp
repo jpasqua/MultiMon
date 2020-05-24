@@ -52,12 +52,6 @@ namespace MMWebUI {
 
   // ----- BEGIN: MMWebUI::Endpoints
   namespace Endpoints {
-    void reboot() {
-      if (!WebUI::authenticationOK()) { return; }
-      MultiMon::Protected::askToReboot();
-      WebUI::redirectHome();
-    }
-
     void setBrightness() {
       if (!WebUI::authenticationOK()) { return; }
       Log.trace("Handling /setBrightness");
@@ -93,15 +87,21 @@ namespace MMWebUI {
       WebUI::redirectHome();
     }
 
-    void updateDevData() {
+    void updatePrinterConfig() {
+      boolean flipOld = MM::settings.invertDisplay;
       if (!WebUI::authenticationOK()) { return; }
-      MM::settings.printer[0].mock = WebUI::hasArg("_p0_mock");
-      MM::settings.printer[1].mock = WebUI::hasArg("_p1_mock");
-      MM::settings.printer[2].mock = WebUI::hasArg("_p2_mock");
-      MM::settings.printer[3].mock = WebUI::hasArg("_p3_mock");
 
-      // Save the config, but don't change which printers are mocked until reboot
+      for (int i = 0; i < 4; i++) {
+        bool wasActive = MM::settings.printer[i].isActive;
+        updateSinglePrinter(i);
+        if (!wasActive && MM::settings.printer[i].isActive) MultiMon::Protected::printerWasActivated(i);
+      }
+
       MM::settings.write();
+      // MM::settings.logSettings();
+
+      // Act on changed settings...
+      MM::Protected::configMayHaveChanged();
       WebUI::redirectHome();
     }
 
@@ -132,23 +132,61 @@ namespace MMWebUI {
 
       WebUI::redirectHome();
     }
+  }   // ----- END: MMWebUI::Endpoints
 
-    void updatePrinterConfig() {
-      boolean flipOld = MM::settings.invertDisplay;
+  // ----- BEGIN: MMWebUI::Dev
+  namespace Dev {
+    void presentDevConfig() {
+      Log.trace("Web Request: Handle Dev Configure");
       if (!WebUI::authenticationOK()) { return; }
 
-      for (int i = 0; i < 4; i++) {
-        bool wasActive = MM::settings.printer[i].isActive;
-        updateSinglePrinter(i);
-        if (!wasActive && MM::settings.printer[i].isActive) MultiMon::Protected::printerWasActivated(i);
-      }
+      auto mapper =[](String &key) -> String {
+        if (key.startsWith("_P")) {
+          int i = (key.charAt(2) - '0');
+          key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
+          if (key == "NICK") return MM::settings.printer[i].nickname;
+          if (key == "MOCK") {
+            return checkedOrNot[MM::settings.printer[i].mock];
+          }
+          if (key == "SERVER") return MM::settings.printer[i].server;
+        }
+        return EmptyString;
+      };
 
+      WebUI::startPage();
+      templateHandler->send("/ConfigDev.html", mapper);
+      WebUI::finishPage();
+    }
+
+    void updateDevData() {
+      if (!WebUI::authenticationOK()) { return; }
+      MM::settings.printer[0].mock = WebUI::hasArg("_p0_mock");
+      MM::settings.printer[1].mock = WebUI::hasArg("_p1_mock");
+      MM::settings.printer[2].mock = WebUI::hasArg("_p2_mock");
+      MM::settings.printer[3].mock = WebUI::hasArg("_p3_mock");
+
+      // Save the config, but don't change which printers are mocked until reboot
       MM::settings.write();
-      // MM::settings.logSettings();
-
-      // Act on changed settings...
-      MM::Protected::configMayHaveChanged();
       WebUI::redirectHome();
+    }
+
+    void reboot() {
+      if (!WebUI::authenticationOK()) { return; }
+      MultiMon::Protected::askToReboot();
+      WebUI::redirectHome();
+    }
+
+    void forceScreen() {
+      Log.trace("Web Request: /dev/settings");
+      if (!WebUI::authenticationOK()) { return; }
+      String screen = WebUI::arg("screen");
+      if (screen.isEmpty()) return;
+      else if (screen == "splash") GUI::displaySplashScreen();
+      else if (screen == "wifi") GUI::displayWiFiScreen();
+      else if (screen == "config") {
+        String ssid = "MM-nnnnnn";
+        GUI::displayConfigScreen(ssid);
+      }
     }
 
     void yieldSettings() {
@@ -167,8 +205,7 @@ namespace MMWebUI {
 
       WebUI::sendArbitraryContent("image/bmp", GUI::getSizeOfScreenShotAsBMP(), GUI::streamScreenShotAsBMP);
     }
-
-  }   // ----- END: MMWebUI::Endpoints
+  }   // ----- END: MMWebUI::Dev
 
 
   namespace Pages {
@@ -275,28 +312,6 @@ namespace MMWebUI {
       templateHandler->send("/ConfigDisplay.html", mapper);
       WebUI::finishPage();
     }
-
-    void presentDevConfig() {
-      Log.trace("Web Request: Handle Dev Configure");
-      if (!WebUI::authenticationOK()) { return; }
-
-      auto mapper =[](String &key) -> String {
-        if (key.startsWith("_P")) {
-          int i = (key.charAt(2) - '0');
-          key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
-          if (key == "NICK") return MM::settings.printer[i].nickname;
-          if (key == "MOCK") {
-            return checkedOrNot[MM::settings.printer[i].mock];
-          }
-          if (key == "SERVER") return MM::settings.printer[i].server;
-        }
-        return EmptyString;
-      };
-
-      WebUI::startPage();
-      templateHandler->send("/ConfigDev.html", mapper);
-      WebUI::finishPage();
-    }
   }   // ----- END: MMWebUI::Pages
 
 
@@ -307,17 +322,19 @@ namespace MMWebUI {
     WebUI::registerHandler("/presentWeatherConfig",   Pages::presentWeatherConfig);
     WebUI::registerHandler("/presentPrinterConfig",   Pages::presentPrinterConfig);
     WebUI::registerHandler("/presentDisplayConfig",   Pages::presentDisplayConfig);
-    WebUI::registerHandler("/dev",                    Pages::presentDevConfig);
 
     WebUI::registerHandler("/updateStatus",           Endpoints::updateStatus);
     WebUI::registerHandler("/updateWeatherConfig",    Endpoints::updateWeatherConfig);
     WebUI::registerHandler("/updatePrinterConfig",    Endpoints::updatePrinterConfig);
     WebUI::registerHandler("/updateDisplayConfig",    Endpoints::updateDisplayConfig);
     WebUI::registerHandler("/setBrightness",          Endpoints::setBrightness);
-    WebUI::registerHandler("/updateDevData",          Endpoints::updateDevData);
-    WebUI::registerHandler("/reboot",                 Endpoints::reboot);
-    WebUI::registerHandler("/dev/settings",           Endpoints::yieldSettings);
-    WebUI::registerHandler("/dev/screenShot",         Endpoints::yieldScreenShot);
+
+    WebUI::registerHandler("/dev",                    Dev::presentDevConfig);
+    WebUI::registerHandler("/dev/updateDevData",      Dev::updateDevData);
+    WebUI::registerHandler("/dev/reboot",             Dev::reboot);
+    WebUI::registerHandler("/dev/settings",           Dev::yieldSettings);
+    WebUI::registerHandler("/dev/screenShot",         Dev::yieldScreenShot);
+    WebUI::registerHandler("/dev/forceScreen",        Dev::forceScreen);
 
     templateHandler = WebUI::getTemplateHandler();
   }
