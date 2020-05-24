@@ -146,7 +146,15 @@ namespace MultiMon {
       // GUI::displayConfigMode(ssid, ip);
     }
   
-    void baseConfigChange() { WebUI::setTitle("MultiMon (" + WebThing::settings.hostname + ")"); }
+    void setTitle() {
+      String hostname = WebThing::settings.hostname;
+      if (hostname.isEmpty() || hostname.startsWith("MM-"))
+        WebUI::setTitle("MultiMon (" + hostname + ")");
+      else
+        WebUI::setTitle(hostname);
+    }
+
+    void baseConfigChange() { setTitle(); }
 
     void configModeCallback(String &ssid, String &ip) {
       GUI::displayConfigScreen(ssid);
@@ -183,7 +191,7 @@ namespace MultiMon {
     }
 
     void prepWebUI() {
-      WebUI::setTitle("MultiMon (" + WebThing::settings.hostname + ")");
+      setTitle();
       MMWebUI::init();
     }
 
