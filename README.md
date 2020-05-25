@@ -130,7 +130,7 @@ You may use any housing you wish for *MultiMon*. I have uploaded a model to [thi
 Building the software for MultiMon is a bit more complex than a typical application because it stores files on the ESP8266 file system. This means that you need to use a plug-in to the Arduino IDE to upload those files to the Arduino. The file structure is described in detail in the [*WebThing*](https://github.com/jpasqua/WebThing) readme file. In this section I will describe the steps involved.
 
 1. Download and install the [`ESP8266 Sketch Data Upload`](https://github.com/esp8266/arduino-esp8266fs-plugin)plug-in. If you have installed successfully, you will see a new menu item in the Arduino IDE Tools menu. See the screen shot below.
-2. Copy or link the `wt` directory from [*WebThing*](https://github.com/jpasqua/WebThing) `data` directory to the *MultiMon* `data` directory. When you're done you'll have a `data` directory that contains a number of `HTML` files, a `settings.json` file, and a `wt` subdirectory. The `wt` subdirectory will also contain `HTML` files and another `settings.json` file.
+2. Copy or link the `wt` directory from [*WebThing*](https://github.com/jpasqua/WebThing) `data` directory to the *MultiMon* `data` directory. When you're done you'll have a `data` directory that contains a number of `HTML` files and a `wt` subdirectory. The `wt` subdirectory will also contain `HTML` files.
 3. You need to reserve some flash memory space for the file system. In the Tools menu of the Arduino IDE you will see a `Flash Size` submenu. Choose `FS: 1MB`.
 4. Now connect your ESP8266 to your computer via USB and select the `ESP8266 Sketch Data Upload` item from the tools menu. You will see all the files in your `data` directory, including those in the `wt` subdirectory being loaded onto your ESP8266.
 5. Finally you can proceed as usual and compile / upload *MultiMon* to your ESP8266.
@@ -234,7 +234,7 @@ The `/dev` page allows you to make any one of the printers a "mock" printer mean
 
 ### Capturing the Current State
 
-It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings as JSON` button which will go to a page with the JSON content. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`.
+It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings as JSON` button which will go to a page with the JSON content. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`. If you save these settings as a file named `settings.json` and place it in your `data` directory, it can be uploaded to your device using `ESP8266 Sketch Data Uploader`. There is no need to do this, but developers may find it useful to easily switch between batches of settings.
 
 Similarly you can get a screen shot of whatever is currently displayed on the device using the `Take a screen shot` button. This will display an image in your browser which corresponds to the current content of the display. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/screenShot`.
 
