@@ -110,7 +110,7 @@ To configure for the D1 Mini TFT Shield, just copy the two files listed below in
 
 * `MultiMon/resources/TFT_eSPI/User_Setup_Select.h` -> `library/TFT_eSPI` 
 	+ *Note*: This will overwrite the file in the destination, so you may wish to save the original.
-* `MultiMon/resources/TFT_eSPI/User\_Setups/D1Mini_ILI9341.h`  -> `library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`
+* `MultiMon/resources/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`  -> `library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`
 
 #### Enabling brightness control
 
@@ -130,7 +130,7 @@ You may use any housing you wish for *MultiMon*. I've uploaded two models to [th
 ### Software
 Building the software for MultiMon is a bit more complex than a typical application because it stores files on the ESP8266 file system. This means that you need to use a plug-in to the Arduino IDE to upload those files to the Arduino. The file structure is described in detail in the [*WebThing*](https://github.com/jpasqua/WebThing) readme file. In this section I will describe the steps involved.
 
-1. Download and install the [`ESP8266 Sketch Data Upload`](https://github.com/esp8266/arduino-esp8266fs-plugin)plug-in. If you have installed successfully, you will see a new menu item in the Arduino IDE Tools menu. See the screen shot below.
+1. Download and install the [`ESP8266 Sketch Data Upload`](https://github.com/esp8266/arduino-esp8266fs-plugin) plug-in. Note that installing this plugin is not the same as installing a normal Arduino library. Follow the installation instructions [here](https://github.com/esp8266/arduino-esp8266fs-plugin#installation). If you have installed successfully, you will see a new menu item in the Arduino IDE Tools menu. See the screen shot below.
 2. Copy or link the `wt` directory from [*WebThing*](https://github.com/jpasqua/WebThing) `data` directory to the *MultiMon* `data` directory. When you're done you'll have a `data` directory that contains a number of `HTML` files and a `wt` subdirectory. The `wt` subdirectory will also contain `HTML` files.
 3. You need to reserve some flash memory space for the file system. In the Tools menu of the Arduino IDE you will see a `Flash Size` submenu. Choose `FS: 1MB`.
 4. Now connect your ESP8266 to your computer via USB and select the `ESP8266 Sketch Data Upload` item from the tools menu. You will see all the files in your `data` directory, including those in the `wt` subdirectory being loaded onto your ESP8266.
