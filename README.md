@@ -30,6 +30,7 @@ The following third party libraries are used within this project. You'll need to
 * [ESPTemplateProcessor](https://github.com/jpasqua/ESPTemplateProcessor)
 * [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI): Minimum version 2.2.7
 * [TimeLib](https://github.com/PaulStoffregen/Time.git)
+* [JSONService](https://github.com/jpasqua/JSONService)
 * [WebThing](https://github.com/jpasqua/WebThing)
 * [WiFiManager](https://github.com/tzapu/WiFiManager)
 
