@@ -121,10 +121,10 @@ Many displays allow you to control their brightness. *MultiMon* takes advantage 
 
 <a name="enclosure"></a>
 ### Enclosure
-You may use any housing you wish for *MultiMon*. I have uploaded a model to [thingiverse](thingiverse.com) that may be useful:
+You may use any housing you wish for *MultiMon*. I've uploaded two models to [thingiverse](thingiverse.com) that may be useful:
 
-**TO DO: Upload my enclosure**
-[Model 1](https://www.thingiverse.com/thing:MMMM)
+1. [2.4" TFT Modular Enclosure](https://www.thingiverse.com/thing:4393857)  
+2. (To be uploaded)
 
 <a name="software"></a>
 ### Software
