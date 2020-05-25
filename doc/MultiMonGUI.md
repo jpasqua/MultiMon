@@ -148,7 +148,7 @@ The units (metric or imperial) are configured in the Web UI.
 
 The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the forecast for the city that was configured using the Web UI. The screen displays 6 forecasts arranged in two columns. It starts with the forecast for the next 3 hours. After that it presents the 5-day day forecast. They are ordered from top top bottom, left to right.
 
-Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the day and hour of the forecast, and the low/high temperature. Since the first forecast is just for a single 3 hour period, it only shows the average temperature (not high and low).
+Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the low/high temperature, and the day / hour when the high will occur. Since the first forecast is just for a single 3 hour period, it only shows the average temperature (not high and low).
 
 ![](images/ss/ForecastScreen.png)
 
