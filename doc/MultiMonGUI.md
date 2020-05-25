@@ -20,7 +20,7 @@ Index of Screens (alphabetical):
 * [Config Screen](#config-screen)
 * [Info Screen](#info-screen)
 * [Forecast Screen](#forecast-screen)
-* [Priner Status Screen](#printer-status-screen)
+* [Printer Status Screen](#printer-status-screen)
 * [Printer Detail Screen](#printer-detail-screen)
 * [Reboot Screen](#reboot-screen)
 * [Splash Screen](#splash-screen)
@@ -45,7 +45,7 @@ When MultiMon boots, the first thing it displays is the WiFi Screen. This will r
 
 The Splash Screen is displayed during the boot process while MultiMon is initializing. You will notice that the Info Icon is displayed almost the whole time since MultiMon is getting initial status from all configured printers, getting the current weather, and getting the forecast.
 
-In the image below you will see the info icon with an orange border which means that at this point in time, MultiMon is getting weather data.
+In the screen shots below you will see the info icon displayed in the upper right corner. A green border indicates that it is receiving printer status, while an orange border means it is getting weather data.
 
 ![](images/ss/SplashScreen_IIP.png)
 ![](images/ss/SplashScreen_IIW.png)
@@ -58,7 +58,7 @@ In the image below you will see the info icon with an orange border which means 
 <a name="time-screen"></a>
 ### Time Screen (aka Home Screen)
 
-The time screen is the the primary/home screen. It provides a clock, overview status of the printers, and a single line of weather information. The screen shots below capture the home screen in a variety of states. The elements of the scree are as follows:
+The time screen is the the primary/home screen. It provides a clock, overview status of the printers, and a single line of weather information. The screen shots below capture the home screen in a variety of situations. The elements of the scree are as follows:
 
 * The current temperature and weather description for the selected city
 * The next line shows the expected completion time of the next print across all configured printers. If there is no print in progress, then that line will not be displayed.
@@ -146,7 +146,9 @@ The units (metric or imperial) are configured in the Web UI.
 <a name="forecast-screen"></a>
 ### Forecast Screen
 
-The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the forecast for the city that was configured using the Web UI. The forecast is arranged in two columns. The left column shows the forecast for the next three 3-hour periods. The right column shows the forecast for the next three days. Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the day and hour of the forecast, and the temperature. The forecast cells for the next 3 days show the high and low predicted temperature for that day.
+The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the forecast for the city that was configured using the Web UI. The screen displays 6 forecasts arranged in two columns. It starts with the forecast for the next 3 hours. After that it presents the 5-day day forecast. They are ordered from top top bottom, left to right.
+
+Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the day and hour of the forecast, and the low/high temperature. Since the first forecast is just for a single 3 hour period, it only shows the average temperature (not high and low).
 
 ![](images/ss/ForecastScreen.png)
 
@@ -158,10 +160,10 @@ The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get 
 <a name="info-screen"></a>
 ### Info Screen
 
-The Info Screen dislpays various low level pieces of information also provides a few buttons that allow the user to take actions. The layout of the screen is:
+The Info Screen displays various low level pieces of information also provides a few buttons that allow the user to take actions. The layout of the screen is:
 
-* The header line jsut shows the the MultiMon version number
-* Below that is the name of the monitor and it's current IP address. If you use a computer/phone/tablet that has Bonjour support, you can access MultiMon by typing the unit's name followed by ".local" into the address bar of your browser. In the example below, the name of this unit is "MyMonitor" so you could access it by entering `http://MyMonitor.local` into your browser.
+* The header line just shows the the MultiMon version number
+* Below that is the name of the monitor and its current IP address. If you use a computer/phone/tablet that has Bonjour support, you can access MultiMon by typing the unit's name followed by ".local" into the address bar of your browser. In the example below, the name of this unit is "MyMonitor" so you could access it by entering `http://MyMonitor.local` into your browser.
 * To the right of that are bars indicating the WiFi signal strength (0 to 4 bars).
 * Next is the `Refresh` button. Pressing it will cause MultiMon to ask each printer for fresh status information. The Info Icon will flash on the screen while that is happening. 
 * The next row of buttons allows you to change the brightness of the screen to Dim, Medium, or Bright. The brightness can also be changed from the Web UI interactively or via a schedule. The current brightness level is displayed below the buttons.

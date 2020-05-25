@@ -116,28 +116,25 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
     Log.warning("Failed to retreive forecast");
     return;
   }
-
-  //serializeJsonPretty(*root, Serial); Serial.println();
+  // serializeJsonPretty(*root, Serial); Serial.println();
 
   // The forecast elements are arranged as follows:
-  // The first 3 forecasts correspond to the next 9 hour period (modulo offset for start time)
-  // forecast[0] corresponds to the list[0]
-  // forecast[1] corresponds to the list[1]
-  // forecast[2] corresponds to the list[2]
-  // The next 3 forecasts correspond to the next 3 days
-  // forecast[3] corresponds to the 1st day included in the returned forecast list
-  // forecast[4] corresponds to the 2nd day included in the returned forecast list
-  // forecast[5] corresponds to the 3rd day included in the returned forecast list
-
+  // forecast[0] corresponds to the first available 3 hour period - not a full day
+  // The next 5 elements correspond to the 5 day forecast
+  // forecast[1] corresponds to the 1st day included in the returned forecast list
+  // forecast[2] corresponds to the 2nd day included in the returned forecast list
+  // forecast[3] corresponds to the 3rd day included in the returned forecast list
+  // forecast[4] corresponds to the 4th day included in the returned forecast list
+  // forecast[5] corresponds to the 5th day included in the returned forecast list
 
   JsonArray list = (*root)["list"];
 
-  int startDay = day();
   int operationalDay = -1;
 
   uint32_t curDT;
   String   curIcon;
-  float    curMin, curMax;
+  float    curMin = 1000.0f;
+  float    curMax = -1000.0f;
   int      dayOfCurDT;
   uint32_t timeOfMaxTemp;
   int forecastIndex = 0;
@@ -146,28 +143,22 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
   // index in a loop. This is much more efficient since the underlying JsonArray
   // is actually a linked list (see ArduinoJson doc for the recommendation)
   for (JsonObject f : list) {
-    if (forecastIndex < 3) {
-      // Just capture the first three elements and do no other processing.
-      forecast[forecastIndex].dt = f["dt"];
-      forecast[forecastIndex].dt += gmtOffset;
-      forecast[forecastIndex].hiTemp = f["main"]["temp"];
-      forecast[forecastIndex].loTemp = Forecast::NoReading;
-      forecast[forecastIndex].icon = f["weather"][0]["icon"].as<String>();   
-      forecastIndex++;
-      continue;
-    }
-
     curDT = f["dt"];
     curDT += gmtOffset;
     dayOfCurDT = day(curDT);
 
-    // If we're past the first three readings, but still on the startDay, skip this entry
-    if (dayOfCurDT == startDay) continue;
-    if (operationalDay == -1) {
+    if (forecastIndex == 0) {
+      // Just capture the first element and do no other processing.
+      forecast[forecastIndex].dt = curDT;
+      forecast[forecastIndex].hiTemp = f["main"]["temp"];
+      forecast[forecastIndex].loTemp = Forecast::NoReading;
+      forecast[forecastIndex].icon = f["weather"][0]["icon"].as<String>();   
+      forecastIndex++;
       operationalDay = dayOfCurDT;
-      curMin = 1000;
-      curMax = -1000;
-    } else if (dayOfCurDT != operationalDay) {
+      continue;
+    }
+
+    if (dayOfCurDT != operationalDay) {
       forecast[forecastIndex].dt = timeOfMaxTemp;
       forecast[forecastIndex].loTemp = curMin;
       forecast[forecastIndex].hiTemp = curMax;
@@ -186,6 +177,12 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
     if (curTemp < curMin) {
       curMin = curTemp;
     }
+  }
+  if (forecastIndex < ForecastElements) {
+    forecast[forecastIndex].dt = timeOfMaxTemp;
+    forecast[forecastIndex].loTemp = curMin;
+    forecast[forecastIndex].hiTemp = curMax;
+    forecast[forecastIndex].icon = curIcon;
   }
 
   dumpForecast();
