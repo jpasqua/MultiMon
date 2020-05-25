@@ -18,7 +18,7 @@ For details on using the device, please see the [*MultiMon* GUI documentation](d
 * Configuration information for the built-in web server
 * etc.
 
-Some of this configuration information is specific to *MultiMon* while other information is common to any web-connected device. You can learn more about such *WebThing*'s [here](https://github.com/jpasqua/WebThing).
+Some of this configuration information is specific to *MultiMon* while other information is common to any web-connected device. You can learn more about such *WebThing*s [here](https://github.com/jpasqua/WebThing).
 
 ## Dependencies
 
