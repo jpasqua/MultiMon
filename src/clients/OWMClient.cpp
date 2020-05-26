@@ -118,14 +118,7 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
   }
   // serializeJsonPretty(*root, Serial); Serial.println();
 
-  // The forecast elements are arranged as follows:
-  // forecast[0] corresponds to the first available 3 hour period - not a full day
-  // The next 5 elements correspond to the 5 day forecast
-  // forecast[1] corresponds to the 1st day included in the returned forecast list
-  // forecast[2] corresponds to the 2nd day included in the returned forecast list
-  // forecast[3] corresponds to the 3rd day included in the returned forecast list
-  // forecast[4] corresponds to the 4th day included in the returned forecast list
-  // forecast[5] corresponds to the 5th day included in the returned forecast list
+  // The 5 forecast elements correspond to the 5-day forecast
 
   JsonArray list = (*root)["list"];
 
@@ -147,16 +140,7 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
     curDT += gmtOffset;
     dayOfCurDT = day(curDT);
 
-    if (forecastIndex == 0) {
-      // Just capture the first element and do no other processing.
-      forecast[forecastIndex].dt = curDT;
-      forecast[forecastIndex].hiTemp = f["main"]["temp"];
-      forecast[forecastIndex].loTemp = Forecast::NoReading;
-      forecast[forecastIndex].icon = f["weather"][0]["icon"].as<String>();   
-      forecastIndex++;
-      operationalDay = dayOfCurDT;
-      continue;
-    }
+    if (operationalDay == -1) { operationalDay = dayOfCurDT; }
 
     if (dayOfCurDT != operationalDay) {
       forecast[forecastIndex].dt = timeOfMaxTemp;
@@ -190,7 +174,7 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
 }
 
 void OWMClient::dumpForecast() {
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < ForecastElements; i++) {
     forecast[i].dumpToLog();
   }
 }

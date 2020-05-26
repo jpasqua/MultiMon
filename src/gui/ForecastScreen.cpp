@@ -1,7 +1,8 @@
 /*
  * ForecastScreen:
- *    Display forecast info for the next 9 hours and the next
- *    three days.
+ *    Display the 5-day forecast. Since we are arranging the readings in two columns
+ *    with the 3 forecast cells each, we've got an extra spot. Make the first spot
+ *    the current readings and the next 5 spots the 5-day forecast.
  *                    
  * TO DO:
  * o Respect settings.use24Hour
@@ -62,10 +63,29 @@ void ForecastScreen::display(bool activating) {
 
   tft.fillScreen(GUI::Color_WeatherBkg);
   uint16_t x = 0, y = 0;
+
+  // The first element of the forecast display is really the current temperature
+  Forecast current;
+  current.dt = MultiMon::owmClient->weather.dt + WebThing::getGMTOffset();
+  current.hiTemp = MultiMon::owmClient->weather.readings.temp;
+  current.loTemp = Forecast::NoReading;
+  current.icon = MultiMon::owmClient->weather.description.icon;
+  displaySingleForecast(&current, x, y);
+  y += TileHeight;
+
   Forecast *f = MultiMon::owmClient->getForecast();
   for (int i = 0; i < OWMClient::ForecastElements; i++) {
+    // It's possible that the current temperature is higher than what was
+    // forecast. If so, update the forecast with the known higher temp
+    if (i == 0 && day(f[i].dt) == day(current.dt)) {
+      if (f[i].hiTemp < current.hiTemp) {
+        f[i].dt = current.dt;
+        f[i].hiTemp = current.hiTemp;
+        f[i].icon = current.icon;
+      }
+    }
     displaySingleForecast(&f[i], x, y);
-    if (i == 2) x += TileWidth;
+    if (i == 1) x += TileWidth;
     y = (y + TileHeight) % Screen::Height;
   }
 }

@@ -84,7 +84,7 @@ public:
 
 class OWMClient {
 public:
-  static const uint8_t ForecastElements = 6;
+  static const uint8_t ForecastElements = 5;  // 5-day forecast
 
   Weather weather;
 
