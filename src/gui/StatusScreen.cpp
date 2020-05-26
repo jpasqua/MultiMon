@@ -4,8 +4,10 @@
  *    as a button that moves to a DetailScreen for that printer. 
  *                    
  * TO DO:
- * o Avoid screen flashing on updates
  * o Clean up how dimensions are defined / used
+ *
+ * DONE:
+ * o Avoid screen flashing on updates
  *
  */
 

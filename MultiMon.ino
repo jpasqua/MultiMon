@@ -8,13 +8,10 @@
  *   - Perhaps at some point allow "themes" to be set for colors used on the display.
  *     Probably not fonts since the layout is not flexible
  *   - Figure out the whole w3-row, w3-container model and apply across all pages
- * o Change the way mocking works. Take it out of the individual print client impls
- *   and create a MockPrintClient. Instantiate one of those instead of a real client
  *
  * o Consider:
  *   - Local temperature sensor support
  *   - BlynkClient support
- *   - Pop up a screen while refreshing printer status which can take a while?
  *
  * ISSUES TO RESOLVE:
  * 
@@ -45,6 +42,10 @@
  *     a failure in connect() given a host.local server name. For some reason
  *     it seems to resolve to localhost.
  *   - Intermittent reboots (memory leak?)
+ * o Change the way mocking works. Take it out of the individual print client impls
+ *   and create a MockPrintClient. Instantiate one of those instead of a real client
+ * o Pop up an icon while refreshing printer status which can take a while?
+ *
  */
 
 
