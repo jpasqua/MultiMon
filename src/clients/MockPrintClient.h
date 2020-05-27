@@ -3,10 +3,10 @@
 static const uint8_t N_Names = 6;
 static char *names[N_Names] = {
   "covid19_headband_all_rc3_0.2mm_PLA.gcode",
-  "Middle Logo Insert X1_0.15mm_PLA.gcode",
+  "Box (Bottom Facing USB)_0.2mm_PLA_UXL_2h57m.gcode",
   "D1 2.4 TFT Shield Box Alt3 v4_0.2mm_PLA.gcode",
-  "VEND-Knob w Screw Hole_0.2mm_PLA.gcode",
-  "Bushnell Stand_0.2mm_PETG.gcode",
+  "Slanted Box Bottom_0.2mm_PLA_MK3_38m.gcode",
+  "smallv3_router_table_insert_0.2mm_PLA_MK3_53m.gcode",
   "Reset shaft_0.2mm_PLA.gcode",
 };
 static constexpr float RoomTemp = 21.1f;
