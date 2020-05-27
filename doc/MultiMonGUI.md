@@ -101,7 +101,7 @@ The Printer Status Screen gives an overview of the status of each printer. It is
 The Printer Detail Screen provides more detail about a print in progress. This screen is only available for printers that are either printing or have completed a print. The layout of the screen is:
 
 * The nickname of the printer. If no nickname was specified, the server name will be used.
-* The name of the file being printed. If the name ends with ".gcode", that will be stripped to preserve space. If the name won't fit on a single line, it will occupy two lines - but not more than that.
+* The name of the file being printed. If the name won't fit on a single line, it will be truncated, [but can be scrolled](#scroll-filename). If it is shorter than a single line, it will be centered. 
 * A progress bar shows the percent completion of the print and the time remaining in HH:MM:SS format.
 * The line below the progress bar gives the bed actual and target temperatures as well as the target and actual temperature for tool 1 (labeled E0 for extruder 0). Each pair is given as Actual / Target (e.g. 60.1 / 60.0). These values are always in degrees Celsius.
 * The next line shows the elapsed time of the print (labeled as "Done:") and the estimated completion time (labeled "Est:"). When a print is complete, this will show "Complete" rather than an estimate.
@@ -111,6 +111,7 @@ The Printer Detail Screen provides more detail about a print in progress. This s
 
 **Actions**:
 
+* <a name="scroll-filename"></a> If the file name is too long to fit on a single line, it is truncated. To see the whole name, tap anywhere in the nickname area or the filename area (i.e. anywhere near the top of the screen) and the name will scroll to reveal the entire content.
 * Pressing anywhere on the screen navigates back to the [Home Screen](#home-screen).
 * If the print is complete (100%), it will continue to show as 100%, here and on the home screen, until an action is taken.
 	* Sometimes it is preferable to show the printer as Online and ready for a new print. I sometimes use this distinction to remind myself whether I have already collected the last print so the printer is ready for a new job.
@@ -148,7 +149,7 @@ The units (metric or imperial) are configured in the Web UI.
 
 The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the 5-day forecast for the city that was configured using the Web UI. The screen is arranged as two columns with 3 forecasts each for a total of six cells. They are ordered chronologically from top to bottom, left to right. We use the first cell for the current temperature. The rest of the cells are the 5-day forecast.
 
-Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the low/high temperature for the day, and the day/hour when the high will occur. Obviously the weather conditions can change throughout the day but there is only space to display one weather condition icon. To accomodate this I display the weather condition icon corresponding to the time of the high temperature.
+Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the low/high temperature for the day, and the day/hour when the high will occur. Obviously the weather conditions can change throughout the day but there is only space to display one weather condition icon. To accommodate this I display the weather condition icon corresponding to the time of the high temperature.
 
 Note: Since the first entry corresponds to the current conditions, it only shows one temperature (not high and low). The hour displayed is the hour when the reading was taken.
 
