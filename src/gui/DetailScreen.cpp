@@ -28,12 +28,27 @@ using GUI::sprite;
  *
  *----------------------------------------------------------------------------*/
 
+static const uint16_t TitleAreaYOrigin = 0;
 static const auto TitleFont = &FreeSansBold18pt7b;
+static const auto TitleFontHeight = TitleFont->yAdvance;
+static const auto TitleAreaHeight = TitleFontHeight;
+
+static const uint16_t FileNameYOrigin = TitleAreaYOrigin + TitleAreaHeight;
+static const auto FileNameFont = &FreeSansBold9pt7b;
+static const auto FileNameFontHeight = FileNameFont->yAdvance;
+
+// The button that initiates scrolling of the file name covers both the title
+// area and the file name area. The file name area by itself is too small.
+static const uint16_t FileNameButtonX = 0;
+static const uint16_t FileNameButtonY = 0;
+static const uint16_t FileNameButtonWidth = Screen::Width;
+static const uint16_t FileNameButtonHeight = 64; // TitleAreaHeight+FileNameFontHeight;
+
 static const auto ProgressFont = &FreeSansBold18pt7b;
 static const uint16_t ProgressXInset = 4;
 static const uint16_t ProgressXOrigin = ProgressXInset;
 static const uint16_t ProgressYOrigin = 100;
-static const uint16_t ProgressHeight = 40;
+static const uint16_t ProgressHeight = ProgressFont->yAdvance;
 static const uint16_t ProgressWidth = Screen::Width - (2 * ProgressXInset);
 
 static const auto DetailFont = &FreeSansBold9pt7b;
@@ -45,6 +60,8 @@ static const uint16_t DetailHeight = 2 * DetailFontHeight;
 static const uint16_t DetailXOrigin = 0;
 static const uint16_t DetailYOrigin = Screen::Height - DetailHeight - DetailYBottomMargin;
 
+static const uint8_t FileNameButtonID = 0;
+static const uint8_t FullScreenButtonID = 1;
 
 /*------------------------------------------------------------------------------
  *
@@ -55,6 +72,11 @@ static const uint16_t DetailYOrigin = Screen::Height - DetailHeight - DetailYBot
 DetailScreen::DetailScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose("In DetailScreen ButtonHandler, id = %d", id);
+    if (id == FileNameButtonID) {  // The file name was tapped
+      revealFullFileName();
+      return;
+    }
+
     PrintClient *p = MultiMon::printer[index];
     if (type > Button::PressType::NormalPress && p->getState() == PrintClient::State::Complete) {
       p->acknowledgeCompletion();
@@ -62,8 +84,11 @@ DetailScreen::DetailScreen() {
     GUI::displayHomeScreen();
   };
 
-  buttons = new Button[(nButtons = 1)];
-  buttons[0].init(0, 0, Screen::Width, Screen::Height, buttonHandler, 0);
+  buttons = new Button[(nButtons = 2)];
+  buttons[0].init(
+      FileNameButtonX, FileNameButtonY, FileNameButtonWidth, FileNameButtonHeight,
+      buttonHandler, FileNameButtonID);
+  buttons[1].init(0, 0, Screen::Width, Screen::Height, buttonHandler, FullScreenButtonID);
 }
 
 void DetailScreen::setIndex(int i) { index = i; }
@@ -72,6 +97,7 @@ void DetailScreen::display(bool activating) {
   PrintClient *printer = MultiMon::printer[index];
 
   if (activating) {
+    scrollIndex = -1; // We're doing an inital display, so we aren't scrolling
     tft.fillScreen(GUI::Color_Background);
     drawStaticContent(printer, activating);
   }
@@ -86,6 +112,9 @@ void DetailScreen::display(bool activating) {
 }
 
 void DetailScreen::processPeriodicActivity() {
+  if (scrollIndex != -1 && (millis() >= nextScrollTime)) {
+    scrollFileName();
+  }
   if (millis() >= nextUpdateTime) { display();  }
 }
 
@@ -114,23 +143,16 @@ void DetailScreen::drawStaticContent(PrintClient *printer, bool force) {
   tft.setTextColor(GUI::Color_Nickname);
   tft.drawString(MultiMon::settings.printer[index].nickname, Screen::XCenter, 5);
 
-  // ----- Display the file name
-  // This may involve drawinging two lines of text if the name is too long.
-  // Keep pulling chars off the end until the first part will fit. If there
-  // is anything left, draw that on the next line down.
   String name = printer->getFilename();
-  int fullLength = name.length();
-  if (name.endsWith(".gcode")) { fullLength -= 6; name.remove(fullLength); }
-  int len = fullLength;
-
-  tft.setFreeFont(DetailFont);
-  while (tft.textWidth(name) >= Screen::Width) { name.remove(--len); }
+  tft.setFreeFont(DetailFont);            // Set font BEFORE measuring width
+  nameWidth = tft.textWidth(name);        // Remember width in case we need to scroll
   tft.setTextColor(GUI::Color_DimText);
-  tft.setTextDatum(TC_DATUM);
-  tft.drawString(name, Screen::XCenter, 40);
-
-  if (fullLength > len) {
-    tft.drawString(printer->getFilename().substring(len, fullLength), Screen::XCenter, 59);
+  if (nameWidth < Screen::Width)  {
+    tft.setTextDatum(TC_DATUM);
+    tft.drawString(name, Screen::XCenter, FileNameYOrigin);
+  } else {
+    tft.setTextDatum(TL_DATUM);
+    tft.drawString(name, 0, FileNameYOrigin);
   }
 }
 
@@ -213,6 +235,30 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
   sprite->deleteSprite();
 }
 
+void DetailScreen::scrollFileName() {
+  sprite->setColorDepth(1);
+  sprite->createSprite(Screen::Width, DetailHeight);
+  sprite->fillSprite(GUI::Mono_Background);
+  sprite->setFreeFont(DetailFont);
+  sprite->setTextColor(GUI::Mono_Foreground);
+  sprite->setTextDatum(TL_DATUM);
+
+  String name = MultiMon::printer[index]->getFilename();
+  if (scrollIndex == nameWidth - Screen::Width) { delta = -delta; }
+  sprite->drawString(name, -scrollIndex, 0);
+  sprite->setBitmapColor(GUI::Color_DimText, GUI::Color_Background);
+  sprite->pushSprite(0, FileNameYOrigin);
+  sprite->deleteSprite();
+
+  nextScrollTime = millis() + 10;
+  scrollIndex = scrollIndex + delta;
+}
+
+void DetailScreen::revealFullFileName() {
+  if (nameWidth <= Screen::Width) return; // It's already revealed
+  scrollIndex = 1;
+  delta = 1;
+}
 
 
 
