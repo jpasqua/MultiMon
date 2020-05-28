@@ -63,7 +63,7 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 * The current temperature and weather description for the selected city
 * The next line shows the expected completion time of the next print across all configured printers. If there is no print in progress, then that line will not be displayed.
 * The largest area shows the time. The format (24 hour or AM/PM) is configured in the Web UI.
-* Across the bottom of the home screen are status indicators for each printer. To conserve space, this screen does not show the printer nicknames. The printers are displayed in the order in which they were configured in the Web UI. Each status indicator will show the current state which can be:
+* Across the bottom of the home screen are status indicators for each printer. To conserve space, this screen shows the nicknames in a very small font. My experience has been that after a short time, you know which printer is which by the location, so the small font isn't a real issue. The printers are displayed in the order in which they were configured in the Web UI. Each status indicator will show the current state which can be:
 	* **Offline**: No connection to the printer
 	* **Online**: Connected to the printer, but no print in progress
 	* **Printing**: In which case the area displays a progress bar with percent complete
@@ -71,9 +71,9 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 
 ![](images/ss/HomeScreen_3Prints.png)
 ![](images/ss/HomeScreen_Mixed.png)
-![](images/ss/HomeScreen_Unused.png)
 ![](images/ss/HomeScreen_UIW.png)
 ![](images/ss/HomeScreen_UIP.png)
+![](images/ss/HomeScreen_Unused.png)
 
 **Actions**:
 
@@ -111,7 +111,7 @@ The Printer Detail Screen provides more detail about a print in progress. This s
 
 **Actions**:
 
-* <a name="scroll-filename"></a> If the file name is too long to fit on a single line, it is truncated. To see the whole name, tap anywhere in the nickname area or the filename area (i.e. anywhere near the top of the screen) and the name will scroll to reveal the entire content.
+* <a name="scroll-filename"></a> If the file name is too long to fit on a single line, it is truncated. To see the whole name, tap anywhere in the nickname area or the filename area (i.e. anywhere near the top of the screen) and the name will scroll to reveal the entire content. If you tap the area again while it is scrolling, the scrolling will stop and the name will be displayed from the beginning.
 * Pressing anywhere on the screen navigates back to the [Home Screen](#home-screen).
 * If the print is complete (100%), it will continue to show as 100%, here and on the home screen, until an action is taken.
 	* Sometimes it is preferable to show the printer as Online and ready for a new print. I sometimes use this distinction to remind myself whether I have already collected the last print so the printer is ready for a new job.
