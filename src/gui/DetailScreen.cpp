@@ -256,8 +256,14 @@ void DetailScreen::scrollFileName() {
 
 void DetailScreen::revealFullFileName() {
   if (nameWidth <= Screen::Width) return; // It's already revealed
-  scrollIndex = 1;
-  delta = 1;
+  if (scrollIndex != -1) {  // We're already scrolling, finish
+    scrollIndex = 0;
+    delta = -1;
+  } else {
+    scrollIndex = 1;
+    delta = 1;    
+  }
+
 }
 
 
