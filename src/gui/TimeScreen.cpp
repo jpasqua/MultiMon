@@ -61,6 +61,8 @@ static const uint16_t WeatherYOrigin = 0;
 static const uint16_t WeatherHeight = WeatherFontHeight;
 static const uint16_t WeatherWidth = Screen::Width;
 
+static int16_t PrinterNameFont = 2; // A small 5x7 font
+
 // NC is short for Next Completion
 static const auto NCFont = &FreeSansBold9pt7b;
 static const uint16_t NCFontHeight = NCFont->yAdvance;
@@ -78,11 +80,12 @@ static const uint16_t PB_BarWidth = PB_Width - (PB_FrameSize*2);    // Just the 
 static const uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the bar, no frame
 static const uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
 static const uint16_t PB_YOrigin = Screen::Height - PB_Height;      // Y Origin of all progress bars
+static const uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
 
-static const uint16_t ClockXOrigin = 0;                       // Starts at left edge of screen
-static const uint16_t ClockYOrigin = NCYOrigin + NCHeight;    // Starts below the NextCompletion area
-static const uint16_t ClockWidth = Screen::Width;             // Full width of the screen
-static const uint16_t ClockHeight = PB_YOrigin-ClockYOrigin;  // The space between the other 2 areas
+static const uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
+static const uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
+static const uint16_t ClockWidth = Screen::Width;                   // Full width of the screen
+static const uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
 static const auto ClockFont = &DSEG7_Classic_Bold_100;
 static const uint16_t ClockFontHeight = ClockFont->yAdvance;
 
@@ -134,6 +137,7 @@ void TimeScreen::display(bool activating) {
   if (activating) { tft.fillScreen(GUI::Color_Background); }
 
   drawClock(activating);
+  drawPrinterNames(activating);
   drawStatus(activating);
   drawWeather(activating);
   drawNextComplete(activating);
@@ -277,6 +281,21 @@ void TimeScreen::drawNextComplete(bool force) {
   sprite->pushSprite(NCXOrigin, NCYOrigin);
   sprite->deleteSprite();
 
+}
+
+void TimeScreen::drawPrinterNames(bool force) {
+  uint16_t yPos = PB_YOrigin;
+  uint16_t xDelta = Screen::Width/MultiMon::MaxServers;
+  uint16_t xPos = 0 + xDelta/2;
+  tft.setTextDatum(BC_DATUM);
+  tft.setTextColor(GUI::Color_NormalText);
+  for (int i = 0; i < MultiMon::MaxServers; i++) {
+    String name;
+    if (!MultiMon::settings.printer[i].isActive) name = "";
+    else name = MultiMon::settings.printer[i].nickname;
+    tft.drawString(name, xPos, yPos, PrinterNameFont);
+    xPos += xDelta;
+  }
 }
 
 void TimeScreen::drawStatus(bool force) {
