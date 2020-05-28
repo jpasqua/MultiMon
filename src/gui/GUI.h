@@ -19,10 +19,12 @@ namespace GUI {
   static const uint32_t Color_Border = TFT_WHITE;
   static const uint32_t Color_Background = TFT_BLACK;
 
-  static const uint32_t Color_SplashBkg = TFT_BLACK;  // Can swap white and black
+  static const uint32_t Color_SplashBkg  = TFT_BLACK;  // Can swap white and black
   static const uint32_t Color_SplashText = TFT_WHITE; // Can swap white and black
   static const uint32_t Color_SplashOcto = TFT_GREEN;
   static const uint32_t Color_SplashDuet = TFT_BLUE;
+  static const uint32_t Color_SplashRR   = 0x0488;
+    // RR Logo color is #029346, 565 version of that is 0x0488
 
   static const uint32_t Color_WeatherTxt = TFT_PURPLE;
   static const uint32_t Color_WeatherBkg = TFT_WHITE;

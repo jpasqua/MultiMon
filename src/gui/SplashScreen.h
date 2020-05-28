@@ -5,7 +5,7 @@
 #include <TimeLib.h>
 //                                  Local Includes
 #include "MMScreen.h"
-#include "images/Duet3dMono.h"
+#include "images/RepRapMono.h"
 #include "images/OctoMono.h"
 //--------------- End:    Includes ---------------------------------------------
 
@@ -26,8 +26,8 @@ public:
         6, 0, OctoMono, OctoMono_Width, OctoMono_Height,
         GUI::Color_SplashBkg, GUI::Color_SplashOcto);
     tft.drawBitmap(
-        Screen::XCenter+6, 0, Duet3dMono, Duet3dMono_Width, Duet3dMono_Height,
-        GUI::Color_SplashBkg, GUI::Color_SplashDuet);
+        Screen::XCenter+6, 0, RepRapMono, RepRapMono_Width, RepRapMono_Height,
+        GUI::Color_SplashBkg, GUI::Color_SplashRR);
 
     tft.setFreeFont(&FreeSansBoldOblique24pt7b);
     tft.setTextColor(GUI::Color_SplashText);
