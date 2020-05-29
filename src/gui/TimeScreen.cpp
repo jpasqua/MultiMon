@@ -194,7 +194,7 @@ void TimeScreen::drawClock(bool force) {
 
   sprite->setBitmapColor(GUI::Color_AlertGood, GUI::Color_Background);
   uint16_t yPlacement = ClockYOrigin+((ClockHeight-ClockFontHeight)/2);
-  yPlacement -= 5;  // Having it perfectly centered doesn't look as good,
+  yPlacement -= 10; // Having it perfectly centered doesn't look as good,
                     // especially when no "next completion time" is displayed
   sprite->pushSprite(ClockXOrigin, yPlacement);
   sprite->deleteSprite();
