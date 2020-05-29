@@ -149,11 +149,12 @@ The units (metric or imperial) are configured in the Web UI.
 
 The Forecast Screen uses [OpenWeatherMap.org](http://OpenWeatherMap.org) to get the 5-day forecast for the city that was configured using the Web UI. The screen is arranged as two columns with 3 forecasts each for a total of six cells. They are ordered chronologically from top to bottom, left to right. We use the first cell for the current temperature. The rest of the cells are the 5-day forecast.
 
-Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the low/high temperature for the day, and the day/hour when the high will occur. Obviously the weather conditions can change throughout the day but there is only space to display one weather condition icon. To accommodate this I display the weather condition icon corresponding to the time of the high temperature.
+Each cell shows an icon representing the weather condition (e.g. Sunny or Rain), the low/high temperature for the day, and the day/hour when the high will occur. Obviously the weather conditions can change throughout the day but there is only space to display one weather condition icon. To accommodate this I display the weather condition icon corresponding to the time of the high temperature. The two screenshots below show how the screen looks using [24-hour time or AM/PM](../README.md#configure-display) format.
 
 Note: Since the first entry corresponds to the current conditions, it only shows one temperature (not high and low). The hour displayed is the hour when the reading was taken.
 
-![](images/ss/ForecastScreen.png)
+![](images/ss/ForecastScreen24hr.png)
+![](images/ss/ForecastScreenAMPM.png)
 
 **Actions**:
 

@@ -31,12 +31,13 @@ using GUI::tft;
  *----------------------------------------------------------------------------*/
 
 static const auto ReadingsFont = &FreeSansBold9pt7b;
-static const uint16_t ReadingsFontHeight = 22;
+static const uint16_t ReadingsFontHeight = ReadingsFont->yAdvance;
 
 static const uint16_t TileWidth = Screen::Width/2;
 static const uint16_t TileHeight = Screen::Height/3;
 static const uint16_t TextVPad = (TileHeight - (2*ReadingsFontHeight))/2;
 
+static int16_t TinyFont = 2;  // A small 5x7 font
 
 /*------------------------------------------------------------------------------
  *
@@ -120,9 +121,21 @@ void ForecastScreen::displaySingleForecast(Forecast *f, uint16_t x, uint16_t y) 
   reading = dayShortStr(weekday(f->dt));
   int h = hour(f->dt);
   bool pm = isPM(f->dt);
-  if (pm) h -= 12;
-  else if (h == 0) h = 12;
-  reading += " " + String(h) + (pm ? "P" : "A");
+  if (!MultiMon::settings.use24Hour) {
+    if (pm) h -= 12;
+    else if (h == 0) h = 12;
+    reading += " " + String(h);
+  } else {
+    reading += " ";
+    if (h < 10) reading += "0";
+    reading += String(h);
+  }
 
-  tft.drawString(reading, x, y);
+  x += tft.drawString(reading, x, y) + 1;
+  if (MultiMon::settings.use24Hour) {
+    reading = ":00";
+  } else {
+    reading = (pm ? "PM" : "AM");
+  }
+  tft.drawString(reading, x+1, y+1, TinyFont);
 }
