@@ -16,7 +16,7 @@
 
 namespace MultiMon {
   // ----- Constants
-  static const String VersionString = "0.5";
+  static const String VersionString = "0.6";
   static const int MaxServers = 4;
   static const int8_t Pin_LEDBrightnessControl = D4;  // -1 for no pin
 
