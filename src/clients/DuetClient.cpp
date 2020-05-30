@@ -42,8 +42,10 @@ void DuetClient::init(String server, int port, String pass) {
 
 void DuetClient::updateState() {
   if (connect()) {
-    getRRState();                     // Refresh the RepRap State
-    if (fileInfo.err) getFileInfo();  // If we don't already have the fileInfo, get it.
+    String oldStatus = rrState.status;  // Let's see if this changes...
+    getRRState();                       // Refresh the RepRap State
+    // Only get the file info if we need it...
+    if (fileInfo.err || oldStatus != rrState.status) getFileInfo();
     updateDerivedValues();
     disconnect();
   } else {
