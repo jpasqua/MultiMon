@@ -171,7 +171,7 @@ void TimeScreen::drawClock(bool force) {
     if (hr == 0) { hr = 12; }
   }
 
-  timeString[0] = (hr < 10) ? ' ' : '1';
+  timeString[0] = (hr < 10) ? ' ' : (hr/10 + '0');
   timeString[1] = '0' + (hr % 10);
   timeString[2] = ':';
   timeString[3] = '0' + (min / 10);
@@ -259,7 +259,7 @@ void TimeScreen::drawNextComplete(bool force) {
   if (minCompletion != UINT32_MAX) {
     PrintClient *printer = MultiMon::printer[printerWithNextCompletion];
     PrinterSettings *ps = &MultiMon::settings.printer[printerWithNextCompletion];
-    time_t theTime = now() + printer->getPrintTimeLeft();
+    time_t theTime = now() + minCompletion;
 
     String readout =  (ps->nickname.isEmpty()) ? readout = ps->server : ps->nickname;
     readout += ": ";
@@ -277,7 +277,8 @@ void TimeScreen::drawNextComplete(bool force) {
     sprite->drawString(readout, NCWidth/2, 0);
   }
 
-  sprite->setBitmapColor(GUI::Color_AlertGood, GUI::Color_Background);
+  uint16_t color = minCompletion < (15*60) ? GUI::Color_AlertGood : GUI::Color_NormalText;
+  sprite->setBitmapColor(color, GUI::Color_Background);
   sprite->pushSprite(NCXOrigin, NCYOrigin);
   sprite->deleteSprite();
 

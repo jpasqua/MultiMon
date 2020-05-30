@@ -61,7 +61,7 @@ In the screen shots below you will see the info icon displayed in the upper righ
 The time screen is the the primary/home screen. It provides a clock, overview status of the printers, and a single line of weather information. The screen shots below capture the home screen in a variety of situations. The elements of the scree are as follows:
 
 * The current temperature and weather description for the selected city
-* The next line shows the expected completion time of the next print across all configured printers. If there is no print in progress, then that line will not be displayed.
+* The next line shows the expected completion time of the next print across all configured printers. If there is no print in progress, then that line will not be displayed. If the print is scheduled to complete within 15 minutes, it will be displayed in a highlight color. Otherwise it will be displayed as normal text.
 * The largest area shows the time. The format (24 hour or AM/PM) is configured in the Web UI.
 * Across the bottom of the home screen are status indicators for each printer. To conserve space, this screen shows the nicknames in a very small font. My experience has been that after a short time, you know which printer is which by the location, so the small font isn't a real issue. The printers are displayed in the order in which they were configured in the Web UI. Each status indicator will show the current state which can be:
 	* **Offline**: No connection to the printer
