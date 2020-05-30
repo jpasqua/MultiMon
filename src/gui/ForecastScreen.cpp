@@ -5,9 +5,9 @@
  *    the current readings and the next 5 spots the 5-day forecast.
  *                    
  * TO DO:
- * o Respect settings.use24Hour
  *
  * COMPLETE
+ * o Respect settings.use24Hour
  *
  */
 
