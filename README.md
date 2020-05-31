@@ -124,7 +124,7 @@ Many displays allow you to control their brightness. *MultiMon* takes advantage 
 You may use any housing you wish for *MultiMon*. I've uploaded two models to [thingiverse](thingiverse.com) that may be useful:
 
 1. [2.4" TFT Modular Enclosure](https://www.thingiverse.com/thing:4393857)  
-2. (To be uploaded)
+2. [Slanted box for 2.4Inch TFT](https://www.thingiverse.com/thing:4413894)
 
 <a name="software"></a>
 ### Software
