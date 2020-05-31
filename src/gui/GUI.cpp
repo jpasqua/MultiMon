@@ -121,7 +121,7 @@ namespace GUI {
       uint16_t morning = MultiMon::settings.morning.hr * 100 + MultiMon::settings.morning.min;
       uint16_t evening = MultiMon::settings.evening.hr * 100 + MultiMon::settings.evening.min;
       uint32_t curMillis = millis();
-      int today = day();
+      uint32_t today = day();
       if (curMillis > nextScheduleCheck) {
         nextScheduleCheck = curMillis + (60-second()) * 1000L;
         uint16_t curTime = hour() * 100 + minute();
@@ -215,7 +215,7 @@ namespace GUI {
   void streamScreenShotAsBMP(Stream &s) {
     // Adapted form https://forum.arduino.cc/index.php?topic=406416.0
     byte hiByte, loByte;
-    int i, j = 0;
+    uint16_t i, j = 0;
 
     uint8_t bmFlHdr[14] = {
       'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0
