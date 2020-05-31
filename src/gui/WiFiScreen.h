@@ -18,6 +18,7 @@ public:
   }
 
   void display(bool activating = false) {
+    (void)activating; // We don't use this parameter - avoid a warning...
     tft.fillScreen(GUI::Color_Background);
     uint16_t x = (Screen::Width-WiFiLogo_Width)/2;
     uint16_t y = 30;  // A little space from the top of the screen

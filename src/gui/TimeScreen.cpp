@@ -208,6 +208,7 @@ void TimeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, fl
 }
 
 void TimeScreen::drawWeather(bool force) {
+  (void)force;  // We don't use this parameter. Avoid a warning...
   if (!MultiMon::owmClient) { Log.verbose("owmClient = NULL"); return; }
   if (!MultiMon::settings.owm.enabled) return;
   String readout;
@@ -239,6 +240,7 @@ void TimeScreen::drawWeather(bool force) {
 }
 
 void TimeScreen::drawNextComplete(bool force) {
+  (void)force;  // We don't use this parameter. Avoid a warning...
   sprite->setColorDepth(1);
   sprite->createSprite(NCWidth, NCHeight);
   sprite->fillSprite(GUI::Mono_Background);
@@ -285,6 +287,7 @@ void TimeScreen::drawNextComplete(bool force) {
 }
 
 void TimeScreen::drawPrinterNames(bool force) {
+  (void)force;  // We don't use this parameter. Avoid a warning...
   uint16_t yPos = PB_YOrigin;
   uint16_t xDelta = Screen::Width/MultiMon::MaxServers;
   uint16_t xPos = 0 + xDelta/2;
@@ -300,6 +303,7 @@ void TimeScreen::drawPrinterNames(bool force) {
 }
 
 void TimeScreen::drawStatus(bool force) {
+  (void)force;  // We don't use this parameter. Avoid a warning...
   for (int i = 0; i < MultiMon::MaxServers; i++) {
     PrintClient *printer = MultiMon::printer[i];
 

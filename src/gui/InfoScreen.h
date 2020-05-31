@@ -87,6 +87,7 @@ public:
   }
 
   void display(bool activating = false) {
+    (void)activating; // We don't use this parameter - avoid a warning...
     uint16_t y = 0;
 
     tft.fillScreen(GUI::Color_Background);

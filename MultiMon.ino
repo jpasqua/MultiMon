@@ -117,7 +117,7 @@ namespace MultiMon {
 
       for (int i = 0; i < MultiMon::MaxServers; i++) {
         if (settings.printer[i].isActive) {
-          uint32_t threshold;
+          uint32_t threshold = UINT32_MAX;
           // Randomize the refresh times a little so we aren't do all the updates
           // at once which can cause the UI to become unresponsive
           switch (printer[i]->getState()) {
@@ -143,10 +143,6 @@ namespace MultiMon {
       GUI::hideUpdatingIcon();
     }
 
-    void cmCallback(String &ssid, String &ip) {
-      // GUI::displayConfigMode(ssid, ip);
-    }
-  
     void setTitle() {
       String hostname = WebThing::settings.hostname;
       if (hostname.isEmpty() || hostname.startsWith("MM-"))
@@ -158,6 +154,7 @@ namespace MultiMon {
     void baseConfigChange() { setTitle(); }
 
     void configModeCallback(String &ssid, String &ip) {
+      (void)ip; // We don't use this parameter - avoid a warning
       GUI::displayConfigScreen(ssid);
     }
 

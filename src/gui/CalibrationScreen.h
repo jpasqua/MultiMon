@@ -53,6 +53,7 @@ private:
 
   void init() {
     auto buttonHandler =[&](int id, Button::PressType type) -> void {
+      (void)type; // We don't use this parameter - avoid a warning...
       Log.verbose("In CalibrationScreenButtonHandler, id = %d", id);
       switch (state) {
         case pre:
@@ -65,12 +66,14 @@ private:
           state = post;
           break;
         case complete:
-          uint16 *cd = &MultiMon::settings.calibrationData[0];
           Log.verbose("Finished calibration, saving settings : [");
           for (int i = 0; i < MMSettings::nCalReadings; i++) { Log.verbose("  %d,", MultiMon::settings.calibrationData[i]); }
           Log.verbose("]");
           MultiMon::Protected::saveSettings();
           GUI::displayHomeScreen();
+          break;
+        case post:
+          // Assert: should never get here
           break;
       }
     };

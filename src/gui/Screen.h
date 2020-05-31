@@ -39,7 +39,6 @@ public:
     } else {
       if (wasPressed) {
         // Ok, we got a press/release, see which button (if any) is associated
-        uint32_t endOfPress = millis();
         Button::PressType pt;
         uint32_t pressDuration = (millis() - startOfPress);
         if (pressDuration >= Button::VeryLongPressInterval) pt = Button::PressType::VeryLongPress;

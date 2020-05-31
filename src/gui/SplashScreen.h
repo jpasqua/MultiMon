@@ -19,8 +19,8 @@ public:
   }
 
   void display(bool activating = false) {
-    // #include "src/images/OctoLogo.h"
-    // tft.pushImage(0, 0, Screen::Width, Screen::Height, logo_320x240);
+    (void)activating; // We don't use this parameter - avoid a warning...
+
     tft.fillScreen(GUI::Color_SplashBkg);
     tft.drawBitmap(
         6, 0, OctoMono, OctoMono_Width, OctoMono_Height,

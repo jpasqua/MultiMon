@@ -30,6 +30,7 @@ public:
   }
 
   void display(bool activating = false) {
+    (void)activating; // We don't use this parameter - avoid a warning...
     tft.fillScreen(GUI::Color_Background);
     tft.drawBitmap(0, 0, Gears160x240, 160, 240, GUI::Color_AlertGood);
 

@@ -44,6 +44,7 @@ public:
   }
 
   void display(bool activating = false) {
+    (void)activating; // We don't use this parameter - avoid a warning...
     tft.fillScreen(GUI::Color_Background);
 
     tft.setFreeFont(RebootButtonFont);

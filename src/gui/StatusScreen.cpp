@@ -97,7 +97,8 @@ void StatusScreen::processPeriodicActivity() {
  *----------------------------------------------------------------------------*/
 
 void StatusScreen::displayStaticElements(int index, bool force) {
-  PrintClient *printer = MultiMon::printer[index];
+  (void)force; // We don't use this parameter - avoid a warning...
+
   int x = (index%2) * (TileWidth+1);
   int y = (index>1) * (TileHeight+1);
 
@@ -109,10 +110,12 @@ void StatusScreen::displayStaticElements(int index, bool force) {
 }
 
 void StatusScreen::displaySingleStatus(int index, bool force) {
+  (void)force; // We don't use this parameter - avoid a warning...
+
   PrintClient *printer = MultiMon::printer[index];
   int x = (index%2) * (TileWidth+1);
   int y = (index>1) * (TileHeight+1);
-  uint16_t statusColor;
+  uint16_t statusColor = GUI::Color_AlertError;
   String statusMessage;
   String extraMessage = "";
 
