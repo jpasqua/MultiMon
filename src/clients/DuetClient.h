@@ -171,4 +171,4 @@ private:
   void updateDerivedValues();
 };
 
-#endif DuetClient_h
+#endif // DuetClient_h

@@ -143,4 +143,4 @@ private:
   void getPrinterState();
 };
 
-#endif OctoClient_h
+#endif // OctoClient_h
