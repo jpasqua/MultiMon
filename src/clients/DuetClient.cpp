@@ -42,11 +42,16 @@ void DuetClient::init(String server, int port, String pass) {
 
 void DuetClient::updateState() {
   if (connect()) {
-    String oldStatus = rrState.status;  // Let's see if this changes...
+    PrintClient::State oldState = printerState;  // Let's see if this changes...
     getRRState();                       // Refresh the RepRap State
-    // Only get the file info if we need it...
-    if (fileInfo.err || oldStatus != rrState.status) getFileInfo();
     updateDerivedValues();
+    if ((oldState < Printing && printerState == Printing) ||
+        (printerState == Printing && fileInfo.err)) {
+      // We don't have file info for the file that's printing!!
+      // Get it and recompute the derived values.
+      getFileInfo();
+      updateDerivedValues();
+    }
     disconnect();
   } else {
     printerState = PrintClient::State::Offline;
@@ -64,6 +69,7 @@ float DuetClient::getPctComplete() {
   if (printerState == Complete) return 100.0f;
   // Assert(printerState == Printing)
   if (printTimeEstimate == 0) return 0.0f;
+Log.verbose("PrinterState: %d, elapsed: %F, pte: %d", printerState, elapsed, printTimeEstimate);
   return (elapsed*100.0f)/((float)printTimeEstimate);
 }
 
