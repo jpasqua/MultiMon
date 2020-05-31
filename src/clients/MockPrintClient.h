@@ -1,7 +1,7 @@
 #include "PrintClient.h"
 
 static const uint8_t N_Names = 6;
-static char *names[N_Names] = {
+static const char *names[N_Names] = {
   "covid19_headband_all_rc3_0.2mm_PLA.gcode",
   "Box (Bottom Facing USB)_0.2mm_PLA_UXL_2h57m.gcode",
   "D1 2.4 TFT Shield Box Alt3 v4_0.2mm_PLA.gcode",
@@ -43,8 +43,8 @@ public:
   void setIdle() {
     state = PrintClient::State::Operational;
     fileName = "";
-    uint32_t totalPrintTime = 0;
-    uint32_t elapsed = 0;
+    totalPrintTime = 0;
+    elapsed = 0;
     bedTarget = toolTarget = 0.0;
     bedActual = toolActual = RoomTemp;
   }
@@ -73,7 +73,7 @@ public:
     if (ms.state == PrintClient::State::Printing) {
       ms.elapsed += secsSinceUpdate;
       if (ms.elapsed >= ms.totalPrintTime) {
-        ms.elapsed == ms.totalPrintTime;
+        ms.elapsed = ms.totalPrintTime;
         ms.state = PrintClient::State::Complete;
       } else {
         ms.bedActual = ms.bedTarget + ((float)random(-100, 101))/100;
