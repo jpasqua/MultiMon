@@ -88,7 +88,6 @@ namespace MMWebUI {
     }
 
     void updatePrinterConfig() {
-      boolean flipOld = MM::settings.invertDisplay;
       if (!WebUI::authenticationOK()) { return; }
 
       for (int i = 0; i < 4; i++) {
