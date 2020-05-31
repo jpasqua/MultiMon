@@ -137,6 +137,8 @@ inline void appendDate(time_t theTime, String &target) {
 }
 
 void DetailScreen::drawStaticContent(PrintClient *printer, bool force) {
+  (void)force;  // We don't use this parameter. Avoid a warning...
+
   // ----- Display the nickname
   tft.setTextDatum(TC_DATUM);
   tft.setFreeFont(TitleFont);
@@ -161,6 +163,7 @@ void DetailScreen::drawProgressBar(
   static float  lastPct = -1;
   static String lastTxt = "";
 
+  if (pct == 100.0f && lastPct != 100.0f) force = true; // Special case, we want 100% at the end
   if ((pct - lastPct < 1) && (txt == lastTxt) && !force) return;
   lastPct = pct;
   lastTxt = txt;
@@ -198,6 +201,8 @@ void DetailScreen::drawProgressBar(
 }
 
 void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
+  (void)force;  // We don't use this parameter. Avoid a warning...
+
   sprite->setColorDepth(1);
   sprite->createSprite(Screen::Width, DetailHeight);
   sprite->fillSprite(GUI::Mono_Background);
