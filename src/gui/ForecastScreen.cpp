@@ -58,6 +58,8 @@ ForecastScreen::ForecastScreen() {
 
 
 void ForecastScreen::display(bool activating) {
+  (void)activating; // We don't use this parameter - avoid a warning...
+
   // We should not get here if owm is disabled or we were unable to contact the
   // OWM service, but just double check...
   if (!MultiMon::settings.owm.enabled || !MultiMon::owmClient) return;

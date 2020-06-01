@@ -104,10 +104,11 @@ namespace GUI {
 
 
   void setBrightness(uint8_t b) {
+    if (TFT_LED == -1) return;
     if (b == brightness) return;
     brightness = b;
     int analogValue = map(brightness, 0, 100, 0, PWMRANGE);
-    analogWrite(MultiMon::Pin_LEDBrightnessControl, analogValue);
+    analogWrite(TFT_LED, analogValue);
   }
 
   uint8_t getBrightness() { return brightness; }
@@ -140,7 +141,7 @@ namespace GUI {
 
   void init(bool flipDisplay) {
     flipped = flipDisplay;
-    if (MultiMon::Pin_LEDBrightnessControl != -1) pinMode(MultiMon::Pin_LEDBrightnessControl, OUTPUT);
+    if (TFT_LED != -1) pinMode(TFT_LED, OUTPUT);
     setBrightness(100);
     tft.init();
     tft.setSwapBytes(true);

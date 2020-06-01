@@ -259,7 +259,6 @@ void TimeScreen::drawNextComplete(bool force) {
   }
 
   if (minCompletion != UINT32_MAX) {
-    PrintClient *printer = MultiMon::printer[printerWithNextCompletion];
     PrinterSettings *ps = &MultiMon::settings.printer[printerWithNextCompletion];
     time_t theTime = now() + minCompletion;
 
