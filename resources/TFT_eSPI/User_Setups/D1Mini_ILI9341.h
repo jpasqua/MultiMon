@@ -1,10 +1,19 @@
+// Pin assignments for D1 Mini 2.4" TFT Shield
 // See SetupX_Template.h for all options available
 
 #define ILI9341_DRIVER
 
-#define TFT_CS PIN_D0     //for D1 mini or TFT I2C Connector Shield (V1.1.0 or later)
-#define TFT_DC PIN_D8     //for D1 mini or TFT I2C Connector Shield (V1.1.0 or later)
-#define TFT_RST -1        //for D1 mini or TFT I2C Connector Shield (V1.1.0 or later)
+#undef  TFT_CS
+#undef  TFT_DC
+#undef  TFT_RST
+#undef  TFT_LED
+#undef  TOUCH_CS
+
+#define TFT_CS  PIN_D0
+#define TFT_DC  PIN_D8
+#define TFT_RST -1
+#define TFT_LED PIN_D4    // LED backlight brightness. Requires an added wire.
+                          // Use -1 for no connection (full brightness)
 
 #define TOUCH_CS  PIN_D3  //for D1 mini or TFT I2C Connector Shield (V1.1.0 or later)
 
@@ -19,6 +28,7 @@
 
 #define SMOOTH_FONT
 
+#undef  SPI_FREQUENCY
 #define SPI_FREQUENCY       40000000
 #define SPI_READ_FREQUENCY  20000000
 #define SPI_TOUCH_FREQUENCY  2500000
