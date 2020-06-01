@@ -104,20 +104,29 @@ This project requires an ESP8266 and a 320x240 touch screen display. It has been
 
 #### Configuring the `TFT_eSPI` library for your display
 
-`TFT_eSPI` needs to know how your display is connected to your ESP8266 including which pins are used for which signals. If you use the D1 Mini and D1 Mini TFT Shield, you can use the HW configurations supplied by this project (see below). If you use a different display, please refer to the [`TFT_eSPI`](https://github.com/Bodmer/TFT_eSPI) documentation. The library itself provides many configurations you can choose from, or you can create your own custom configuration.
+`TFT_eSPI` needs to know how your display is connected to your ESP8266 including which pins are used for which signals. If you use the D1 Mini and D1 Mini TFT Shield, you can use the HW configuration supplied by this project (see below). If you use a display such as [this one](https://www.amazon.com/gp/product/B073R7BH1B), you can use the second configuration mentioned below. This display has a single 14-pin header that can be conveniently attached to the D1 Mini using this [daughter board](https://oshpark.com/shared_projects/dopTFnBT).
 
-To configure for the D1 Mini TFT Shield, just copy the two files listed below into the `TFT_eSPI` directory:
+If you use a different display, please refer to the [`TFT_eSPI`](https://github.com/Bodmer/TFT_eSPI) documentation. The library itself provides many configurations you can choose from, or you can create your own custom configuration.
 
-* `MultiMon/resources/TFT_eSPI/User_Setup_Select.h` -> `library/TFT_eSPI` 
+To configure for the D1 Mini TFT Shield or the other display mentioned above, just copy the files listed below into the `TFT_eSPI` directory and uncomment the corresponding line in `User_Setup_Select.h`. By default it assumes the 2.4" TFT Shield.
+
+* `MultiMon/resources/TFT_eSPI/User_Setup_Select.h` &rarr; `library/TFT_eSPI` 
 	+ *Note*: This will overwrite the file in the destination, so you may wish to save the original.
-* `MultiMon/resources/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`  -> `library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`
+* `MultiMon/resources/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`  &rarr; `library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`
+* `MultiMon/resources/TFT_eSPI/User_Setups/D1_DB_Mini_ILI9341.h`  &rarr; `library/TFT_eSPI/User_Setups/D1_DB_Mini_ILI9341.h`
+
 
 #### Enabling brightness control
 
-Many displays allow you to control their brightness. *MultiMon* takes advantage of this by providing an analog output on pin D4 which is proportional to the brightness to be displayed. Identify the input on your display which controls brightness, and connect pin D4 to it. The images below show how this is done for the D1 Mini and TFT Shield. See the areas highlighted in red in the first image below.
+Many displays allow you to control their brightness. *MultiMon* takes advantage of this by providing an analog output which is proportional to the desired display brightness. The output pin to be used is specified in the `TFT_eSPI` configuration file and is named TFT_LED. 
 
+Identify the input on your display which controls brightness, and connect the specified pin to it. This is particularly easy for the D1 Mini and TFT Shield. As shown in the images below, it provides a spot to make a solder bridge that connects the brightness input to pin D4 of the D1 Mini.
+
+The first image shows the back side of the TFT Shield and the jumper area is marked in red.
 ![](doc/images/TFTBackSide.jpg)
-![](doc/images/BrightnessWire.jpg)
+
+In this image you can see the area in red from the previous image with the solder bridge applied.
+![](doc/images/D4Bridge.jpg)
 
 <a name="enclosure"></a>
 ### Enclosure
