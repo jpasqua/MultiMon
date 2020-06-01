@@ -85,7 +85,6 @@ public:
 class OWMClient {
 public:
   static const uint8_t ForecastElements = 5;  // 5-day forecast
-
   Weather weather;
 
   OWMClient(String key, int cityID, bool useMetric, String language);
@@ -106,8 +105,8 @@ public:
   String getIcon() {  return weather.description.icon; }
 
 private:
-  String _cityID = "";
   String _key = "";
+  String _cityID = "";
   bool   _useMetric = false;
   String _lang = "";
   Forecast forecast[ForecastElements];

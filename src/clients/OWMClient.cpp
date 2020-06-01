@@ -129,7 +129,7 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
   float    curMin = 1000.0f;
   float    curMax = -1000.0f;
   int      dayOfCurDT;
-  uint32_t timeOfMaxTemp;
+  uint32_t timeOfMaxTemp = 0;
   int forecastIndex = 0;
 
   // Iterate through the JsonArray this way rather than referencing values by
