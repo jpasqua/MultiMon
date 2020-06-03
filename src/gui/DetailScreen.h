@@ -28,11 +28,3 @@ private:
   void scrollFileName();
   void revealFullFileName();
 };
-
-
-
-
-
-
-
-

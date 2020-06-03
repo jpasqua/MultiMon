@@ -69,7 +69,6 @@ float DuetClient::getPctComplete() {
   if (printerState == Complete) return 100.0f;
   // Assert(printerState == Printing)
   if (printTimeEstimate == 0) return 0.0f;
-Log.verbose("PrinterState: %d, elapsed: %F, pte: %d", printerState, elapsed, printTimeEstimate);
   return (elapsed*100.0f)/((float)printTimeEstimate);
 }
 
@@ -167,7 +166,7 @@ bool DuetClient::disconnect() {
 
 void DuetClient::getRRState() {
   static const String RRStateEndpoint = "/rr_status?type=3";
-  static const uint32_t RRStateJSONSize = 2048;
+  static const uint32_t RRStateJSONSize = 3000;
 
   DynamicJsonDocument *root = service->issueGET(RRStateEndpoint, RRStateJSONSize);
   if (!root) {
