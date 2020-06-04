@@ -248,14 +248,15 @@ void DetailScreen::scrollFileName() {
   sprite->setTextColor(GUI::Mono_Foreground);
   sprite->setTextDatum(TL_DATUM);
 
+  uint32_t extraDelay = 0;
   String name = MultiMon::printer[index]->getFilename();
-  if (scrollIndex == nameWidth - Screen::Width) { delta = -delta; }
+  if (scrollIndex == nameWidth - Screen::Width) { delta = -delta; extraDelay = 500; }
   sprite->drawString(name, -scrollIndex, 0);
   sprite->setBitmapColor(GUI::Color_DimText, GUI::Color_Background);
   sprite->pushSprite(0, FileNameYOrigin);
   sprite->deleteSprite();
 
-  nextScrollTime = millis() + 10;
+  nextScrollTime = millis() + 10 + extraDelay;
   scrollIndex = scrollIndex + delta;
 }
 
