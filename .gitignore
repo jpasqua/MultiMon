@@ -1,5 +1,6 @@
 .DS_Store
-resources/image_sources
 data/wt
+data/plugins/*.json
 *settings.json
 doc/images/source
+resources/image_sources
