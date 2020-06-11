@@ -122,6 +122,7 @@ namespace MMWebUI {
 
       MM::settings.use24Hour = WebUI::hasArg("is24hour");
       MM::settings.invertDisplay = WebUI::hasArg("invDisp");
+      MM::settings.blynk.enabled = WebUI::hasArg("blynkEnabled");
 
       MM::settings.write();
       //MM::settings.logSettings();
@@ -176,7 +177,7 @@ namespace MMWebUI {
     }
 
     void forceScreen() {
-      Log.trace("Web Request: /dev/settings");
+      Log.trace("Web Request: /dev/forceScreen");
       if (!WebUI::authenticationOK()) { return; }
       String screen = WebUI::arg("screen");
       if (screen.isEmpty()) return;
@@ -186,6 +187,8 @@ namespace MMWebUI {
         String ssid = "MM-nnnnnn";
         GUI::displayConfigScreen(ssid);
       }
+      else GUI::displayFlexScreen(screen);
+      WebUI::redirectHome();
     }
 
     void yieldSettings() {
@@ -304,6 +307,7 @@ namespace MMWebUI {
 
         if (key == "USE_24HOUR") return checkedOrNot[MM::settings.use24Hour];
         if (key == "INVERT_DISPLAY") return checkedOrNot[MM::settings.invertDisplay];
+        if (key == "BLYNK_ENABLED") return checkedOrNot[MM::settings.blynk.enabled];
         return EmptyString;
       };
 

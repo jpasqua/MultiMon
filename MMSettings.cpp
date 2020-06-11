@@ -101,6 +101,7 @@ void MMSettings::fromJSON(JsonDocument &doc) {
 
   use24Hour = doc["use24Hour"];
   useMetric = doc["useMetric"];
+  blynk.enabled = doc["blynkEnabled"];
 
   invertDisplay = doc["invertDisplay"];
   for (int i = 0; i < nCalReadings; i++) { calibrationData[i] = doc["calibrationData"][i]; }
@@ -128,6 +129,7 @@ void MMSettings::toJSON(JsonDocument &doc) {
 
   doc["use24Hour"] = use24Hour;
   doc["useMetric"] = useMetric;
+  doc["blynkEnabled"] = blynk.enabled;
 
   doc["invertDisplay"] = invertDisplay;
   JsonArray cd = doc.createNestedArray("calibrationData");
@@ -159,6 +161,7 @@ void MMSettings::logSettings() {
   Log.verbose("Display Settings");
   Log.verbose("  use24Hour: %T", use24Hour);
   Log.verbose("  useMetric: %T", useMetric);
+  Log.verbose("  blynk enabled: %T", blynk.enabled);
   Log.verbose("HW Settings");
   Log.verbose("  invertDisplay: %T", invertDisplay);
   Log.verbose("  CalibrationData: [");

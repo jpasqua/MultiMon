@@ -56,6 +56,10 @@ public:
   bool use24Hour = false;             // 23:00 military 24 hour clock
   bool useMetric = false;
 
+  struct {
+    bool enabled;
+  } blynk;
+  
   // HW Settings
   bool     invertDisplay = false;      // true = pins at top | false = pins at the bottom
   static const int nCalReadings = 5;
