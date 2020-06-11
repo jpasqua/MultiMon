@@ -125,7 +125,7 @@ void ForecastScreen::displaySingleForecast(Forecast *f, uint16_t x, uint16_t y) 
   bool pm = isPM(f->dt);
   if (!MultiMon::settings.use24Hour) {
     if (pm) h -= 12;
-    else if (h == 0) h = 12;
+    if (h == 0) h = 12;
     reading += " " + String(h);
   } else {
     reading += " ";
