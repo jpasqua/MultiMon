@@ -69,6 +69,7 @@ The directory structure of the project is shown below. You don't need to know th
                     [Custom fonts]
                 /images
                     [Custom images]
+            /plugins (experimental)
 
 ````
 
@@ -102,9 +103,11 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 
 This project requires an ESP8266 and a 320x240 touch screen display. It has been tested with a [Wemos D1 Mini](https://docs.wemos.cc/en/latest/d1/d1_mini.html) and a [Wemos D1 Mini 2.4" TFT Shield](https://docs.wemos.cc/en/latest/d1_mini_shiled/tft_2_4.html). They are a nice combination since they require no soldering and only 1 mounting point (the display). However, it should work with virtually any ESP8266 with sufficient storage space and any 320x240 screen with an ILI9341 display controller and an XPT2046 touch screen controller.
 
+If you'd like a larger display, *MultiMon* has also been tested with the 2.8" and 3.2" variants of [this one](https://www.aliexpress.com/item/32960934541.html). Both versions of this display have a single 14-pin header that can be conveniently attached to the D1 Mini using this [daughter board](https://oshpark.com/shared_projects/dopTFnBT).
+
 #### Configuring the `TFT_eSPI` library for your display
 
-`TFT_eSPI` needs to know how your display is connected to your ESP8266 including which pins are used for which signals. If you use the D1 Mini and D1 Mini TFT Shield, you can use the HW configuration supplied by this project (see below). If you use a display such as [this one](https://www.amazon.com/gp/product/B073R7BH1B), you can use the second configuration mentioned below. This display has a single 14-pin header that can be conveniently attached to the D1 Mini using this [daughter board](https://oshpark.com/shared_projects/dopTFnBT).
+`TFT_eSPI` needs to know how your display is connected to your ESP8266 including which pins are used for which signals. If you use the D1 Mini and D1 Mini TFT Shield, you can use the HW configuration supplied by this project (see below). There is also a configuration for the 2.8"/3.2" display with daughter board mentioned above.
 
 If you use a different display, please refer to the [`TFT_eSPI`](https://github.com/Bodmer/TFT_eSPI) documentation. The library itself provides many configurations you can choose from, or you can create your own custom configuration.
 
@@ -128,12 +131,19 @@ The first image shows the back side of the TFT Shield and the jumper area is mar
 In this image you can see the area in red from the previous image with the solder bridge applied.
 ![](doc/images/D4Bridge.jpg)
 
+*Note*: If you use the [daughter board](https://oshpark.com/shared_projects/dopTFnBT) mentioned above, the brightness pin is hard-wired to full brightness. If you want to control brightness, you need to cut the trace to pin 7 on the daughter board and then connect a brightness control pin from the D1 Mini to pin 7. It sounds a little scary, but is actually pretty quick and easy. See the red circled area of the image below to see the trace should be cut (coin for scale).
+
+![](doc/images/DBCutTrace.jpg)
+
+
+
 <a name="enclosure"></a>
 ### Enclosure
-You may use any housing you wish for *MultiMon*. I've uploaded two models to [thingiverse](thingiverse.com) that may be useful:
+You may use any housing you wish for *MultiMon*. I've uploaded two models to [thingiverse](thingiverse.com) that may be useful for the D1 Mini Shield hardware:
 
 1. [2.4" TFT Modular Enclosure](https://www.thingiverse.com/thing:4393857)  
 2. [Slanted box for 2.4Inch TFT](https://www.thingiverse.com/thing:4413894)
+
 
 <a name="software"></a>
 ### Software
@@ -210,6 +220,7 @@ Use this menu to configure aspects of the GUI - both how information is displaye
 	* Note that the scheduled brightness can be overridden at any time from the [home page](#home-page) or from the GUI.
 - Use 24 Hour Clock: Controls the display format of times in the GUI (10:30PM vs 22:30)
 - Flip display orientation: Depending on how your hardware was mounted, your display may have been installed "upside down". If you see the image inverted, check this box.
+- Enable Blynk Support (*Experimental*): Off by default and should remain this way unless you wish to [experiment](#dev-exp) with this feature.
 
 <a name="weather-settings"></a>
 ![](doc/images/ConfigureWeather.png)  
@@ -251,6 +262,27 @@ Similarly you can get a screen shot of whatever is currently displayed on the de
 ### Rebooting
 
 Finally, the `/dev` page also has a `Request Reboot` button. If you press the button you will be presented with a popup in your browser asking if you are sure. If you confirm, *MultiMon* will go to a "Reboot Screen" that displays a red reboot button and a green cancel button. The user must press and hold the reboot button for 1 second to confirm a reboot. Pressing cancel will resume normal operation. Pressing no button for 1 minute will behave as if the cancel button was pressed.
+
+<a name="dev-exp"></a>
+## Experimental Info for Developers
+
+MultiMon contains the beginning of a Plugin system to extend the functionality of MultiMon. The basic idea is that a plugin can read data from one more data sources and then display that info on a screen. *MultiMon* includes an example Plugin for reading data from [Blynk](https://blynk.io). In this example, it is reading data from two different weather stations and displaying it.
+
+There are three main components to create a plugin:
+
+1. **Plugin Descriptor**: A declarative definition of the plugin in the form of a JSON file. This definition includes configuration information for the plugin itself and a description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. Plugin descriptors are placed in the `plugins` subdirectory of the `data` directory.
+2. **Plugin Data Source**: Any code that makes data available for use by the Plugin. This could be something that reads information from local sensors, a remote device, a news service - whatever. It is responsible for getting the data and providing an API for consuming it. 
+3. **Plugin Code**: Each type of plugin requires code which coordinates between the data source and the screen. This code is a subclass of the Plugin class. When a FlexScreen instance is about to display itself, it looks through the descriptor and finds references to all of the places where data should be slotted into the template. Each of these refers to the data it wants with a key. FlexScreen asks the Plugin to map the key name to the current value for that key read by the data source.
+
+You can have many instances of the same type of plugin or of different types of plugin.
+
+As mentioned above, the example included with *MultiMon* use Blynk to display weather station information. It is disabled by default and is enabled using the [Configure Display](#configure-display) page. The components of the example are``:
+
+1. **Plugin Descriptor**: The example descriptor file is `plugins/blynk.json`. It displays information from two blynk-based weather stations in a tabular format (see screenshot below). For Blynk, this descriptor also includes the Blynk App IDs for each source from which data is to be pulled. The file included with the package is named `plugins/blynk.json.sample`. to use it you must remove the `.sample` extension.
+2. **Plugin Data Source**: A simple, readonly, client is provided to read the necessary data from Blynk. It is `src/clients/BlynkClient.{cpp|h}`.
+3. **Plugin Code**: The Plugin subclass for Blynk is `src/plugins/BlynkPlugin.{cpp|h}`. It provides the mapper between keys described in the screen definition and data supplied by `BlynkClient`.
+
+![](doc/images/ss/BlynkScreen.png)
 
 
 ## Acknowledgements
