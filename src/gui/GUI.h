@@ -2,6 +2,8 @@
 #define GUI_h
 
 #include <TFT_eSPI.h>
+#include <ArduinoJson.h>
+#include "../Basics.h"
 
 namespace GUI {
   static const uint32_t Color_Online = TFT_GREEN;
@@ -31,6 +33,7 @@ namespace GUI {
 
   static const uint32_t Color_UpdatingWeather = TFT_ORANGE;
   static const uint32_t Color_UpdatingPrinter = TFT_DARKGREEN;
+  static const uint32_t Color_UpdatingPlugins = TFT_SKYBLUE;
   static const uint32_t Color_UpdatingText = TFT_WHITE;
   static const uint32_t Color_UpdatingFill = TFT_BLACK;
 
@@ -49,6 +52,11 @@ namespace GUI {
   
   void loop();
 
+  bool createFlexScreen(
+      JsonObjectConst &descriptor,
+      uint32_t refreshInterval,
+      const Basics::StringMapper &vc);
+
   void displayHomeScreen();
   void displayCalibrationScreen();
   void displayConfigScreen(String &ssid);
@@ -61,6 +69,7 @@ namespace GUI {
   void displayTimeScreen();
   void displayWeatherScreen();
   void displayWiFiScreen();
+  void displayFlexScreen(String name);
 
   /**
    * Overlay the current screen with an icon to indicate that a potentially

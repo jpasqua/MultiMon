@@ -31,6 +31,7 @@
 //                                  Local Includes
 #include "../../MultiMon.h"
 #include "GUI.h"
+#include "FlexScreen.h"
 #include "CalibrationScreen.h"
 #include "ConfigScreen.h"
 #include "DetailScreen.h"
@@ -61,7 +62,12 @@ namespace GUI {
   CalibrationScreen calibrationScreen;
   InfoScreen infoScreen;
   WiFiScreen wiFiScreen;
+  FlexScreen blynkScreen;
   Screen *curScreen = NULL;
+
+  static const uint8_t MaxFlexScreens = 5;
+  FlexScreen* flexScreens[MaxFlexScreens];
+  uint8_t nFlexScreens = 0;
 
   namespace Internal {
     static const uint16_t InfoIconSize = 32;
@@ -82,7 +88,7 @@ namespace GUI {
       tft.drawString("i", centerX, centerY);
     }
 
-    void initUpdatingMessage() {
+    void initInfoIcon() {
       // In theory it would be better to allocate/deallocate this as needed, but it causes
       // a lot more fragmentation and potentially a crash.
       savedPixels = (uint16_t *)malloc(InfoIconSize*InfoIconSize*sizeof(uint16_t));  // This is BIG!
@@ -159,7 +165,7 @@ namespace GUI {
       Log.trace("GUI::init: No valid calibration data in settings");
     }
 
-    Internal::initUpdatingMessage();
+    Internal::initInfoIcon();
   }
 
   uint8_t getTouch(uint16_t *x, uint16_t *y) { return tft.getTouch(x, y); }
@@ -204,6 +210,36 @@ namespace GUI {
   void displayInfoScreen() { display(infoScreen); }
 
   void displayForecastScreen() { display(forecastScreen); }
+
+  void displayFlexScreen(String name)  {
+    for (int i = 0; i < nFlexScreens; i++) {
+      if (name.equalsIgnoreCase(flexScreens[i]->getName())) {
+        curScreen = flexScreens[i];
+        curScreen->activate();
+        return;
+      }
+    }
+    Log.error("Requesting a non-existent screen: %s", name.c_str());
+  }
+
+  bool createFlexScreen(
+      JsonObjectConst &descriptor,
+      uint32_t refreshInterval,
+      const Basics::StringMapper &vc) {
+    if (nFlexScreens == MaxFlexScreens) {
+      Log.warning("Maximum number of FlexScreens exceeded");
+      return false;
+    }
+
+    FlexScreen *flexScreen = new FlexScreen();
+    if (!flexScreen->init(descriptor, refreshInterval, vc)) {
+      delete flexScreen;
+      return false;
+    }
+
+    flexScreens[nFlexScreens++] = flexScreen;
+    return true;
+  }
 
   void showUpdatingIcon(uint16_t accentColor) { Internal::showUpdating(accentColor); }
   void hideUpdatingIcon() { Internal::hideUpdating(); }
