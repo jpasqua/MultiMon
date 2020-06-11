@@ -22,6 +22,8 @@
 
 using GUI::tft;
 
+static const uint8_t SmallFont = 2;
+
 static const auto NormalFont = &FreeSansBold9pt7b;
 static const uint16_t NormalFontHeight = NormalFont->yAdvance;
 static const auto HeaderFont = &FreeSansBold12pt7b;
@@ -32,9 +34,12 @@ static const uint16_t ButtonFontHeight = ButtonFont->yAdvance;
 static const uint16_t ButtonFrameSize = 2;
 static const uint16_t ButtonHeight = ButtonFontHeight + 2 * ButtonFrameSize+10;
 
-static const uint16_t RefreshButtonWidth = Screen::Width/2;
-static const uint16_t RefreshButtonX = (Screen::Width - RefreshButtonWidth)/2;
+static const uint16_t RefreshButtonWidth = Screen::Width/2-10;
+static const uint16_t RefreshButtonX = 5;
 static const uint16_t RefreshButtonY = 65;
+static const uint16_t BlynkButtonWidth = RefreshButtonWidth;
+static const uint16_t BlynkButtonX = (Screen::Width)/2+5;
+static const uint16_t BlynkButtonY = 65;
 
 static const uint16_t ButtonInsetFromEdge = 5;
 static const uint16_t ButtonWidth = 100;
@@ -49,7 +54,8 @@ static const uint8_t DimButtonIndex = 0;
 static const uint8_t MediumButtonIndex = 1;
 static const uint8_t BrightButtonIndex = 2;
 static const uint8_t RefreshButtonIndex = 3;
-static const uint8_t ReturnButtonIndex = 4;
+static const uint8_t BlynkButtonIndex = 4;
+static const uint8_t ReturnButtonIndex = 5;
 
 class InfoScreen : public Screen {
 public:
@@ -60,14 +66,16 @@ public:
         GUI::setBrightness(id == DimButtonIndex ? 20 : (id == MediumButtonIndex ? 50 : 90));
         displayCurrentBrightness(true);
       } else if (id == RefreshButtonIndex) {
-        MultiMon::Protected::updatePrinterData();
+        MultiMon::Protected::updateAllData();
+      } else if (id == BlynkButtonIndex && MultiMon::settings.blynk.enabled) {
+        GUI::displayFlexScreen("blynk");
       } else {
         if (type > Button::PressType::NormalPress) GUI::displayCalibrationScreen();
         else GUI::displayHomeScreen();
       }
     };
 
-    buttons = new Button[(nButtons = 5)];
+    buttons = new Button[(nButtons = 6)];
 
     buttons[DimButtonIndex].init(
         ButtonInsetFromEdge, ButtonYOrigin, ButtonWidth, ButtonHeight,
@@ -81,6 +89,9 @@ public:
     buttons[RefreshButtonIndex].init(
         RefreshButtonX, RefreshButtonY, RefreshButtonWidth, ButtonHeight,
         buttonHandler, RefreshButtonIndex);
+    buttons[BlynkButtonIndex].init(
+        BlynkButtonX, BlynkButtonY, BlynkButtonWidth, ButtonHeight,
+        buttonHandler, BlynkButtonIndex);
     buttons[ReturnButtonIndex].init(  // The rest of the screen is a button
         0, 0, Screen::Width, Screen::Height,
         buttonHandler, ReturnButtonIndex); 
@@ -108,10 +119,11 @@ public:
 
     for (int i = DimButtonIndex; i <= BrightButtonIndex; i++) { drawButton(label[i], i); }
     drawButton("Refresh", RefreshButtonIndex);
+    if (MultiMon::settings.blynk.enabled) drawButton("Blynk", BlynkButtonIndex);
 
     y = displayCurrentBrightness(false);
 
-    tft.setFreeFont(NormalFont);
+    tft.setTextFont(SmallFont);
     tft.setTextColor(GUI::Color_NormalText);
     tft.setTextDatum(TC_DATUM);
     String heapStats = "Heap: Free="+String(ESP.getFreeHeap())+", Frag="+String(ESP.getHeapFragmentation())+"%";
@@ -129,7 +141,7 @@ public:
 private:
   uint16_t displayCurrentBrightness(bool clear) {
     if (clear) tft.fillRect(0, ButtonYOrigin+ButtonHeight+5, Screen::Width, ButtonFontHeight, GUI::Color_Background);
-    tft.setFreeFont(NormalFont);
+    tft.setTextFont(SmallFont);
     tft.setTextColor(GUI::Color_NormalText);
     tft.setTextDatum(TC_DATUM);
     String b = "(Current brightness: " + String(GUI::getBrightness()) + "%)";

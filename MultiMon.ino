@@ -11,7 +11,7 @@
  *
  * o Consider:
  *   - Local temperature sensor support
- *   - BlynkClient support
+ *   - FlexClient support
  *
  * ISSUES TO RESOLVE:
  * 
@@ -61,7 +61,9 @@
 #include "MultiMon.h"
 #include "MMSettings.h"
 #include "MMWebUI.h"
+#include "src/Basics.h"
 #include "src/gui/GUI.h"
+#include "src/plugins/Plugin.h"
 #include "src/clients/PrintClient.h"
 #include "src/clients/DuetClient.h"
 #include "src/clients/MockPrintClient.h"
@@ -256,6 +258,7 @@ namespace MultiMon {
     void updateAllData() {
       Internal::refreshPrinterData(true);
       Internal::refreshWeatherData(true);
+      Plugin::refreshAll(true);
     }
 
     void updateWeatherData() { Internal::refreshWeatherData(true); }
@@ -299,8 +302,10 @@ void setup() {
   GUI::displaySplashScreen();
   Internal::prepPrintClients();
   Internal::prepWeather();
-  Internal::refreshPrinterData(true);   // Updates printer status periodically
-  Internal::refreshWeatherData(true);
+  Plugin::loadAll("/plugins");
+  Internal::refreshPrinterData(true);   // Initial update of printer status
+  Internal::refreshWeatherData(true);   // Initial update of weather info
+  Plugin::refreshAll(true);             // Initial update of plugin data
 
   GUI::displayHomeScreen();
 
@@ -312,6 +317,7 @@ void loop() {
 
   Internal::refreshWeatherData();       // Updates weather data periodically
   Internal::refreshPrinterData();       // Updates printer status periodically
+  Plugin::refreshAll();                 // Update plugin related data
 
   GUI::loop();
 
