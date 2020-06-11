@@ -23,10 +23,10 @@ public:
 
     tft.fillScreen(GUI::Color_SplashBkg);
     tft.drawBitmap(
-        6, 0, OctoMono, OctoMono_Width, OctoMono_Height,
+        6, 10, OctoMono, OctoMono_Width, OctoMono_Height,
         GUI::Color_SplashBkg, GUI::Color_SplashOcto);
     tft.drawBitmap(
-        Screen::XCenter+6, 0, RepRapMono, RepRapMono_Width, RepRapMono_Height,
+        Screen::XCenter+6, 10, RepRapMono, RepRapMono_Width, RepRapMono_Height,
         GUI::Color_SplashBkg, GUI::Color_SplashRR);
 
     tft.setFreeFont(&FreeSansBoldOblique24pt7b);
