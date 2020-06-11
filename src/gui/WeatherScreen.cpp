@@ -141,7 +141,7 @@ void WeatherScreen::display(bool activating) {
   tft.drawString(reading, XTopAreaInset, YReadingsArea);
   tft.setTextDatum(TR_DATUM);
   float pressure = MultiMon::owmClient->weather.readings.pressure;
-  if (!useMetric) pressure = hpa_to_inhg(pressure);
+  if (!useMetric) pressure = Basics::hpa_to_inhg(pressure);
   reading = String(pressure) +  (useMetric ? "hPa" : "inHG"),
   tft.drawString(reading, Screen::Width - XTopAreaInset, YReadingsArea);
 
@@ -151,7 +151,7 @@ void WeatherScreen::display(bool activating) {
   if (useMetric) { visibility /= 1000;  }
   else {
     units = "mi";
-    visibility = (uint16_t)km_to_m( ((float)(visibility+500)) / 1000.0);
+    visibility = (uint16_t)Basics::km_to_m( ((float)(visibility+500)) / 1000.0);
   }
   reading = "Visibility: " + String(visibility) +  units;
   tft.setTextDatum(TL_DATUM);
