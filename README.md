@@ -209,6 +209,8 @@ Use this menu item to configure up to four printers. To start you will see four 
 * Password: The password for your OctoPrint / Duet3D server. For Duet3D, only enter this value if you have changed it from the default.
 * API Key: Only displayed/required for OctoPrint printers. Get this from your OctoPrint server as described [here](https://octoclient.zendesk.com/hc/en-us/articles/360007208474-Where-to-Find-the-API-Key).
 
+In addition to configuring each printer, you can set the refresh interval (in seconds) for all printers. For any printer that is actively printing, MultiMon will ask the printer for its status every time that interval elapses. By default, it is 30 seconds.
+
 <a name="configure-display"></a>
 ![](doc/images/ConfigureDisplay.png)  
 Use this menu to configure aspects of the GUI - both how information is displayed and control of the display hardware. *MultiMon* will operate with defaults for these settings, but your display may be upside down! The specific settings are described below:
@@ -247,12 +249,19 @@ The home page for *MultiMon* (see below for screen shot) contains three primary 
 <a name="dev-info"></a>
 ## Operational Info for Developers
 
-Though it is not part of the main menu, a developer can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into their browser.  
+Though it is not normally part of the main menu, a developer can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into their browser. If you wish, you can make it part of the main menu by uploading a `settings.json` file with an additional entry. To get the current settings file which you can then add to, see the [section below](#get-settings). Add the following line at the top level to enable the developer menu:
+
+````
+...
+  "showDevMenu": true,
+...
+````  
 
 ### Mock (Simulated) Printer Operation
 
 The `/dev` page allows you to make any one of the printers a "mock" printer meaning that it will produce artificial values that mimic what a real printer might produce. This can be useful for testing, debugging, and tuning the GUI or WebUI. To make any of the configured printers act as a mock printer, just check the associated box and then `Save`. These settings will not take effect until the next time *MultiMon* boots.
 
+<a name="get-settings"></a>
 ### Capturing the Current State
 
 It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings as JSON` button which will go to a page with the JSON content. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`. If you save these settings as a file named `settings.json` and place it in your `data` directory, it can be uploaded to your device using `ESP8266 Sketch Data Uploader`. There is no need to do this, but developers may find it useful to easily switch between batches of settings.

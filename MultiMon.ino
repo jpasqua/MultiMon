@@ -131,7 +131,7 @@ namespace MultiMon {
               threshold = (random(1*60, 3*60) * 1000L);   // 1 to 3 minutes
               break;
             case PrintClient::State::Printing:
-              threshold = (10 * 1000L);                   // 10 seconds
+              threshold = (settings.printerRefreshInterval * 1000L);  // O(10 seconds)
               break;
           }
           if (force || ((millis() -  lastUpdateTime[i])) > threshold) {

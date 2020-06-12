@@ -51,15 +51,17 @@ public:
   // ----- Settings
   static const uint8_t MaxServers = 4;
   PrinterSettings printer[MaxServers];
+  uint32_t printerRefreshInterval = 10;
 
   // Display Options
   bool use24Hour = false;             // 23:00 military 24 hour clock
   bool useMetric = false;
-
+  bool showDevMenu = false;
+  
   struct {
     bool enabled;
   } blynk;
-  
+
   // HW Settings
   bool     invertDisplay = false;      // true = pins at top | false = pins at the bottom
   static const int nCalReadings = 5;

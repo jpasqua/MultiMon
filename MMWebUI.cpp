@@ -34,6 +34,10 @@ namespace MMWebUI {
       "<i class='fa fa-desktop'></i> Configure Display</a>"
       "<a class='w3-bar-item w3-button' href='/presentWeatherConfig'>"
       "<i class='fa fa-thermometer-three-quarters'></i> Configure Weather</a>";
+
+    String DEV_ACTION =
+      "<a class='w3-bar-item w3-button' href='/presentDevConfig'>"
+      "<i class='fa fa-gears'></i> Dev Settings</a>";
   }
 
   void updateSinglePrinter(int i) {
@@ -95,7 +99,7 @@ namespace MMWebUI {
         updateSinglePrinter(i);
         if (!wasActive && MM::settings.printer[i].isActive) MultiMon::Protected::printerWasActivated(i);
       }
-
+      MM::settings.printerRefreshInterval = WebUI::arg("refreshInterval").toInt();
       MM::settings.write();
       // MM::settings.logSettings();
 
@@ -286,6 +290,7 @@ namespace MMWebUI {
           if (key == "NICK") return  MM::settings.printer[i].nickname;
           if (key == type) return "selected";
         }
+        if (key == "RFRSH") return String(MM::settings.printerRefreshInterval);
         return EmptyString;
       };
 
@@ -319,7 +324,11 @@ namespace MMWebUI {
 
 
   void init() {
-    WebUI::addMenuItems(Internal::MM_ACTIONS);
+    String actions = Internal::MM_ACTIONS;
+    if (MM::settings.showDevMenu) {
+      actions += Internal::DEV_ACTION;
+    }
+    WebUI::addMenuItems(actions);
 
     WebUI::registerHandler("/",                       Pages::presentHomePage);
     WebUI::registerHandler("/presentWeatherConfig",   Pages::presentWeatherConfig);

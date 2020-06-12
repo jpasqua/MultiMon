@@ -98,10 +98,12 @@ void MMSettings::fromJSON(JsonDocument &doc) {
     printer[i++].fromJSON(os);
     if (i == MaxServers) break;
   }
+  printerRefreshInterval = doc["printerRefreshInterval"];
 
   use24Hour = doc["use24Hour"];
   useMetric = doc["useMetric"];
   blynk.enabled = doc["blynkEnabled"];
+  showDevMenu = doc["showDevMenu"];
 
   invertDisplay = doc["invertDisplay"];
   for (int i = 0; i < nCalReadings; i++) { calibrationData[i] = doc["calibrationData"][i]; }
@@ -126,10 +128,12 @@ void MMSettings::toJSON(JsonDocument &doc) {
   for (int i = 0; i < MaxServers; i++) {
     printer[i].toJSON(printerSettings.createNestedObject());
   }
+  doc["printerRefreshInterval"] = printerRefreshInterval;
 
   doc["use24Hour"] = use24Hour;
   doc["useMetric"] = useMetric;
   doc["blynkEnabled"] = blynk.enabled;
+  doc["showDevMenu"] = showDevMenu;
 
   doc["invertDisplay"] = invertDisplay;
   JsonArray cd = doc.createNestedArray("calibrationData");
@@ -155,13 +159,15 @@ void MMSettings::toJSON(JsonDocument &doc) {
 
 void MMSettings::logSettings() {
   for (int i = 0; i < MaxServers; i++) {
-    Log.verbose("Octoprint Settings %d", i);
+    Log.verbose("Printer Settings %d", i);
     printer[i].logSettings();
   }
+  Log.verbose("Printer refresh interval: %d", printerRefreshInterval);
   Log.verbose("Display Settings");
   Log.verbose("  use24Hour: %T", use24Hour);
   Log.verbose("  useMetric: %T", useMetric);
   Log.verbose("  blynk enabled: %T", blynk.enabled);
+  Log.verbose("  show dev menu: %T", showDevMenu);
   Log.verbose("HW Settings");
   Log.verbose("  invertDisplay: %T", invertDisplay);
   Log.verbose("  CalibrationData: [");
