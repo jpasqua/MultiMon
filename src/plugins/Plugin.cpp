@@ -90,12 +90,11 @@ void Plugin::loadAll(String filePath) {
       continue;
     }
 
-    std::unique_ptr<char[]> buf(new char[size]);
-    file.readBytes(buf.get(), size);
-    file.close();
+
 Log.verbose("Loading data from %s", name.c_str());
     DynamicJsonDocument doc(MaxFileSize);
-    auto error = deserializeJson(doc, buf.get());
+    auto error = deserializeJson(doc, file);
+    file.close();
     if (error) {
       Log.warning("Failed to parse plugin descriptor (%s): %s", name.c_str(), error.c_str());
       continue;
@@ -103,7 +102,6 @@ Log.verbose("Loading data from %s", name.c_str());
     // serializeJsonPretty(doc, Serial); Serial.println();
 
     newPlugin(doc);
-    doc.clear();
   }
 }
 
