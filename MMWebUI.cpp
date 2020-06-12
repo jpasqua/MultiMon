@@ -17,7 +17,7 @@
 
 namespace MM = MultiMon;
 
-// ----- BEGIN: WebUI namespacea
+// ----- BEGIN: WebUI namespace
 namespace MMWebUI {
   static const String   checkedOrNot[2] = {"", "checked='checked'"};
   static const String   EmptyString = "";
