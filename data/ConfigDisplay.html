@@ -34,7 +34,7 @@
 
   <p><input name='is24hour' class='w3-check' type='checkbox' %USE_24HOUR%> Use 24 Hour Clock (13:30 vs 1:30)</p>
   <p><input name='invDisp' class='w3-check' type='checkbox' %INVERT_DISPLAY% onchange='alertRecalibrate()'> Flip display orientation</p>
-  <p><input name='blynkEnabled' class='w3-check' type='checkbox' %BLYNK_ENABLED%> Experimental Blynk Support</p>
+  <p><input name='blynkEnabled' class='w3-check' type='checkbox' %BLYNK_ENABLED% onclick='alert("Changes will take effect on the next reboot");'> Experimental Blynk Support</p>
 
   <button class='w3-button w3-block w3-round-large w3-grey w3-section w3-padding' type='submit'>Save</button>
 
