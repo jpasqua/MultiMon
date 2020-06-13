@@ -14,7 +14,7 @@
 
 class FlexItem {
 public:
-  typedef enum {INT, FLOAT, STRING, BOOL} Type;
+  typedef enum {INT, FLOAT, STRING, BOOL, CLOCK} Type;
 
   void fromJSON(JsonObjectConst& item);
 
@@ -62,6 +62,8 @@ private:
   uint32_t _refreshInterval;  // How often to refresh the display
   Basics::StringMapper _vc;   // A function to call to get a value for an item
   uint32_t  lastDisplayTime;  // Last time the display() function ran
+  uint32_t  lastClockTime;
+  FlexItem* _clock;
 
   bool fromJSON(JsonObjectConst& screen);
 };

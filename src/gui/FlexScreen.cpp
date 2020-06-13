@@ -18,6 +18,7 @@
 #include "../Basics.h"
 #include "MMScreen.h"
 #include "FlexScreen.h"
+#include "fonts/DSEG7_Classic_Bold_22.h"
 //--------------- End:    Includes ---------------------------------------------
 
 using GUI::tft;
@@ -43,6 +44,7 @@ FlexItem::Type mapType(String t) {
   if (t.equalsIgnoreCase("FLOAT")) return FlexItem::Type::FLOAT;
   if (t.equalsIgnoreCase("STRING")) return FlexItem::Type::STRING;
   if (t.equalsIgnoreCase("BOOL")) return FlexItem::Type::BOOL;
+  if (t.equalsIgnoreCase("CLOCK")) return FlexItem::Type::CLOCK;
   return FlexItem::Type::STRING;
 }
 
@@ -99,8 +101,12 @@ static const struct  {
 
   {"S24",   &FreeSans24pt7b},
   {"SB24",  &FreeSansBold24pt7b},
-  {"SO24",  &FreeSansOblique24pt7b},
-  {"SBO24", &FreeSansBoldOblique24pt7b}
+  // {"SO24",  &FreeSansOblique24pt7b},
+  // {"SBO24", &FreeSansBoldOblique24pt7b},
+
+  {"D20",   &DSEG7_Classic_Bold_20}
+  // {"D72",   &DSEG7_Classic_Bold_72},
+  // {"D100",  &DSEG7_Classic_Bold_100}
 };
 static const uint8_t nGFXFonts = ARRAY_SIZE(GFXFonts);
 
@@ -148,6 +154,7 @@ bool FlexScreen::init(
   buttons = new Button[(nButtons = 1)];
   buttons[0].init(0, 0, Screen::Width, Screen::Height, buttonHandler, 0);
 
+  _clock = NULL;
   return fromJSON(screen);
 }
 
@@ -164,11 +171,21 @@ void FlexScreen::display(bool activating) {
       _items[i].display(_bkg, mapper);
     }
   }
-  lastDisplayTime = millis();
+  lastDisplayTime = lastClockTime = millis();
+}
+
+String nullMapper(String&k) {
+  Log.verbose("Null mapper: %s",k.c_str());
+  return "";
 }
 
 void FlexScreen:: processPeriodicActivity() {
-  if (millis() - lastDisplayTime > _refreshInterval) display(false);
+  uint32_t curMillis = millis();
+  if (curMillis - lastDisplayTime > _refreshInterval) display(false);
+  else if (_clock != NULL  && curMillis - lastClockTime) {
+    _clock->display(_bkg, nullMapper);
+    lastClockTime = curMillis;
+  }
 }
 
 // ----- Private functions
@@ -183,7 +200,12 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
 
   int i = 0;
   for (JsonObjectConst item : itemArray) {
-    _items[i++].fromJSON(item);
+    _items[i].fromJSON(item);
+    if (_items[i]._dataType == FlexItem::Type::CLOCK) {
+      Log.verbose("Found a clock at index %d", i);
+      _clock = &_items[i];
+    }
+    i++;
   }
 
   _bkg = mapColor(screen["bkg"].as<String>());
@@ -202,7 +224,7 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
 void FlexItem::fromJSON(JsonObjectConst& item) {
   // What it is...
   _dataType = mapType(item["type"].as<String>());
-  mapKey(item["key"].as<String>(), _key, _isLiteral);
+  mapKey(String(item["key"]|""), _key, _isLiteral);
 
   // Where it goes...
   _x = item["x"]; _y = item["y"];
@@ -240,9 +262,14 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
         sprintf(buf, fmt, value.c_str());
         break;
       case FlexItem::Type::BOOL:
-        char c = value[0];
-        bool bv = (c == 't' || c == 'T' || c == '1') ;
-        sprintf(buf, fmt, bv ? "True" : "False");
+        {
+          char c = value[0];
+          bool bv = (c == 't' || c == 'T' || c == '1') ;
+          sprintf(buf, fmt, bv ? "True" : "False");
+          break;
+        }
+      case FlexItem::Type::CLOCK:
+        sprintf(buf, fmt, hourFormat12(), minute(), second());
         break;
     }
     if (_gfxFont != NULL) { sprite->setFreeFont(_gfxFont);}
