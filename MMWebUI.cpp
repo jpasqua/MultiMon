@@ -36,7 +36,7 @@ namespace MMWebUI {
       "<i class='fa fa-thermometer-three-quarters'></i> Configure Weather</a>";
 
     String DEV_ACTION =
-      "<a class='w3-bar-item w3-button' href='/presentDevConfig'>"
+      "<a class='w3-bar-item w3-button' href='/dev'>"
       "<i class='fa fa-gears'></i> Dev Settings</a>";
   }
 
