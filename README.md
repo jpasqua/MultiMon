@@ -144,6 +144,8 @@ You may use any housing you wish for *MultiMon*. I've uploaded two models to [th
 1. [2.4" TFT Modular Enclosure](https://www.thingiverse.com/thing:4393857)  
 2. [Slanted box for 2.4Inch TFT](https://www.thingiverse.com/thing:4413894)
 
+I have also upload [another model](https://www.thingiverse.com/thing:4460344) for use with a 3.2" display.
+
 
 <a name="software"></a>
 ### Software
