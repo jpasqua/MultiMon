@@ -18,7 +18,6 @@
 #include "../Basics.h"
 #include "MMScreen.h"
 #include "FlexScreen.h"
-#include "fonts/DSEG7_Classic_Bold_22.h"
 //--------------- End:    Includes ---------------------------------------------
 
 using GUI::tft;
@@ -75,57 +74,17 @@ uint8_t mapDatum(String justify) {
   return TL_DATUM;
 }
 
-static const struct  {
-  const char *name;
-  const GFXfont *font;
-} GFXFonts[] = {
-  {"M9",    &FreeMono9pt7b},
-  {"MB9",   &FreeMonoBold9pt7b},
-  {"MO9",   &FreeMonoOblique9pt7b},
-  {"MBO9",  &FreeMonoBoldOblique9pt7b},
-
-  {"S9",    &FreeSans9pt7b},
-  {"SB9",   &FreeSansBold9pt7b},
-  {"SO9",   &FreeSansOblique9pt7b},
-  {"SBO9",  &FreeSansBoldOblique9pt7b},
-
-  {"S12",   &FreeSans12pt7b},
-  {"SB12",  &FreeSansBold12pt7b},
-  {"SO12",  &FreeSansOblique12pt7b},
-  {"SBO12", &FreeSansBoldOblique12pt7b},
-
-  {"S18",   &FreeSans18pt7b},
-  {"SB18",  &FreeSansBold18pt7b},
-  {"SO18",  &FreeSansOblique18pt7b},
-  {"SBO18", &FreeSansBoldOblique18pt7b},
-
-  {"S24",   &FreeSans24pt7b},
-  {"SB24",  &FreeSansBold24pt7b},
-  // {"SO24",  &FreeSansOblique24pt7b},
-  // {"SBO24", &FreeSansBoldOblique24pt7b},
-
-  {"D20",   &DSEG7_Classic_Bold_20}
-  // {"D72",   &DSEG7_Classic_Bold_72},
-  // {"D100",  &DSEG7_Classic_Bold_100}
-};
-static const uint8_t nGFXFonts = ARRAY_SIZE(GFXFonts);
-
-void mapFont(String fontName, GFXfont* &gfxFont, uint8_t &font) {
+void mapFont(String fontName, int8_t& gfxFont, uint8_t& font) {
   // Use a default if no matching font is found
   font = 2;
-  gfxFont = NULL;
+  gfxFont = -1;
 
   if (fontName.length() == 1 && isDigit(fontName[0])) {
     font = fontName[0] - '0';
     return;
   } 
 
-  for (int i = 0; i < nGFXFonts; i++) {
-    if (fontName == GFXFonts[i].name) {
-      gfxFont = const_cast<GFXfont*>(GFXFonts[i].font);
-      return;
-    }
-  }
+  gfxFont = GUI::Font::idFromName(fontName);
 } 
 
 /*------------------------------------------------------------------------------
@@ -272,7 +231,7 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
         sprintf(buf, fmt, hourFormat12(), minute(), second());
         break;
     }
-    if (_gfxFont != NULL) { sprite->setFreeFont(_gfxFont);}
+    if (_gfxFont >= 0) { GUI::Font::setUsingID(_gfxFont, sprite); }
     else { sprite->setTextFont(_font);}
     sprite->setTextColor(GUI::Mono_Foreground);
     sprite->setTextDatum(_datum);

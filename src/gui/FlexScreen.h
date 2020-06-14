@@ -22,7 +22,7 @@ public:
   uint16_t _w, _h;    // Size of the field
   uint16_t _xOff;     // x offset of text within field
   uint16_t _yOff;     // y offset of text within field
-  GFXfont* _gfxFont;  // The GFXFont to use. If NULL, use a built-in font
+  int8_t   _gfxFont;  // The ID of the GFXFont to use. If negative, use a built-in font
   uint8_t  _font;     // Font to use if no GFXFont was given
   uint16_t _color;    // Color to use
   String   _format;   // Format string to use when displaying the value

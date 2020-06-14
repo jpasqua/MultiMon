@@ -25,7 +25,7 @@ public:
     tft.pushImage(x, y, WiFiLogo_Width, WiFiLogo_Height, WiFiLogo, WiFiLogo_Transparent);
     y += WiFiLogo_Height;
 
-    tft.setFreeFont(&FreeMonoBoldOblique12pt7b);
+    GUI::Font::setUsingID(GUI::Font::FontID::SBO12, tft);
     tft.setTextColor(GUI::Color_WiFiBlue);
     tft.setTextDatum(MC_DATUM);
     x = Screen::XCenter;

@@ -29,7 +29,7 @@ public:
         Screen::XCenter+6, 10, RepRapMono, RepRapMono_Width, RepRapMono_Height,
         GUI::Color_SplashBkg, GUI::Color_SplashRR);
 
-    tft.setFreeFont(&FreeSansBoldOblique24pt7b);
+    GUI::Font::setUsingID(GUI::Font::FontID::SBO24, tft);
     tft.setTextColor(GUI::Color_SplashText);
     tft.setTextDatum(BC_DATUM);
     tft.drawString("MultiMon", Screen::XCenter, Screen::Height-1);

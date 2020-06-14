@@ -43,6 +43,9 @@
 #include "TimeScreen.h"
 #include "WeatherScreen.h"
 #include "WiFiScreen.h"
+#include "fonts/DSEG7_Classic_Bold_22.h"
+#include "fonts/DSEG7_Classic_Bold_72.h"
+#include "fonts/DSEG7_Classic_Bold_100.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -83,7 +86,8 @@ namespace GUI {
       tft.fillCircle(centerX, centerY, InfoIconSize/2-1, borderColor);
       tft.fillCircle(centerX, centerY, (InfoIconSize/2-1)-InfoIconBorderSize, fillColor);
       tft.setTextDatum(MC_DATUM);
-      tft.setFreeFont(&FreeSerifBoldItalic9pt7b);
+      // tft.setFreeFont(&FreeSerifBoldItalic9pt7b);
+      tft.setFreeFont(&FreeSansBold9pt7b);
       tft.setTextColor(textColor);
       tft.drawString("i", centerX, centerY);
     }
@@ -107,6 +111,56 @@ namespace GUI {
       infoIconIsDisplayed = false;
     }
   }  // ----- END: GUI::Internal
+
+  namespace Font {
+    const struct  {
+      const char *name;
+      const GFXfont *font;
+    } GFXFonts[] = {
+      // ORDER MUST MATCH GUI::Font::FontID enum
+      {"M9",    &FreeMono9pt7b},
+      {"MB9",   &FreeMonoBold9pt7b},
+      {"MO9",   &FreeMonoOblique9pt7b},
+      {"MBO9",  &FreeMonoBoldOblique9pt7b},
+
+      {"S9",    &FreeSans9pt7b},
+      {"SB9",   &FreeSansBold9pt7b},
+      {"SO9",   &FreeSansOblique9pt7b},
+      {"SBO9",  &FreeSansBoldOblique9pt7b},
+
+      {"S12",   &FreeSans12pt7b},
+      {"SB12",  &FreeSansBold12pt7b},
+      {"SO12",  &FreeSansOblique12pt7b},
+      {"SBO12", &FreeSansBoldOblique12pt7b},
+
+      {"S18",   &FreeSans18pt7b},
+      {"SB18",  &FreeSansBold18pt7b},
+      {"SO18",  &FreeSansOblique18pt7b},
+      {"SBO18", &FreeSansBoldOblique18pt7b},
+
+      {"S24",   &FreeSans24pt7b},
+      {"SB24",  &FreeSansBold24pt7b},
+      {"SO24",  &FreeSansOblique24pt7b},
+      {"SBO24", &FreeSansBoldOblique24pt7b},
+
+      {"D20",   &DSEG7_Classic_Bold_20},
+      {"D72",   &DSEG7_Classic_Bold_72},
+      {"D100",  &DSEG7_Classic_Bold_100}
+    };
+    const uint8_t nGFXFonts = ARRAY_SIZE(GFXFonts);
+
+    void setUsingID(uint8_t fontID, TFT_eSPI& t) { t.setFreeFont(GFXFonts[fontID].font); }
+    void setUsingID(uint8_t fontID, TFT_eSprite *s) { s->setFreeFont(GFXFonts[fontID].font); }
+
+    int8_t idFromName(String fontName) {
+      for (int i = 0; i < nGFXFonts; i++) {
+        if (fontName == GFXFonts[i].name) return i;
+      }
+      return -1;
+    }
+
+    uint8_t getHeight(uint8_t fontID) { return GFXFonts[fontID].font->yAdvance; }
+  }  // ----- END: GUI::Font namespace
 
 
   void setBrightness(uint8_t b) {

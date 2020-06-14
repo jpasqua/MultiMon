@@ -29,13 +29,13 @@ using GUI::sprite;
  *----------------------------------------------------------------------------*/
 
 static const uint16_t TitleAreaYOrigin = 0;
-static const auto TitleFont = &FreeSansBold18pt7b;
-static const auto TitleFontHeight = TitleFont->yAdvance;
+static const auto TitleFont = GUI::Font::FontID::SB18;
+static const auto TitleFontHeight = 42;     // TitleFont->yAdvance;
 static const auto TitleAreaHeight = TitleFontHeight;
 
 static const uint16_t FileNameYOrigin = TitleAreaYOrigin + TitleAreaHeight;
-static const auto FileNameFont = &FreeSansBold9pt7b;
-static const auto FileNameFontHeight = FileNameFont->yAdvance;
+static const auto FileNameFont = GUI::Font::FontID::SB9;
+static const auto FileNameFontHeight = 22;  // FileNameFont->yAdvance;
 
 // The button that initiates scrolling of the file name covers both the title
 // area and the file name area. The file name area by itself is too small.
@@ -44,17 +44,17 @@ static const uint16_t FileNameButtonY = 0;
 static const uint16_t FileNameButtonWidth = Screen::Width;
 static const uint16_t FileNameButtonHeight = 64; // TitleAreaHeight+FileNameFontHeight;
 
-static const auto ProgressFont = &FreeSansBold18pt7b;
+static const auto ProgressFont = GUI::Font::FontID::SB18;
 static const uint16_t ProgressXInset = 4;
 static const uint16_t ProgressXOrigin = ProgressXInset;
 static const uint16_t ProgressYOrigin = 100;
-static const uint16_t ProgressHeight = ProgressFont->yAdvance;
+static const uint16_t ProgressHeight = 42;      // ProgressFont->yAdvance;
 static const uint16_t ProgressWidth = Screen::Width - (2 * ProgressXInset);
 
-static const auto DetailFont = &FreeSansBold9pt7b;
+static const auto DetailFont = GUI::Font::FontID::SB9;
 static const uint16_t DetailXInset = 10;
 static const uint16_t DetailYBottomMargin = 4;
-static const uint16_t DetailFontHeight = DetailFont->yAdvance;
+static const uint16_t DetailFontHeight = 22;    // DetailFont->yAdvance;
 static const uint16_t DetailWidth = Screen::Width;
 static const uint16_t DetailHeight = 2 * DetailFontHeight;
 static const uint16_t DetailXOrigin = 0;
@@ -141,12 +141,12 @@ void DetailScreen::drawStaticContent(PrintClient *printer, bool force) {
 
   // ----- Display the nickname
   tft.setTextDatum(TC_DATUM);
-  tft.setFreeFont(TitleFont);
+  GUI::Font::setUsingID(TitleFont, tft);
   tft.setTextColor(GUI::Color_Nickname);
   tft.drawString(MultiMon::settings.printer[index].nickname, Screen::XCenter, 5);
 
   String name = printer->getFilename();
-  tft.setFreeFont(DetailFont);            // Set font BEFORE measuring width
+  GUI::Font::setUsingID(DetailFont, tft); // Set font BEFORE measuring width
   nameWidth = tft.textWidth(name);        // Remember width in case we need to scroll
   tft.setTextColor(GUI::Color_DimText);
   if (nameWidth < Screen::Width)  {
@@ -189,7 +189,7 @@ void DetailScreen::drawProgressBar(
 
   static const uint16_t PctXInset = 10;
   static const uint16_t TxtXInset = 5;
-  sprite->setFreeFont(ProgressFont);
+  GUI::Font::setUsingID(ProgressFont, sprite);
   sprite->setTextColor(TextIndex);
   sprite->setTextDatum(ML_DATUM);
   sprite->drawString(String((int)(pct)) + "%", PctXInset, (h/2));
@@ -206,7 +206,7 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
   sprite->setColorDepth(1);
   sprite->createSprite(Screen::Width, DetailHeight);
   sprite->fillSprite(GUI::Mono_Background);
-  sprite->setFreeFont(DetailFont);
+  GUI::Font::setUsingID(DetailFont, sprite);
   sprite->setTextColor(GUI::Mono_Foreground);
   sprite->setTextDatum(TL_DATUM);
 
@@ -221,7 +221,7 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
   sprite->drawString(temp, Screen::XCenter+DetailXInset, 0);
 
   // ----- Display the elapsed Time
-  sprite->setFreeFont(DetailFont);
+  GUI::Font::setUsingID(DetailFont, sprite);
   sprite->setTextDatum(TL_DATUM);
   sprite->setTextColor(GUI::Color_NormalText);
   String elapsed = "Done: " + WebThing::formattedInterval(printer->getElapsedTime());
@@ -244,7 +244,7 @@ void DetailScreen::scrollFileName() {
   sprite->setColorDepth(1);
   sprite->createSprite(Screen::Width, DetailHeight);
   sprite->fillSprite(GUI::Mono_Background);
-  sprite->setFreeFont(DetailFont);
+  GUI::Font::setUsingID(DetailFont, sprite);
   sprite->setTextColor(GUI::Mono_Foreground);
   sprite->setTextDatum(TL_DATUM);
 
@@ -269,7 +269,6 @@ void DetailScreen::revealFullFileName() {
     scrollIndex = 1;
     delta = 1;    
   }
-
 }
 
 

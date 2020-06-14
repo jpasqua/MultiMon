@@ -24,12 +24,12 @@ using GUI::tft;
 
 static const uint8_t SmallFont = 2;
 
-static const auto NormalFont = &FreeSansBold9pt7b;
-static const uint16_t NormalFontHeight = NormalFont->yAdvance;
-static const auto HeaderFont = &FreeSansBold12pt7b;
-static const uint16_t HeaderFontHeight = HeaderFont->yAdvance;
+static const auto NormalFont = GUI::Font::FontID::SB9;
+static const uint16_t NormalFontHeight = 22;    // NormalFont->yAdvance;
+static const auto HeaderFont = GUI::Font::FontID::SB12;
+static const uint16_t HeaderFontHeight = 29;    // HeaderFont->yAdvance;
 static const auto ButtonFont = NormalFont;
-static const uint16_t ButtonFontHeight = ButtonFont->yAdvance;
+static const uint16_t ButtonFontHeight = NormalFontHeight;
 
 static const uint16_t ButtonFrameSize = 2;
 static const uint16_t ButtonHeight = ButtonFontHeight + 2 * ButtonFrameSize+10;
@@ -104,12 +104,12 @@ public:
     tft.fillScreen(GUI::Color_Background);
 
     tft.setTextColor(GUI::Color_AlertGood);
-    tft.setFreeFont(HeaderFont);
+    GUI::Font::setUsingID(HeaderFont, tft);
     tft.setTextDatum(TC_DATUM);
     tft.drawString("MultiMon v" + MultiMon::VersionString, Screen::XCenter, y);
     y += HeaderFontHeight;
 
-    tft.setFreeFont(NormalFont);
+    GUI::Font::setUsingID(NormalFont, tft);
     tft.setTextColor(GUI::Color_NormalText);
     tft.setTextDatum(TC_DATUM);
     String address = WebThing::settings.hostname + " (" + WiFi.localIP().toString() + ")";
@@ -132,7 +132,7 @@ public:
     y += NormalFontHeight;
 
     tft.setTextColor(GUI::Color_Inactive);
-    tft.setFreeFont(NormalFont);
+    GUI::Font::setUsingID(NormalFont, tft);
     tft.drawString("Written by Joe Pasqua", Screen::XCenter, Screen::Height - NormalFontHeight);
   }
 

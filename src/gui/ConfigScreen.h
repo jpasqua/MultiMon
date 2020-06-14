@@ -34,7 +34,7 @@ public:
     tft.fillScreen(GUI::Color_Background);
     tft.drawBitmap(0, 0, Gears160x240, 160, 240, GUI::Color_AlertGood);
 
-    tft.setFreeFont(&FreeSans12pt7b);
+    GUI::Font::setUsingID(GUI::Font::FontID::S12, tft);
     tft.setTextSize(1);
     tft.setTextDatum(TC_DATUM);
     tft.setTextColor(GUI::Color_NormalText);

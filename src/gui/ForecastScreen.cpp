@@ -30,8 +30,8 @@ using GUI::tft;
  *
  *----------------------------------------------------------------------------*/
 
-static const auto ReadingsFont = &FreeSansBold9pt7b;
-static const uint16_t ReadingsFontHeight = ReadingsFont->yAdvance;
+static const auto ReadingsFont = GUI::Font::FontID::SB9;
+static const uint16_t ReadingsFontHeight = 22;  // ReadingsFont->yAdvance;
 
 static const uint16_t TileWidth = Screen::Width/2;
 static const uint16_t TileHeight = Screen::Height/3;
@@ -116,7 +116,7 @@ void ForecastScreen::displaySingleForecast(Forecast *f, uint16_t x, uint16_t y) 
 
   y += TextVPad;
   tft.setTextColor(TFT_BLACK);
-  tft.setFreeFont(ReadingsFont);
+  GUI::Font::setUsingID(ReadingsFont, tft);
   tft.drawString(reading, x, y);
 
   y += ReadingsFontHeight;

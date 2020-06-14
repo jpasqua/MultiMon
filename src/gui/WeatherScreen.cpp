@@ -14,8 +14,6 @@
 //                                  Third Party Libraries
 //                                  Local Includes
 #include "WeatherScreen.h"
-#include "fonts/DSEG7_Classic_Bold_22.h"
-#include "fonts/DSEG7_Classic_Bold_72.h"
 #include "images/Icons.h"
 #include "../Basics.h"
 //--------------- End:    Includes ---------------------------------------------
@@ -29,20 +27,20 @@ using GUI::sprite;
  *
  *----------------------------------------------------------------------------*/
 
-static const auto TimeFont = &DSEG7_Classic_Bold_20;
+static const auto TimeFont = GUI::Font::FontID::D20;
 static const uint16_t TimeFontWidth = 17;
 static const uint16_t TimeFontHeight = 22;
 static const uint16_t TimeFontColonWidth = 9;
 
-static const auto TempUnitsFont = &DSEG7_Classic_Bold_20;
-static const uint16_t TempUnitsFontWidth = 17;
-static const uint16_t TempUnitsFontHeight = 22;
+static const auto TempUnitsFont = TimeFont;
+static const uint16_t TempUnitsFontWidth = TimeFontWidth;
+static const uint16_t TempUnitsFontHeight = TimeFontHeight;
 
-static const auto TempFont = &DSEG7_Classic_Bold_72;
+static const auto TempFont = GUI::Font::FontID::D72;
 static const uint16_t TempFontWidth = 60;
 static const uint16_t TempFontHeight = 72;
 
-static const auto ReadingsFont = &FreeSans12pt7b;
+static const auto ReadingsFont = GUI::Font::FontID::S12;
 static const uint16_t ReadingsFontHeight = 29;
 
 
@@ -87,7 +85,7 @@ void WeatherScreen::display(bool activating) {
   tft.fillScreen(GUI::Color_WeatherBkg);
 
   if (MultiMon::owmClient->weather.dt == 0) {
-    tft.setFreeFont(&FreeSansBold18pt7b);
+    GUI::Font::setUsingID(GUI::Font::FontID::SB18, tft);
     tft.setTextColor(GUI::Color_AlertError);
     tft.setTextDatum(MC_DATUM);
     tft.drawString("No Weather Data", Screen::XCenter, Screen::YCenter);
@@ -95,7 +93,7 @@ void WeatherScreen::display(bool activating) {
   }
 
   // ----- Draw Summary line at the top of the screen
-  tft.setFreeFont(&FreeSansBold12pt7b);
+  GUI::Font::setUsingID(GUI::Font::FontID::SB12, tft);
   tft.setTextColor(GUI::Color_WeatherTxt);
   tft.setTextDatum(TL_DATUM);
   tft.drawString(MultiMon::owmClient->weather.location.city, XTopAreaInset, YTopArea);
@@ -110,13 +108,13 @@ void WeatherScreen::display(bool activating) {
       getWindIcon(MultiMon::owmClient->weather.readings.windSpeed), WI_Transparent);
 
   int textOffset = (WindIcon_Height-TempFontHeight)/2;
-  tft.setFreeFont(TempFont);
+  GUI::Font::setUsingID(TempFont, tft);
   tft.setTextColor(GUI::Color_Progress);
   tft.setTextDatum(TL_DATUM);
   int nDigits = temp < 10 ? 1 : (temp < 100 ? 2 : 3);
   int xLoc = Screen::XCenter - ((nDigits*TempFontWidth+TempUnitsFontWidth)/2);
   tft.drawString(String((int)temp), xLoc, YCentralArea-textOffset);
-  tft.setFreeFont(&DSEG7_Classic_Bold_20);
+  GUI::Font::setUsingID(TimeFont, tft);
   tft.drawString(
       (useMetric ? "C" : "F"),
       xLoc+(nDigits*TempFontWidth),
@@ -128,14 +126,14 @@ void WeatherScreen::display(bool activating) {
     MultiMon::owmClient->weather.description.longer[0] = toUpperCase(firstChar);
   }
   tft.setTextColor(GUI::Color_WeatherTxt);
-  tft.setFreeFont(&FreeSans12pt7b);
+  GUI::Font::setUsingID(ReadingsFont, tft);
   tft.drawString(
       MultiMon::owmClient->weather.description.longer,
       Screen::XCenter,YCentralArea-textOffset+TempFontHeight + 5); // A little spacing in Y
 
   // Readings Area
   tft.setTextColor(GUI::Color_WeatherTxt);
-  tft.setFreeFont(&FreeSans12pt7b);
+  GUI::Font::setUsingID(ReadingsFont, tft);
   tft.setTextDatum(TL_DATUM);
   String reading = "Humidty: " + String(MultiMon::owmClient->weather.readings.humidity) + "%";
   tft.drawString(reading, XTopAreaInset, YReadingsArea);
@@ -163,7 +161,7 @@ void WeatherScreen::display(bool activating) {
   units = useMetric ? "C" : "F";
   reading = "Feels " + String((int)(feelsLike+0.5)) +  units;
   tft.setTextColor(GUI::Color_Progress);
-  tft.setFreeFont(&FreeSansBold12pt7b);
+  GUI::Font::setUsingID(GUI::Font::FontID::SB12, tft);
   tft.drawString(reading, Screen::Width - XTopAreaInset, YReadingsArea+ReadingsFontHeight);
 
   lastDT = MultiMon::owmClient->weather.dt;
@@ -188,7 +186,7 @@ void WeatherScreen::showTime() {
 
   lastClockUpdate = millis();
 
-  sprite->setFreeFont(TimeFont);
+  GUI::Font::setUsingID(TimeFont, sprite);
   sprite->setTextColor(GUI::Mono_Foreground);
   sprite->setTextDatum(TR_DATUM);
   sprite->drawString(

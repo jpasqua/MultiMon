@@ -19,7 +19,6 @@
 //                                  Local Includes
 #include "TimeScreen.h"
 #include "../Basics.h"
-#include "fonts/DSEG7_Classic_Bold_100.h"
 //--------------- End:    Includes ---------------------------------------------
 
 using GUI::tft;
@@ -54,8 +53,8 @@ using GUI::sprite;
  *
  *----------------------------------------------------------------------------*/
 
-static const auto WeatherFont = &FreeSansBold9pt7b;
-static const uint16_t WeatherFontHeight = WeatherFont->yAdvance;
+static const auto WeatherFont = GUI::Font::FontID::SB9;
+static const uint16_t WeatherFontHeight = 22;   // WeatherFont->yAdvance;
 static const uint16_t WeatherXOrigin = 0;
 static const uint16_t WeatherYOrigin = 0;
 static const uint16_t WeatherHeight = WeatherFontHeight;
@@ -64,8 +63,8 @@ static const uint16_t WeatherWidth = Screen::Width;
 static int16_t PrinterNameFont = 2; // A small 5x7 font
 
 // NC is short for Next Completion
-static const auto NCFont = &FreeSansBold9pt7b;
-static const uint16_t NCFontHeight = NCFont->yAdvance;
+static const auto NCFont = GUI::Font::FontID::SB9;
+static const uint16_t NCFontHeight = 22;      // NCFont->yAdvance;
 static const uint16_t NCXOrigin = 0;
 static const uint16_t NCYOrigin = WeatherYOrigin + WeatherHeight + 2;
 static const uint16_t NCHeight = NCFontHeight;
@@ -81,13 +80,14 @@ static const uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the 
 static const uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
 static const uint16_t PB_YOrigin = Screen::Height - PB_Height;      // Y Origin of all progress bars
 static const uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
+static const auto PB_Font = GUI::Font::FontID::SB9;                 // Font for the Progress Bar
 
 static const uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
 static const uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
 static const uint16_t ClockWidth = Screen::Width;                   // Full width of the screen
 static const uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
-static const auto ClockFont = &DSEG7_Classic_Bold_100;
-static const uint16_t ClockFontHeight = ClockFont->yAdvance;
+static const auto ClockFont = GUI::Font::FontID::D100;
+static const uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
 
 static const int WeatherAreaIndex = 4;
 static const int ClockAreaIndex = 5;
@@ -182,7 +182,7 @@ void TimeScreen::drawClock(bool force) {
   sprite->createSprite(ClockWidth, ClockFontHeight);
   sprite->fillSprite(GUI::Mono_Background);
 
-  sprite->setFreeFont(ClockFont);
+  GUI::Font::setUsingID(ClockFont, sprite);
   sprite->setTextColor(GUI::Mono_Foreground);
   // With this large font some manual "kerning" is required to make it fit
   uint16_t baseline = ClockFontHeight-1;
@@ -202,7 +202,7 @@ void TimeScreen::drawClock(bool force) {
 
 void TimeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt) {
   buttons[i].drawProgress(
-        pct, txt, &FreeSansBold9pt7b, PB_FrameSize,
+        pct, txt, PB_Font, PB_FrameSize,
         txtColor, GUI::Color_Border, barColor, GUI::Color_Background,
         true);
 }
@@ -229,7 +229,7 @@ void TimeScreen::drawWeather(bool force) {
     readout += (MultiMon::settings.useMetric) ? "C, " : "F, ";
     readout += MultiMon::owmClient->weather.description.longer;
   }
-  sprite->setFreeFont(WeatherFont);
+  GUI::Font::setUsingID(WeatherFont, sprite);
   sprite->setTextColor(GUI::Mono_Foreground);
   sprite->setTextDatum(MC_DATUM);
   sprite->drawString(readout, WeatherWidth/2, WeatherHeight/2);
@@ -272,7 +272,7 @@ void TimeScreen::drawNextComplete(bool force) {
     if (theMinute < 10) readout += '0';
     readout += theMinute;
     if (!MultiMon::settings.use24Hour) readout += isAM(theTime) ? "AM" : "PM";
-    sprite->setFreeFont(NCFont);
+    GUI::Font::setUsingID(NCFont, sprite);
     sprite->setTextColor(GUI::Mono_Foreground);
     sprite->setTextDatum(TC_DATUM);
     sprite->drawString(readout, NCWidth/2, 0);

@@ -33,10 +33,9 @@ static const int TileHeight = Screen::YCenter-2;
 static const int XCenterOffset = (TileWidth)/2;
 static const int YCenterOffset = (TileHeight)/2;
 static const int BorderSize = 2;
-static const auto StatusFont = &FreeSansBold12pt7b;
-static const uint16_t StatusFontHeight = StatusFont->yAdvance;
+static const auto StatusFont = GUI::Font::FontID::SB12;
+static const uint16_t StatusFontHeight = 29; // StatusFont->yAdvance
 static const uint16_t StatusHeight = StatusFontHeight*2;
-
 
 /*------------------------------------------------------------------------------
  *
@@ -104,7 +103,7 @@ void StatusScreen::displayStaticElements(int index, bool force) {
 
   // Display the nickname
   tft.setTextDatum(MC_DATUM);
-  tft.setFreeFont(&FreeSansBold12pt7b);
+  GUI::Font::setUsingID(GUI::Font::FontID::SB12, tft);
   tft.setTextColor(GUI::Color_Nickname);
   tft.drawString(MultiMon::settings.printer[index].nickname, x+XCenterOffset, y+18);
 }
@@ -144,7 +143,7 @@ void StatusScreen::displaySingleStatus(int index, bool force) {
   sprite->setColorDepth(1);
   sprite->createSprite(TileWidth-BorderSize*2, StatusHeight);
   sprite->fillSprite(GUI::Mono_Background);
-  sprite->setFreeFont(StatusFont);
+  GUI::Font::setUsingID(StatusFont, sprite);
   sprite->setTextColor(GUI::Mono_Foreground);
   sprite->setTextDatum(TC_DATUM);
 

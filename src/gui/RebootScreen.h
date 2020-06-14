@@ -22,7 +22,6 @@
 
 using GUI::tft;
 
-static const auto RebootButtonFont = &FreeSansBold12pt7b;
 static uint16_t IconInset = 10;
 
 static const uint8_t RebootButtonID = 0;
@@ -47,7 +46,7 @@ public:
     (void)activating; // We don't use this parameter - avoid a warning...
     tft.fillScreen(GUI::Color_Background);
 
-    tft.setFreeFont(RebootButtonFont);
+    GUI::Font::setUsingID(GUI::Font::FontID::SB12, tft);
     tft.setTextDatum(MC_DATUM);
 
     uint16_t xc = (Screen::Width + (IconInset+RebootIcon_Width))/2;

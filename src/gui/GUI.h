@@ -97,6 +97,23 @@ namespace GUI {
 
   extern TFT_eSPI tft;
   extern TFT_eSprite *sprite;
+
+  namespace Font {
+    enum FontID {
+      M9,  MB9,  MO9,  MBO9,
+      S9,  SB9,  SO9,  SBO9,
+      S12, SB12, SO12, SBO12,
+      S18, SB18, SO18, SBO18,
+      S24, SB24, SO24, SBO24,
+      D20, D72,  D100
+    };
+
+
+    extern void setUsingID(uint8_t fontID, TFT_eSPI& t);
+    extern void setUsingID(uint8_t fontID, TFT_eSprite *s);
+    extern int8_t idFromName(String fontName);
+    extern uint8_t getHeight(uint8_t fontID);
+  }
 }
 
 #endif  // GUI_h

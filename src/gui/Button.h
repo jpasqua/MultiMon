@@ -65,7 +65,7 @@ public:
   // @param bgColor     The color to be used to draw the interior of the button
   // @param buffer      Should this be buffered offscreen then copied to the display
   void drawSimple(
-      String label, const GFXfont *font, uint8_t borderSize,
+      String label, uint8_t font, uint8_t borderSize,
       uint16_t labelColor, uint16_t borderColor, uint16_t bgColor,
       bool buffer = false);
 
@@ -85,7 +85,7 @@ public:
   // @param bgColor     The color to be used for the unfilled part of the progress bar
   // @param buffer      Should this be buffered offscreen then copied to the display
   void drawProgress(
-        float pct, String label, const GFXfont *font, uint8_t borderSize,
+        float pct, String label, uint8_t font, uint8_t borderSize,
         uint16_t labelColor, uint16_t borderColor,
         uint16_t barColor, uint16_t bgColor,
         bool buffer = false);

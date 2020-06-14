@@ -31,12 +31,12 @@ public:
 
     tft.fillScreen(GUI::Color_Background);
     if (state == pre) {
-      tft.setFreeFont(&FreeSansBold9pt7b);
+      GUI::Font::setUsingID(GUI::Font::FontID::SB9, tft);
       tft.setTextColor(GUI::Color_AlertGood);
       tft.setTextDatum(MC_DATUM);
       tft.drawString("Touch to begin calibration", Screen::XCenter, Screen::YCenter);
     } else if (state == post) {
-      tft.setFreeFont(&FreeSansBold9pt7b);
+      GUI::Font::setUsingID(GUI::Font::FontID::SB9, tft);
       tft.setTextColor(GUI::Color_AlertGood);
       tft.setTextDatum(MC_DATUM);
       tft.drawString("Done! Touch to continue", Screen::XCenter, Screen::YCenter);
@@ -58,7 +58,7 @@ private:
       switch (state) {
         case pre:
           tft.fillScreen(GUI::Color_Background);
-          tft.setFreeFont(&FreeSansBold9pt7b);
+          GUI::Font::setUsingID(GUI::Font::FontID::SB9, tft);
           tft.setTextColor(GUI::Color_AlertGood);
           tft.setTextDatum(MC_DATUM);
           tft.drawString("Touch each corner arrow", Screen::XCenter, Screen::YCenter);

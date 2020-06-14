@@ -25,7 +25,7 @@ void Button::clear(uint16_t bg) {
 }
 
 void Button::drawSimple(
-      String label, const GFXfont *font, uint8_t borderSize,
+      String label, uint8_t font, uint8_t borderSize,
       uint16_t labelColor, uint16_t borderColor, uint16_t bgColor,
       bool buffer) {
   if (buffer) {
@@ -37,7 +37,7 @@ void Button::drawSimple(
       for (int i = 0; i < borderSize; i++) {      // Draw the frame
         sprite->drawRect(i, i, _w-(2*i), _h-(2*i), GUI::Mono_Foreground);
       }
-      sprite->setFreeFont(font);
+      GUI::Font::setUsingID(font, sprite);
       sprite->setTextColor(GUI::Mono_Foreground);
       sprite->setTextDatum(MC_DATUM);
       sprite->drawString(label, (_w/2), (_h/2));
@@ -62,7 +62,7 @@ void Button::drawSimple(
       for (int i = 0; i < borderSize; i++) {      // Draw the frame
         sprite->drawRect(i, i, _w-(2*i), _h-(2*i), BorderIndex);
       }
-      sprite->setFreeFont(font);
+      GUI::Font::setUsingID(font, sprite);
       sprite->setTextColor(LabelIndex);
       sprite->setTextDatum(MC_DATUM);
       sprite->drawString(label, (_w/2), (_h/2));
@@ -75,7 +75,7 @@ void Button::drawSimple(
       tft.drawRect(_x+i, _y+i, _w-(2*i), _h-(2*i), borderColor);
     }
 
-    tft.setFreeFont(font);
+    GUI::Font::setUsingID(font, tft);
     tft.setTextColor(labelColor);
     tft.setTextDatum(MC_DATUM);
     tft.drawString(label, _x + (_w/2), _y+(_h/2));
@@ -83,7 +83,7 @@ void Button::drawSimple(
 }
 
 void Button::drawProgress(
-      float pct, String label, const GFXfont *font, uint8_t borderSize,
+      float pct, String label, uint8_t font, uint8_t borderSize,
       uint16_t labelColor, uint16_t borderColor,
       uint16_t barColor, uint16_t bgColor,
       bool buffer) {
@@ -113,7 +113,7 @@ void Button::drawProgress(
     sprite->fillRect(borderSize, borderSize, pct*(_w-2*borderSize), (_h-2*borderSize), BarIndex);
 
     // Draw the overlay text
-    sprite->setFreeFont(font);
+    GUI::Font::setUsingID(font, sprite);
     sprite->setTextColor(TextIndex);
     sprite->setTextDatum(MC_DATUM);
     sprite->drawString(note, _w/2, _h/2);
@@ -131,7 +131,7 @@ void Button::drawProgress(
     tft.fillRect(_x+borderSize, _y+borderSize, pct*(_w-2*borderSize), (_h-2*borderSize), barColor);
 
     // Draw the overlay text
-    tft.setFreeFont(&FreeSansBold9pt7b);
+    GUI::Font::setUsingID(font, tft);
     tft.setTextColor(labelColor);
     tft.setTextDatum(MC_DATUM);
     tft.drawString(note, _x+_w/2, _y+_h/2);
