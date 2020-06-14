@@ -272,6 +272,13 @@ Similarly you can get a screen shot of whatever is currently displayed on the de
 
 Finally, the `/dev` page also has a `Request Reboot` button. If you press the button you will be presented with a popup in your browser asking if you are sure. If you confirm, *MultiMon* will go to a "Reboot Screen" that displays a red reboot button and a green cancel button. The user must press and hold the reboot button for 1 second to confirm a reboot. Pressing cancel will resume normal operation. Pressing no button for 1 minute will behave as if the cancel button was pressed.
 
+## Adding Screens
+To add a news Screen, you need to implment a new subclass of Screen that knows how to display itself (using the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI) library), and how to update itself on a periodic basis if the data it displays changes. The screen must also implement at least minimal navigation capability (i.e. a tap that takes the user to the next screen or back to the home screen). Look at some of the existing screens for examples.
+
+If you'd rather not deal with the graphics library yourself, you can create screens without code using the experimental [`FlexScreen`[(#dev-exp) mechanism described below.
+
+**Implementation Note**: For a fairly [convoluted set of reasons](https://github.com/Bodmer/TFT_eSPI/issues/664), *MultiMon* has a wrapper for the `TFT_eSPI::setFreeFont` function. Though you can call `setFreeFont` directly, it will result in the code size growing significantly. As a result, you should use the wrapper functions (`GUI::Font:setUsingID`).
+
 <a name="dev-exp"></a>
 ## Experimental Info for Developers
 
