@@ -286,7 +286,7 @@ MultiMon contains the beginning of a Plugin system to extend the functionality o
 
 There are three main components to create a plugin:
 
-1. **Plugin Descriptor**: A declarative definition of the plugin in the form of a JSON file. This definition includes configuration information for the plugin itself and a description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. Plugin descriptors are placed in the `plugins` subdirectory of the `data` directory.
+1. **Plugin Descriptor**: A declarative definition of the plugin in the form of a JSON file. This definition includes configuration information for the plugin itself and a description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. FlexScreen can display things like floats, ints, and string using a format you specify. It can also display more complex things like a clock that automatically updates itself. Actually, that is the only more complex object implemented right now. Plugin descriptors are placed in the `plugins` subdirectory of the `data` directory.
 2. **Plugin Data Source**: Any code that makes data available for use by the Plugin. This could be something that reads information from local sensors, a remote device, a news service - whatever. It is responsible for getting the data and providing an API for consuming it. 
 3. **Plugin Code**: Each type of plugin requires code which coordinates between the data source and the screen. This code is a subclass of the Plugin class. When a FlexScreen instance is about to display itself, it looks through the descriptor and finds references to all of the places where data should be slotted into the template. Each of these refers to the data it wants with a key. FlexScreen asks the Plugin to map the key name to the current value for that key read by the data source.
 
@@ -294,7 +294,7 @@ You can have many instances of the same type of plugin or of different types of 
 
 As mentioned above, the example included with *MultiMon* use Blynk to display weather station information. It is disabled by default and is enabled using the [Configure Display](#configure-display) page. The components of the example are``:
 
-1. **Plugin Descriptor**: The example descriptor file is `plugins/blynk.json`. It displays information from two blynk-based weather stations in a tabular format (see screenshot below). For Blynk, this descriptor also includes the Blynk App IDs for each source from which data is to be pulled. The file included with the package is named `plugins/blynk.json.sample`. to use it you must remove the `.sample` extension.
+1. **Plugin Descriptor**: The example descriptor file is `plugins/blynk.json`. It displays information from two blynk-based weather stations in a tabular format (see screenshot below). For Blynk, this descriptor also includes the Blynk App IDs for each source from which data is to be pulled. The file included with the package is named `plugins/blynk.json.sample`. To use it you must remove the `.sample` extension.
 2. **Plugin Data Source**: A simple, readonly, client is provided to read the necessary data from Blynk. It is `src/clients/BlynkClient.{cpp|h}`.
 3. **Plugin Code**: The Plugin subclass for Blynk is `src/plugins/BlynkPlugin.{cpp|h}`. It provides the mapper between keys described in the screen definition and data supplied by `BlynkClient`.
 

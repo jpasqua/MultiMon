@@ -3,8 +3,8 @@
   "typeSpecific": {
     "refreshInterval": 600000,
     "blynkIDs": [
-      "ID 1 GOES HERE",
-      "ID 2 GOES HERE"
+      "Blynk ID 1",
+      "Blynk ID 2"
     ],
     "pins": [
       "0/V0", "0/V1", "0/V2", "0/V7", "0/V8",
@@ -193,7 +193,17 @@
         "color": "0xFFFFFF",
         "format": "%s",
         "key": "1/V8"
-      }      
+      },
+      {
+        "x": 100, "y": 218,
+        "w": 120,  "h": 22,
+        "xOff": 60, "yOff": 11,
+        "justify": "MC",
+        "font": "D20",
+        "color": "0xc354ff",
+        "format": "%02d:%02d:%02d",
+        "type": "CLOCK"
+      }             
     ],
     "bkg": "0x000000",
     "name": "Blynk"
