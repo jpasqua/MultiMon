@@ -3,9 +3,10 @@
   "typeSpecific": {
     "refreshInterval": 600000,
     "blynkIDs": [
-      "Blynk ID 1",
-      "Blynk ID 2"
+      "ID1",
+      "ID2"
     ],
+    "nicknames": ["Nickname 1", "Nickname 2"],
     "pins": [
       "0/V0", "0/V1", "0/V2", "0/V7", "0/V8",
       "1/V0", "1/V1", "1/V2", "1/V7", "1/V8"
@@ -39,7 +40,9 @@
         "justify": "MC",
         "font": "SB9",
         "color": "0xFFFFFF",
-        "format": "Garage"
+        "format": "%s",
+        "type": "STRING",
+        "key": "NN1"
       },
       {
         "x": 203,  "y": 35,
@@ -48,7 +51,9 @@
         "justify": "MC",
         "font": "SB9",
         "color": "0xFFFFFF",
-        "format": "Backyard"
+        "format": "%s",
+        "type": "STRING",
+        "key": "NN2"
       },
       {
         "x": 0,   "y": 64,
