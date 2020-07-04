@@ -126,7 +126,12 @@ namespace MMWebUI {
 
       MM::settings.use24Hour = WebUI::hasArg("is24hour");
       MM::settings.invertDisplay = WebUI::hasArg("invDisp");
+
       MM::settings.blynk.enabled = WebUI::hasArg("blynkEnabled");
+      MM::settings.blynk.id1 = WebUI::arg("blynkID1");
+      MM::settings.blynk.id2 = WebUI::arg("blynkID2");
+      MM::settings.blynk.nickname1 = WebUI::arg("blynkNN1");
+      MM::settings.blynk.nickname2 = WebUI::arg("blynkNN2");
 
       MM::settings.write();
       //MM::settings.logSettings();
@@ -313,6 +318,10 @@ namespace MMWebUI {
         if (key == "USE_24HOUR") return checkedOrNot[MM::settings.use24Hour];
         if (key == "INVERT_DISPLAY") return checkedOrNot[MM::settings.invertDisplay];
         if (key == "BLYNK_ENABLED") return checkedOrNot[MM::settings.blynk.enabled];
+        if (key == "BLYNK_ID1") return MM::settings.blynk.id1;
+        if (key == "BLYNK_ID2") return MM::settings.blynk.id2;
+        if (key == "BLYNK_NN1") return MM::settings.blynk.nickname1;
+        if (key == "BLYNK_NN2") return MM::settings.blynk.nickname2;
         return EmptyString;
       };
 
