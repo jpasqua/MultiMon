@@ -39,14 +39,21 @@ void Plugin::newPlugin(DynamicJsonDocument &doc) {
   }
 
   String type = doc["type"].as<String>();
-  JsonObjectConst typeSpecific = doc["typeSpecific"];
+  JsonObject typeSpecific = doc["typeSpecific"];
   JsonObjectConst screen = doc["screen"];
 
   Plugin *p = NULL;
   if (type.equalsIgnoreCase("static")) {
     p = new StaticPlugin();
   } else if (type.equalsIgnoreCase("blynk")) {
-    if (MultiMon::settings.blynk.enabled) { p = new BlynkPlugin(); }
+    if (MultiMon::settings.blynk.enabled) {
+      p = new BlynkPlugin();
+      // Override plugin values from general settings if available
+      if (!MultiMon::settings.blynk.id1.isEmpty()) typeSpecific["blynkIDs"][0] = MultiMon::settings.blynk.id1;
+      if (!MultiMon::settings.blynk.nickname1.isEmpty()) typeSpecific["nicknames"][0] = MultiMon::settings.blynk.nickname1;
+      if (!MultiMon::settings.blynk.id2.isEmpty()) typeSpecific["blynkIDs"][1] = MultiMon::settings.blynk.id2;
+      if (!MultiMon::settings.blynk.nickname2.isEmpty()) typeSpecific["nicknames"][1] = MultiMon::settings.blynk.nickname2;
+    }
   } 
 
   if (p == NULL) return;
@@ -91,7 +98,6 @@ void Plugin::loadAll(String filePath) {
     }
 
 
-Log.verbose("Loading data from %s", name.c_str());
     DynamicJsonDocument doc(MaxFileSize);
     auto error = deserializeJson(doc, file);
     file.close();
