@@ -23,7 +23,7 @@ class StaticPlugin : public Plugin {
     // Nothing to do here...
   }
 
-  bool init(JsonObjectConst &obj) {
+  bool init(JsonObject &obj) {
     Log.trace("StaticPlugin::init()");
     // There is no type specific data for a StaticPlugin...
     (void)obj;  // Avoid "unused" compiler warning

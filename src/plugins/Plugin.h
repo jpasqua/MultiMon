@@ -25,7 +25,7 @@ public:
   static void refreshAll(bool force = false);
 
   virtual ~Plugin() { }
-	virtual bool init(JsonObjectConst &obj) = 0;
+	virtual bool init(JsonObject &obj) = 0;
 	virtual void refresh(bool force = false) = 0;
 
 protected:

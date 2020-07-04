@@ -19,15 +19,16 @@
 class BlynkPlugin : public Plugin {
 public:
   ~BlynkPlugin();
-  bool init(JsonObjectConst &obj);
+  bool init(JsonObject &obj);
   void refresh(bool force = false);
-  
+
 protected:
   String getValue(String key);
 
 private:
   uint8_t   _nBlynkIDs;
   String*   _blynkIDs;
+  String*   _nicknames;
   uint8_t   _nPins;
   String*   _pins;
   String*   _pinVals;
