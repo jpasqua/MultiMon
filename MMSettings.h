@@ -60,6 +60,8 @@ public:
   
   struct {
     bool enabled;
+    String id1, id2;
+    String nickname1, nickname2;
   } blynk;
 
   // HW Settings

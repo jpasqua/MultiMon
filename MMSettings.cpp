@@ -102,7 +102,13 @@ void MMSettings::fromJSON(JsonDocument &doc) {
 
   use24Hour = doc["use24Hour"];
   useMetric = doc["useMetric"];
-  blynk.enabled = doc["blynkEnabled"];
+
+  blynk.enabled = doc["blynk"]["enabled"];
+  blynk.id1 = doc["blynk"]["id1"].as<String>();
+  blynk.id2 = doc["blynk"]["id2"].as<String>();
+  blynk.nickname1 = doc["blynk"]["nickname1"].as<String>();
+  blynk.nickname2 = doc["blynk"]["nickname2"].as<String>();
+
   showDevMenu = doc["showDevMenu"];
 
   invertDisplay = doc["invertDisplay"];
@@ -132,7 +138,14 @@ void MMSettings::toJSON(JsonDocument &doc) {
 
   doc["use24Hour"] = use24Hour;
   doc["useMetric"] = useMetric;
-  doc["blynkEnabled"] = blynk.enabled;
+
+  doc["blynk"]["enabled"] = blynk.enabled;
+  doc["blynk"]["id1"] = blynk.id1;
+  doc["blynk"]["id2"] = blynk.id2;
+  doc["blynk"]["nickname1"] = blynk.nickname1;
+  doc["blynk"]["nickname2"] = blynk.nickname2;
+
+
   doc["showDevMenu"] = showDevMenu;
 
   doc["invertDisplay"] = invertDisplay;
@@ -167,6 +180,10 @@ void MMSettings::logSettings() {
   Log.verbose("  use24Hour: %T", use24Hour);
   Log.verbose("  useMetric: %T", useMetric);
   Log.verbose("  blynk enabled: %T", blynk.enabled);
+  Log.verbose("    blynk ID1: %s", blynk.id1.c_str());
+  Log.verbose("    blynk ID2: %s", blynk.id2.c_str());
+  Log.verbose("    blynk Nickname 1: %s", blynk.nickname1.c_str());
+  Log.verbose("    blynk Nickname 2: %s", blynk.nickname2.c_str());
   Log.verbose("  show dev menu: %T", showDevMenu);
   Log.verbose("HW Settings");
   Log.verbose("  invertDisplay: %T", invertDisplay);
