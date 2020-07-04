@@ -21,18 +21,21 @@ BlynkPlugin::~BlynkPlugin() {
   if (_blynkIDs) delete _blynkIDs;
 }
 
-bool BlynkPlugin::init(JsonObjectConst &obj) {
+bool BlynkPlugin::init(JsonObject &obj) {
   // Log.trace("BlynkPlugin::init()");
 
   // Get type-specific data
   _refreshInterval = obj["refreshInterval"];
 
   JsonArrayConst ids = obj["blynkIDs"];
+  JsonArrayConst names = obj["nicknames"];
   _nBlynkIDs = ids.size();  
   _blynkIDs = new String[_nBlynkIDs];
+  _nicknames = new String[_nBlynkIDs];
 
   for (int i = 0; i < _nBlynkIDs; i++) {
     _blynkIDs[i] = ids[i].as<String>();
+    _nicknames[i] = names[i].as<String>();
   }
 
   JsonArrayConst pinArray = obj["pins"];
@@ -48,6 +51,8 @@ bool BlynkPlugin::init(JsonObjectConst &obj) {
       for (int i = 0; i < _nPins; i++) {
         if (key == _pins[i]) return _pinVals[i];
       }
+      if (key == "NN1" && _nBlynkIDs >= 1) return _nicknames[0];
+      if (key == "NN2" && _nBlynkIDs >= 2) return _nicknames[1];
       return "";
     };
 
@@ -66,4 +71,3 @@ void BlynkPlugin::refresh(bool force) {
   _nextRefresh = millis() + _refreshInterval;
   GUI::hideUpdatingIcon();
 }
-
