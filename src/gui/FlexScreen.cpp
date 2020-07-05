@@ -133,8 +133,8 @@ void FlexScreen::display(bool activating) {
   lastDisplayTime = lastClockTime = millis();
 }
 
-String nullMapper(String&k) {
-  Log.verbose("Null mapper: %s",k.c_str());
+String nullMapper(String& k) {
+  (void)k;  // Avoid warning for unused parameter
   return "";
 }
 
@@ -161,7 +161,6 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
   for (JsonObjectConst item : itemArray) {
     _items[i].fromJSON(item);
     if (_items[i]._dataType == FlexItem::Type::CLOCK) {
-      Log.verbose("Found a clock at index %d", i);
       _clock = &_items[i];
     }
     i++;
