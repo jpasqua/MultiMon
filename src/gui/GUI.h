@@ -27,6 +27,9 @@ namespace GUI {
   static const uint32_t Color_SplashDuet = TFT_BLUE;
   static const uint32_t Color_SplashRR   = 0x0488;
     // RR Logo color is #029346, 565 version of that is 0x0488
+  static const uint32_t Color_SplashD3   = 0x02DF;
+  //static const uint32_t Color_SplashD3   = 0x000E;
+    // Duet3D Logo color is #040073, 565 version of that is 0x000E
 
   static const uint32_t Color_WeatherTxt = TFT_PURPLE;
   static const uint32_t Color_WeatherBkg = TFT_WHITE;
