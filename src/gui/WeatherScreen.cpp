@@ -88,7 +88,7 @@ void WeatherScreen::display(bool activating) {
     GUI::Font::setUsingID(GUI::Font::FontID::SB18, tft);
     tft.setTextColor(GUI::Color_AlertError);
     tft.setTextDatum(MC_DATUM);
-    tft.drawString("No Weather Data", Screen::XCenter, Screen::YCenter);
+    tft.drawString(F("No Weather Data"), Screen::XCenter, Screen::YCenter);
     return;
   }
 

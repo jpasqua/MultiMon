@@ -32,18 +32,18 @@ using GUI::sprite;
 
 inline uint16_t mapColor(String colorSpecifier) {
   int index = 0;
-  if (colorSpecifier.startsWith("0x")) index = 2;
-  else if (colorSpecifier.startsWith("#")) index = 1;
+  if (colorSpecifier.startsWith(F("0x"))) index = 2;
+  else if (colorSpecifier.startsWith(F("#"))) index = 1;
   uint32_t hexVal = strtol(colorSpecifier.substring(index).c_str(), NULL, 16);
   return tft.color24to16(hexVal);
 }
 
 FlexItem::Type mapType(String t) {
-  if (t.equalsIgnoreCase("INT")) return FlexItem::Type::INT;
-  if (t.equalsIgnoreCase("FLOAT")) return FlexItem::Type::FLOAT;
-  if (t.equalsIgnoreCase("STRING")) return FlexItem::Type::STRING;
-  if (t.equalsIgnoreCase("BOOL")) return FlexItem::Type::BOOL;
-  if (t.equalsIgnoreCase("CLOCK")) return FlexItem::Type::CLOCK;
+  if (t.equalsIgnoreCase(F("INT"))) return FlexItem::Type::INT;
+  if (t.equalsIgnoreCase(F("FLOAT"))) return FlexItem::Type::FLOAT;
+  if (t.equalsIgnoreCase(F("STRING"))) return FlexItem::Type::STRING;
+  if (t.equalsIgnoreCase(F("BOOL"))) return FlexItem::Type::BOOL;
+  if (t.equalsIgnoreCase(F("CLOCK"))) return FlexItem::Type::CLOCK;
   return FlexItem::Type::STRING;
 }
 
@@ -61,15 +61,15 @@ void mapKey(String input, String &key, bool &isLiteral) {
 }
 
 uint8_t mapDatum(String justify) {
-  if (justify.equalsIgnoreCase("TL")) { return TL_DATUM;}
-  if (justify.equalsIgnoreCase("TC")) { return TC_DATUM;}
-  if (justify.equalsIgnoreCase("TR")) { return TR_DATUM;}
-  if (justify.equalsIgnoreCase("ML")) { return ML_DATUM;}
-  if (justify.equalsIgnoreCase("MC")) { return MC_DATUM;}
-  if (justify.equalsIgnoreCase("MR")) { return MR_DATUM;}
-  if (justify.equalsIgnoreCase("BL")) { return BL_DATUM;}
-  if (justify.equalsIgnoreCase("BC")) { return BC_DATUM;}
-  if (justify.equalsIgnoreCase("BR")) { return BR_DATUM;}
+  if (justify.equalsIgnoreCase(F("TL"))) { return TL_DATUM;}
+  if (justify.equalsIgnoreCase(F("TC"))) { return TC_DATUM;}
+  if (justify.equalsIgnoreCase(F("TR"))) { return TR_DATUM;}
+  if (justify.equalsIgnoreCase(F("ML"))) { return ML_DATUM;}
+  if (justify.equalsIgnoreCase(F("MC"))) { return MC_DATUM;}
+  if (justify.equalsIgnoreCase(F("MR"))) { return MR_DATUM;}
+  if (justify.equalsIgnoreCase(F("BL"))) { return BL_DATUM;}
+  if (justify.equalsIgnoreCase(F("BC"))) { return BC_DATUM;}
+  if (justify.equalsIgnoreCase(F("BR"))) { return BR_DATUM;}
 
   return TL_DATUM;
 }
@@ -120,7 +120,7 @@ bool FlexScreen::init(
 void FlexScreen::display(bool activating) {
   auto mapper = [&](String& key) -> String {
     if (key.isEmpty()) return "";
-    if (key.equals("SCREEN_NAME")) return _name;
+    if (key.equals(F("SCREEN_NAME"))) return _name;
     else return _vc(key);
   };
 
@@ -153,7 +153,7 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
   // TO DO: If we are overwriting an existing screen
   // we need to clean up all the old data first
 
-  JsonArrayConst itemArray = screen["items"];
+  JsonArrayConst itemArray = screen[F("items")];
   _nItems = itemArray.size();  
   _items = new FlexItem[_nItems];
 
@@ -166,8 +166,8 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
     i++;
   }
 
-  _bkg = mapColor(screen["bkg"].as<String>());
-  _name = screen["name"].as<String>();
+  _bkg = mapColor(screen[F("bkg")].as<String>());
+  _name = screen[F("name")].as<String>();
 
   return true;
 }
@@ -181,21 +181,21 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
 
 void FlexItem::fromJSON(JsonObjectConst& item) {
   // What it is...
-  _dataType = mapType(item["type"].as<String>());
-  mapKey(String(item["key"]|""), _key, _isLiteral);
+  _dataType = mapType(item[F("type")].as<String>());
+  mapKey(String(item[F("key")]|""), _key, _isLiteral);
 
   // Where it goes...
-  _x = item["x"]; _y = item["y"];
-  _w = item["w"]; _h = item["h"];
-  _xOff = item["xOff"]; _yOff = item["yOff"];
+  _x = item[F("x")]; _y = item[F("y")];
+  _w = item[F("w")]; _h = item[F("h")];
+  _xOff = item[F("xOff")]; _yOff = item[F("yOff")];
 
   // How it is displayed...
-  mapFont(item["font"].as<String>(), _gfxFont, _font);
-  _color = mapColor(item["color"].as<String>());
-  _format = String(item["format"]|"");
-  _datum = mapDatum(item["justify"].as<String>());
+  mapFont(item[F("font")].as<String>(), _gfxFont, _font);
+  _color = mapColor(item[F("color")].as<String>());
+  _format = String(item[F("format")]|"");
+  _datum = mapDatum(item[F("justify")].as<String>());
 
-  _strokeWidth = item["strokeWidth"];
+  _strokeWidth = item[F("strokeWidth")];
 }
 
 void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
@@ -223,7 +223,7 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
         {
           char c = value[0];
           bool bv = (c == 't' || c == 'T' || c == '1') ;
-          sprintf(buf, fmt, bv ? "True" : "False");
+          sprintf(buf, fmt, bv ? F("True") : F("False"));
           break;
         }
       case FlexItem::Type::CLOCK:

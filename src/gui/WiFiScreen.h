@@ -30,7 +30,7 @@ public:
     tft.setTextDatum(MC_DATUM);
     x = Screen::XCenter;
     y += (Screen::Height - y)/2;
-    tft.drawString("Connecting...", x, y);
+    tft.drawString(F("Connecting..."), x, y);
   }
 
   virtual void processPeriodicActivity() {

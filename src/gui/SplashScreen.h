@@ -32,7 +32,7 @@ public:
     GUI::Font::setUsingID(GUI::Font::FontID::SBO24, tft);
     tft.setTextColor(GUI::Color_SplashText);
     tft.setTextDatum(BC_DATUM);
-    tft.drawString("MultiMon", Screen::XCenter, Screen::Height-1);
+    tft.drawString(F("MultiMon"), Screen::XCenter, Screen::Height-1);
   }
 
   virtual void processPeriodicActivity() {

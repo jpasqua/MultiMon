@@ -133,7 +133,7 @@ public:
 
     tft.setTextColor(GUI::Color_Inactive);
     GUI::Font::setUsingID(NormalFont, tft);
-    tft.drawString("Written by Joe Pasqua", Screen::XCenter, Screen::Height - NormalFontHeight);
+    tft.drawString(F("Written by Joe Pasqua"), Screen::XCenter, Screen::Height - NormalFontHeight);
   }
 
   virtual void processPeriodicActivity() {  }

@@ -59,7 +59,7 @@ public:
         RebootIcon_Width, RebootIcon_Height,
         GUI::Color_AlertError);
     tft.setTextColor(GUI::Color_AlertError);
-    tft.drawString("Reboot", xc, yc);
+    tft.drawString(F("Reboot"), xc, yc);
 
     xc = (Screen::Width + (IconInset+CancelIcon_Width))/2;
     yc = (Screen::Height*3)/4;
@@ -71,7 +71,7 @@ public:
         CancelIcon_Width, CancelIcon_Height,
         GUI::Color_AlertGood);
     tft.setTextColor(GUI::Color_AlertGood);
-    tft.drawString("Cancel", xc, yc);
+    tft.drawString(F("Cancel"), xc, yc);
     autoCancelTime = millis() + 60 * 1000L; // If nothing has happened in a minute, cancel
   }
 

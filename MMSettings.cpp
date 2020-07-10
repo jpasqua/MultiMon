@@ -40,27 +40,27 @@ void PrinterSettings::init() {
 }
 
 void PrinterSettings::fromJSON(JsonObjectConst settings) {
-  type = settings["type"].as<String>();
-  apiKey = settings["apiKey"].as<String>();
-  server = settings["server"].as<String>();
-  port = settings["port"];
-  user = settings["user"].as<String>();
-  pass = settings["pass"].as<String>();
-  nickname = settings["nickname"].as<String>();
-  isActive = settings["isActive"];
-  mock = settings["mock"];
+  type = settings[F("type")].as<String>();
+  apiKey = settings[F("apiKey")].as<String>();
+  server = settings[F("server")].as<String>();
+  port = settings[F("port")];
+  user = settings[F("user")].as<String>();
+  pass = settings[F("pass")].as<String>();
+  nickname = settings[F("nickname")].as<String>();
+  isActive = settings[F("isActive")];
+  mock = settings[F("mock")];
 }
 
 void PrinterSettings::toJSON(JsonObject settings) const {
-  settings["type"] = type;
-  settings["apiKey"] = apiKey;
-  settings["server"] = server;
-  settings["port"] = port;
-  settings["user"] = user;
-  settings["pass"] = pass;
-  settings["nickname"] = nickname;
-  settings["isActive"] = isActive;
-  settings["mock"] = mock;
+  settings[F("type")] = type;
+  settings[F("apiKey")] = apiKey;
+  settings[F("server")] = server;
+  settings[F("port")] = port;
+  settings[F("user")] = user;
+  settings[F("pass")] = pass;
+  settings[F("nickname")] = nickname;
+  settings[F("isActive")] = isActive;
+  settings[F("mock")] = mock;
 }
 
 void PrinterSettings::logSettings() {
@@ -92,80 +92,80 @@ MMSettings::MMSettings() {
 }
 
 void MMSettings::fromJSON(JsonDocument &doc) {
-  JsonArrayConst osArray = doc["printerSettings"];
+  JsonArrayConst osArray = doc[F("printerSettings")];
   int i = 0;
   for (JsonObjectConst os : osArray) {
     printer[i++].fromJSON(os);
     if (i == MaxServers) break;
   }
-  printerRefreshInterval = doc["printerRefreshInterval"];
+  printerRefreshInterval = doc[F("printerRefreshInterval")];
 
-  use24Hour = doc["use24Hour"];
-  useMetric = doc["useMetric"];
+  use24Hour = doc[F("use24Hour")];
+  useMetric = doc[F("useMetric")];
 
-  blynk.enabled = doc["blynk"]["enabled"];
-  blynk.id1 = doc["blynk"]["id1"].as<String>();
-  blynk.id2 = doc["blynk"]["id2"].as<String>();
-  blynk.nickname1 = doc["blynk"]["nickname1"].as<String>();
-  blynk.nickname2 = doc["blynk"]["nickname2"].as<String>();
+  blynk.enabled = doc[F("blynk")][F("enabled")];
+  blynk.id1 = doc[F("blynk")][F("id1")].as<String>();
+  blynk.id2 = doc[F("blynk")][F("id2")].as<String>();
+  blynk.nickname1 = doc[F("blynk")][F("nickname1")].as<String>();
+  blynk.nickname2 = doc[F("blynk")][F("nickname2")].as<String>();
 
-  showDevMenu = doc["showDevMenu"];
+  showDevMenu = doc[F("showDevMenu")];
 
-  invertDisplay = doc["invertDisplay"];
-  for (int i = 0; i < nCalReadings; i++) { calibrationData[i] = doc["calibrationData"][i]; }
+  invertDisplay = doc[F("invertDisplay")];
+  for (int i = 0; i < nCalReadings; i++) { calibrationData[i] = doc[F("calibrationData")][i]; }
 
-  owm.enabled = doc["owm"]["enabled"];
-  owm.key = doc["owm"]["key"].as<String>();
-  owm.cityID = doc["owm"]["cityID"];
-  owm.language = doc["owm"]["language"].as<String>();
+  owm.enabled = doc[F("owm")][F("enabled")];
+  owm.key = doc[F("owm")][F("key")].as<String>();
+  owm.cityID = doc[F("owm")][F("cityID")];
+  owm.language = doc[F("owm")][F("language")].as<String>();
 
-  scheduleActive = doc["scheduleActive"];
-  morning.hr = doc["morning"]["hr"];
-  morning.min = doc["morning"]["min"];
-  morning.brightness = doc["morning"]["brightness"];
+  scheduleActive = doc[F("scheduleActive")];
+  morning.hr = doc[F("morning")][F("hr")];
+  morning.min = doc[F("morning")][F("min")];
+  morning.brightness = doc[F("morning")][F("brightness")];
 
-  evening.hr = doc["evening"]["hr"];
-  evening.min = doc["evening"]["min"];
-  evening.brightness = doc["evening"]["brightness"];
+  evening.hr = doc[F("evening")][F("hr")];
+  evening.min = doc[F("evening")][F("min")];
+  evening.brightness = doc[F("evening")][F("brightness")];
 }
 
 void MMSettings::toJSON(JsonDocument &doc) {
-  JsonArray printerSettings = doc.createNestedArray("printerSettings");
+  JsonArray printerSettings = doc.createNestedArray(F("printerSettings"));
   for (int i = 0; i < MaxServers; i++) {
     printer[i].toJSON(printerSettings.createNestedObject());
   }
-  doc["printerRefreshInterval"] = printerRefreshInterval;
+  doc[F("printerRefreshInterval")] = printerRefreshInterval;
 
-  doc["use24Hour"] = use24Hour;
-  doc["useMetric"] = useMetric;
+  doc[F("use24Hour")] = use24Hour;
+  doc[F("useMetric")] = useMetric;
 
-  doc["blynk"]["enabled"] = blynk.enabled;
-  doc["blynk"]["id1"] = blynk.id1;
-  doc["blynk"]["id2"] = blynk.id2;
-  doc["blynk"]["nickname1"] = blynk.nickname1;
-  doc["blynk"]["nickname2"] = blynk.nickname2;
+  doc[F("blynk")][F("enabled")] = blynk.enabled;
+  doc[F("blynk")][F("id1")] = blynk.id1;
+  doc[F("blynk")][F("id2")] = blynk.id2;
+  doc[F("blynk")][F("nickname1")] = blynk.nickname1;
+  doc[F("blynk")][F("nickname2")] = blynk.nickname2;
 
 
-  doc["showDevMenu"] = showDevMenu;
+  doc[F("showDevMenu")] = showDevMenu;
 
-  doc["invertDisplay"] = invertDisplay;
-  JsonArray cd = doc.createNestedArray("calibrationData");
+  doc[F("invertDisplay")] = invertDisplay;
+  JsonArray cd = doc.createNestedArray(F("calibrationData"));
   for (int i = 0; i < nCalReadings; i++) { cd.add(calibrationData[i]); }
 
-  doc["owm"]["enabled"] = owm.enabled;
-  doc["owm"]["key"] = owm.key;
-  doc["owm"]["cityID"] = owm.cityID;
-  doc["owm"]["language"] = owm.language;
+  doc[F("owm")][F("enabled")] = owm.enabled;
+  doc[F("owm")][F("key")] = owm.key;
+  doc[F("owm")][F("cityID")] = owm.cityID;
+  doc[F("owm")][F("language")] = owm.language;
 
-  doc["scheduleActive"] = scheduleActive;
+  doc[F("scheduleActive")] = scheduleActive;
 
-  doc["morning"]["hr"] = morning.hr;
-  doc["morning"]["min"] = morning.min;
-  doc["morning"]["brightness"] = morning.brightness;
+  doc[F("morning")][F("hr")] = morning.hr;
+  doc[F("morning")][F("min")] = morning.min;
+  doc[F("morning")][F("brightness")] = morning.brightness;
 
-  doc["evening"]["hr"] = evening.hr;
-  doc["evening"]["min"] = evening.min;
-  doc["evening"]["brightness"] = evening.brightness;
+  doc[F("evening")][F("hr")] = evening.hr;
+  doc[F("evening")][F("min")] = evening.min;
+  doc[F("evening")][F("brightness")] = evening.brightness;
 
   // serializeJsonPretty(doc, Serial); Serial.println();
 }

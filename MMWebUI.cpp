@@ -60,13 +60,13 @@ namespace MMWebUI {
       if (!WebUI::authenticationOK()) { return; }
       Log.trace(F("Handling /setBrightness"));
 
-      uint8_t b = WebUI::arg("brightness").toInt();
+      uint8_t b = WebUI::arg(F("brightness")).toInt();
       if (b <= 0 || b > 100) {  // NOTE: 0 is not an allowed value!
         Log.warning(F("/setBrightness: %d is an unallowed brightness setting"), b);
-        WebUI::closeConnection(400, "Invalid Brightness: " + WebUI::arg("brightness"));
+        WebUI::closeConnection(400, "Invalid Brightness: " + WebUI::arg(F("brightness")));
       } else {
         GUI::setBrightness(b);
-        WebUI::closeConnection(200, "Brightness Set");
+        WebUI::closeConnection(200, F("Brightness Set"));
       }
     }
 
@@ -78,11 +78,11 @@ namespace MMWebUI {
 
     void updateWeatherConfig() {
       if (!WebUI::authenticationOK()) { return; }
-      MM::settings.owm.enabled = WebUI::hasArg("useOWM");
-      MM::settings.useMetric = WebUI::hasArg("metric");
-      MM::settings.owm.key = WebUI::arg("openWeatherMapApiKey");
-      MM::settings.owm.cityID = WebUI::arg("cityID").toInt();
-      MM::settings.owm.language = WebUI::arg("language");
+      MM::settings.owm.enabled = WebUI::hasArg(F("useOWM"));
+      MM::settings.useMetric = WebUI::hasArg(F("metric"));
+      MM::settings.owm.key = WebUI::arg(F("openWeatherMapApiKey"));
+      MM::settings.owm.cityID = WebUI::arg(F("cityID")).toInt();
+      MM::settings.owm.language = WebUI::arg(F("language"));
 
       MM::settings.write();
       // MM::settings.logSettings();
@@ -99,7 +99,7 @@ namespace MMWebUI {
         updateSinglePrinter(i);
         if (!wasActive && MM::settings.printer[i].isActive) MultiMon::Protected::printerWasActivated(i);
       }
-      MM::settings.printerRefreshInterval = WebUI::arg("refreshInterval").toInt();
+      MM::settings.printerRefreshInterval = WebUI::arg(F("refreshInterval")).toInt();
       MM::settings.write();
       // MM::settings.logSettings();
 
@@ -111,27 +111,27 @@ namespace MMWebUI {
     void updateDisplayConfig() {
       if (!WebUI::authenticationOK()) { return; }
 
-      MM::settings.scheduleActive = WebUI::hasArg("scheduleEnabled");
-      String t = WebUI::arg("morning");
+      MM::settings.scheduleActive = WebUI::hasArg(F("scheduleEnabled"));
+      String t = WebUI::arg(F("morning"));
       int separator = t.indexOf(":");
       MM::settings.morning.hr = t.substring(0, separator).toInt();
       MM::settings.morning.min = t.substring(separator+1).toInt();
-      MM::settings.morning.brightness = WebUI::arg("mBright").toInt();
+      MM::settings.morning.brightness = WebUI::arg(F("mBright")).toInt();
 
-      t = WebUI::arg("evening");
+      t = WebUI::arg(F("evening"));
       separator = t.indexOf(":");
       MM::settings.evening.hr = t.substring(0, separator).toInt();
       MM::settings.evening.min = t.substring(separator+1).toInt();
-      MM::settings.evening.brightness = WebUI::arg("eBright").toInt();
+      MM::settings.evening.brightness = WebUI::arg(F("eBright")).toInt();
 
-      MM::settings.use24Hour = WebUI::hasArg("is24hour");
-      MM::settings.invertDisplay = WebUI::hasArg("invDisp");
+      MM::settings.use24Hour = WebUI::hasArg(F("is24hour"));
+      MM::settings.invertDisplay = WebUI::hasArg(F("invDisp"));
 
-      MM::settings.blynk.enabled = WebUI::hasArg("blynkEnabled");
-      MM::settings.blynk.id1 = WebUI::arg("blynkID1");
-      MM::settings.blynk.id2 = WebUI::arg("blynkID2");
-      MM::settings.blynk.nickname1 = WebUI::arg("blynkNN1");
-      MM::settings.blynk.nickname2 = WebUI::arg("blynkNN2");
+      MM::settings.blynk.enabled = WebUI::hasArg(F("blynkEnabled"));
+      MM::settings.blynk.id1 = WebUI::arg(F("blynkID1"));
+      MM::settings.blynk.id2 = WebUI::arg(F("blynkID2"));
+      MM::settings.blynk.nickname1 = WebUI::arg(F("blynkNN1"));
+      MM::settings.blynk.nickname2 = WebUI::arg(F("blynkNN2"));
 
       MM::settings.write();
       //MM::settings.logSettings();
@@ -153,11 +153,11 @@ namespace MMWebUI {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
-          if (key == "NICK") return MM::settings.printer[i].nickname;
-          if (key == "MOCK") {
+          if (key.equals(F("NICK"))) return MM::settings.printer[i].nickname;
+          if (key.equals(F("MOCK"))) {
             return checkedOrNot[MM::settings.printer[i].mock];
           }
-          if (key == "SERVER") return MM::settings.printer[i].server;
+          if (key.equals(F("SERVER"))) return MM::settings.printer[i].server;
         }
         return EmptyString;
       };
@@ -169,10 +169,10 @@ namespace MMWebUI {
 
     void updateDevData() {
       if (!WebUI::authenticationOK()) { return; }
-      MM::settings.printer[0].mock = WebUI::hasArg("_p0_mock");
-      MM::settings.printer[1].mock = WebUI::hasArg("_p1_mock");
-      MM::settings.printer[2].mock = WebUI::hasArg("_p2_mock");
-      MM::settings.printer[3].mock = WebUI::hasArg("_p3_mock");
+      MM::settings.printer[0].mock = WebUI::hasArg(F("_p0_mock"));
+      MM::settings.printer[1].mock = WebUI::hasArg(F("_p1_mock"));
+      MM::settings.printer[2].mock = WebUI::hasArg(F("_p2_mock"));
+      MM::settings.printer[3].mock = WebUI::hasArg(F("_p3_mock"));
 
       // Save the config, but don't change which printers are mocked until reboot
       MM::settings.write();
@@ -188,11 +188,11 @@ namespace MMWebUI {
     void forceScreen() {
       Log.trace(F("Web Request: /dev/forceScreen"));
       if (!WebUI::authenticationOK()) { return; }
-      String screen = WebUI::arg("screen");
+      String screen = WebUI::arg(F("screen"));
       if (screen.isEmpty()) return;
-      else if (screen == "splash") GUI::displaySplashScreen();
-      else if (screen == "wifi") GUI::displayWiFiScreen();
-      else if (screen == "config") {
+      else if (screen == F("splash")) GUI::displaySplashScreen();
+      else if (screen == F("wifi")) GUI::displayWiFiScreen();
+      else if (screen == F("config")) {
         String ssid = "MM-nnnnnn";
         GUI::displayConfigScreen(ssid);
       }
@@ -227,12 +227,12 @@ namespace MMWebUI {
       String langTarget = "SL" + MM::settings.owm.language;
 
       auto mapper =[langTarget](String &key) -> String {
-        if (key == "WEATHER_KEY") return MM::settings.owm.key;
-        if (key == "CITY_NAME" && MM::settings.owm.enabled) return MM::owmClient->weather.location.city;
-        if (key == "CITY") return String(MM::settings.owm.cityID);
-        if (key == "USE_METRIC") return checkedOrNot[MM::settings.useMetric];
+        if (key.equals(F("WEATHER_KEY"))) return MM::settings.owm.key;
+        if (key.equals(F("CITY_NAME")) && MM::settings.owm.enabled) return MM::owmClient->weather.location.city;
+        if (key.equals(F("CITY"))) return String(MM::settings.owm.cityID);
+        if (key.equals(F("USE_METRIC"))) return checkedOrNot[MM::settings.useMetric];
         if (key == langTarget) return "selected";
-        if (key == "USE_OWM")  return checkedOrNot[MM::settings.owm.enabled];
+        if (key.equals(F("USE_OWM")))  return checkedOrNot[MM::settings.owm.enabled];
         return EmptyString;
       };
 
@@ -250,25 +250,25 @@ namespace MMWebUI {
           int i = (key.charAt(2) - '0');
           key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
           if (MM::settings.printer[i].isActive) {
-            if (key == "VIS") return "block";
-            if (key == "HOST") return  MM::settings.printer[i].server;
-            if (key == "PORT") return String(MM::settings.printer[i].port);
-            if (key == "AUTH") {
+            if (key.equals(F("VIS"))) return "block";
+            if (key.equals(F("HOST"))) return  MM::settings.printer[i].server;
+            if (key.equals(F("PORT"))) return String(MM::settings.printer[i].port);
+            if (key.equals(F("AUTH"))) {
               if (!MM::settings.printer[i].user.isEmpty()) return MM::settings.printer[i].user + ':' + MM::settings.printer[i].pass + '@';
               else return EmptyString;
             }
-            if (key == "NICK") return  MM::settings.printer[i].nickname;
+            if (key.equals(F("NICK"))) return  MM::settings.printer[i].nickname;
           } else {
-            if (key == "VIS") return "none";
+            if (key.equals(F("VIS"))) return "none";
           }
         }
-        if (key == "CITYID") {
+        if (key.equals(F("CITYID"))) {
           if (MM::settings.owm.enabled) return String(MM::settings.owm.cityID);
           else return String("5380748");  // Palo Alto, CA, USA
         }
-        if (key == "WEATHER_KEY") return MM::settings.owm.key;
-        if (key == "UNITS") return MM::settings.useMetric ? "metric" : "imperial";
-        if (key == "BRIGHT") return String(GUI::getBrightness());
+        if (key.equals(F("WEATHER_KEY"))) return MM::settings.owm.key;
+        if (key.equals(F("UNITS"))) return MM::settings.useMetric ? "metric" : "imperial";
+        if (key.equals(F("BRIGHT"))) return String(GUI::getBrightness());
         return EmptyString;
       };
 
@@ -286,16 +286,16 @@ namespace MMWebUI {
           int i = (key.charAt(2) - '0');
           key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
           String type = "T_" + MM::settings.printer[i].type;
-          if (key == "ENABLED") return checkedOrNot[MM::settings.printer[i].isActive];
-          if (key == "KEY") return MM::settings.printer[i].apiKey;
-          if (key == "HOST") return  MM::settings.printer[i].server;
-          if (key == "PORT") return String(MM::settings.printer[i].port);
-          if (key == "USER") return  MM::settings.printer[i].user;
-          if (key == "PASS") return  MM::settings.printer[i].pass;
-          if (key == "NICK") return  MM::settings.printer[i].nickname;
+          if (key.equals(F("ENABLED"))) return checkedOrNot[MM::settings.printer[i].isActive];
+          if (key.equals(F("KEY"))) return MM::settings.printer[i].apiKey;
+          if (key.equals(F("HOST"))) return  MM::settings.printer[i].server;
+          if (key.equals(F("PORT"))) return String(MM::settings.printer[i].port);
+          if (key.equals(F("USER"))) return  MM::settings.printer[i].user;
+          if (key.equals(F("PASS"))) return  MM::settings.printer[i].pass;
+          if (key.equals(F("NICK"))) return  MM::settings.printer[i].nickname;
           if (key == type) return "selected";
         }
-        if (key == "RFRSH") return String(MM::settings.printerRefreshInterval);
+        if (key.equals(F("RFRSH"))) return String(MM::settings.printerRefreshInterval);
         return EmptyString;
       };
 
@@ -309,19 +309,19 @@ namespace MMWebUI {
       if (!WebUI::authenticationOK()) { return; }
 
       auto mapper =[](String &key) -> String {
-        if (key == "SCHED_ENABLED") return checkedOrNot[MM::settings.scheduleActive];
-        if (key == "MORN") return WebThing::formattedInterval(MM::settings.morning.hr, MM::settings.morning.min, 0, true, false);
-        if (key == "EVE") return WebThing::formattedInterval(MM::settings.evening.hr, MM::settings.evening.min, 0, true, false);
-        if (key == "M_BRIGHT") return String(MM::settings.morning.brightness);
-        if (key == "E_BRIGHT") return String(MM::settings.evening.brightness);
+        if (key.equals(F("SCHED_ENABLED"))) return checkedOrNot[MM::settings.scheduleActive];
+        if (key.equals(F("MORN"))) return WebThing::formattedInterval(MM::settings.morning.hr, MM::settings.morning.min, 0, true, false);
+        if (key.equals(F("EVE"))) return WebThing::formattedInterval(MM::settings.evening.hr, MM::settings.evening.min, 0, true, false);
+        if (key.equals(F("M_BRIGHT"))) return String(MM::settings.morning.brightness);
+        if (key.equals(F("E_BRIGHT"))) return String(MM::settings.evening.brightness);
 
-        if (key == "USE_24HOUR") return checkedOrNot[MM::settings.use24Hour];
-        if (key == "INVERT_DISPLAY") return checkedOrNot[MM::settings.invertDisplay];
-        if (key == "BLYNK_ENABLED") return checkedOrNot[MM::settings.blynk.enabled];
-        if (key == "BLYNK_ID1") return MM::settings.blynk.id1;
-        if (key == "BLYNK_ID2") return MM::settings.blynk.id2;
-        if (key == "BLYNK_NN1") return MM::settings.blynk.nickname1;
-        if (key == "BLYNK_NN2") return MM::settings.blynk.nickname2;
+        if (key.equals(F("USE_24HOUR"))) return checkedOrNot[MM::settings.use24Hour];
+        if (key.equals(F("INVERT_DISPLAY"))) return checkedOrNot[MM::settings.invertDisplay];
+        if (key.equals(F("BLYNK_ENABLED"))) return checkedOrNot[MM::settings.blynk.enabled];
+        if (key.equals(F("BLYNK_ID1"))) return MM::settings.blynk.id1;
+        if (key.equals(F("BLYNK_ID2"))) return MM::settings.blynk.id2;
+        if (key.equals(F("BLYNK_NN1"))) return MM::settings.blynk.nickname1;
+        if (key.equals(F("BLYNK_NN2"))) return MM::settings.blynk.nickname2;
         return EmptyString;
       };
 
