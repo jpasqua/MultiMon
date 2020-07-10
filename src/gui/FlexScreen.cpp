@@ -103,7 +103,7 @@ bool FlexScreen::init(
     const Basics::StringMapper &vc) {
 
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
-    Log.verbose("In Flex Screen Button Handler, id = %d, type = %d", id, type);
+    Log.verbose(F("In Flex Screen Button Handler, id = %d, type = %d"), id, type);
     GUI::displayHomeScreen();
   };
 

@@ -61,7 +61,7 @@ class InfoScreen : public Screen {
 public:
   InfoScreen() {
     auto buttonHandler =[&](int id, Button::PressType type) -> void {
-      Log.verbose("In InfoScreenButtonHandler, id = %d", id);
+      Log.verbose(F("In InfoScreenButtonHandler, id = %d"), id);
       if (id <= BrightButtonIndex) {
         GUI::setBrightness(id == DimButtonIndex ? 20 : (id == MediumButtonIndex ? 50 : 90));
         displayCurrentBrightness(true);

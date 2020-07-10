@@ -49,24 +49,24 @@ public:
   }
 
   void dumpToLog() {
-    if (!valid) Log.verbose("----- Job State: Values have not been set");
+    if (!valid) Log.verbose(F("----- Job State: Values have not been set"));
     else {
-      Log.verbose("----- Job State: %s -----", state.c_str());
+      Log.verbose(F("----- Job State: %s -----"), state.c_str());
       if (state.startsWith("Offline")) return;
-      Log.verbose("File");
-      Log.verbose("  fileName: %s", file.name.c_str());
-      Log.verbose("  fileSize: %d", file.size);
-      Log.verbose("Time");
-      Log.verbose("  averagePrintTime: %d (sec)", averagePrintTime);
-      Log.verbose("  estimatedPrintTime: %d (sec)", estimatedPrintTime);
-      Log.verbose("  lastPrintTime: %d (sec)", lastPrintTime);
-      Log.verbose("filamentLength: %d (mm)", filamentLength);
-      Log.verbose("Progress:");
-      Log.verbose("  Filepos: %d", progress.filepos);
-      Log.verbose("  PrintTime: %d (sec)", progress.printTime);
-      Log.verbose("  PrintTimeLeft: %d (sec)", progress.printTimeLeft);
-      Log.verbose("  Completion: %F", progress.completion);
-      Log.verbose("----------");
+      Log.verbose(F("File"));
+      Log.verbose(F("  fileName: %s"), file.name.c_str());
+      Log.verbose(F("  fileSize: %d"), file.size);
+      Log.verbose(F("Time"));
+      Log.verbose(F("  averagePrintTime: %d (sec)"), averagePrintTime);
+      Log.verbose(F("  estimatedPrintTime: %d (sec)"), estimatedPrintTime);
+      Log.verbose(F("  lastPrintTime: %d (sec)"), lastPrintTime);
+      Log.verbose(F("filamentLength: %d (mm)"), filamentLength);
+      Log.verbose(F("Progress:"));
+      Log.verbose(F("  Filepos: %d"), progress.filepos);
+      Log.verbose(F("  PrintTime: %d (sec)"), progress.printTime);
+      Log.verbose(F("  PrintTimeLeft: %d (sec)"), progress.printTimeLeft);
+      Log.verbose(F("  Completion: %F"), progress.completion);
+      Log.verbose(F("----------"));
     }
   }
 };
@@ -97,14 +97,14 @@ public:
   }
 
   void dumpToLog() {
-    if (!valid) Log.verbose("Printer State: Values have not been set");
+    if (!valid) Log.verbose(F("Printer State: Values have not been set"));
     else {
-      Log.verbose("----- Printer State: printing = %T", isPrinting);
-      Log.verbose("  Tool Temp: %F (C)", toolTemp.actual);
-      Log.verbose("  Tool Target Temp: %F (C)", toolTemp.target);
-      Log.verbose("  Tool Temp: %F (C)", bedTemp.actual);
-      Log.verbose("  Tool Target Temp: %F (C)", bedTemp.target);
-      Log.verbose("----------");
+      Log.verbose(F("----- Printer State: printing = %T"), isPrinting);
+      Log.verbose(F("  Tool Temp: %F (C)"), toolTemp.actual);
+      Log.verbose(F("  Tool Target Temp: %F (C)"), toolTemp.target);
+      Log.verbose(F("  Tool Temp: %F (C)"), bedTemp.actual);
+      Log.verbose(F("  Tool Target Temp: %F (C)"), bedTemp.target);
+      Log.verbose(F("----------"));
     }
   }
 };

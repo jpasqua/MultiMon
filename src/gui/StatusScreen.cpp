@@ -45,7 +45,7 @@ static const uint16_t StatusHeight = StatusFontHeight*2;
 
 StatusScreen::StatusScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
-    Log.verbose("In StatusScreen ButtonHandler, id = %d, type = %d", id, type);
+    Log.verbose(F("In StatusScreen ButtonHandler, id = %d, type = %d"), id, type);
     if (type > Button::PressType::NormalPress) { GUI::displayHomeScreen(); return; }
     if (MultiMon::settings.printer[id].isActive &&
         MultiMon::printer[id]->getState() > PrintClient::State::Operational) { GUI::displayDetailScreen(id); return; }

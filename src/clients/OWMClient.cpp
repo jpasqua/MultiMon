@@ -28,7 +28,7 @@ void OWMClient::update() {
   String endpoint = "/data/2.5/group?id=" + _cityID + "&units=" + (_useMetric?"metric":"imperial") + "&cnt=1&APPID=" + _key + "&lang=" + _lang;
   DynamicJsonDocument *root = owmService.issueGET(endpoint, 1024);
   if (!root) {
-    Log.warning("Failed to update weather info");
+    Log.warning(F("Failed to update weather info"));
     weather.cached = true;
     weather.error = "Unable to get data from service";
     weather.dt = 0;
@@ -113,7 +113,7 @@ void OWMClient::updateForecast(int32_t gmtOffset) {
   String endpoint = "/data/2.5/forecast?id=" + _cityID + "&units=" + (_useMetric?"metric":"imperial") + "&APPID=" + _key + "&lang=" + _lang;
   DynamicJsonDocument *root = owmService.issueGET(endpoint, 8192, &filter);
   if (!root) {
-    Log.warning("Failed to retreive forecast");
+    Log.warning(F("Failed to retreive forecast"));
     return;
   }
   // serializeJsonPretty(*root, Serial); Serial.println();

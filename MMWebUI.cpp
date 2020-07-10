@@ -58,11 +58,11 @@ namespace MMWebUI {
   namespace Endpoints {
     void setBrightness() {
       if (!WebUI::authenticationOK()) { return; }
-      Log.trace("Handling /setBrightness");
+      Log.trace(F("Handling /setBrightness"));
 
       uint8_t b = WebUI::arg("brightness").toInt();
       if (b <= 0 || b > 100) {  // NOTE: 0 is not an allowed value!
-        Log.warning("/setBrightness: %d is an unallowed brightness setting", b);
+        Log.warning(F("/setBrightness: %d is an unallowed brightness setting"), b);
         WebUI::closeConnection(400, "Invalid Brightness: " + WebUI::arg("brightness"));
       } else {
         GUI::setBrightness(b);
@@ -146,7 +146,7 @@ namespace MMWebUI {
   // ----- BEGIN: MMWebUI::Dev
   namespace Dev {
     void presentDevConfig() {
-      Log.trace("Web Request: Handle Dev Configure");
+      Log.trace(F("Web Request: Handle Dev Configure"));
       if (!WebUI::authenticationOK()) { return; }
 
       auto mapper =[](String &key) -> String {
@@ -186,7 +186,7 @@ namespace MMWebUI {
     }
 
     void forceScreen() {
-      Log.trace("Web Request: /dev/forceScreen");
+      Log.trace(F("Web Request: /dev/forceScreen"));
       if (!WebUI::authenticationOK()) { return; }
       String screen = WebUI::arg("screen");
       if (screen.isEmpty()) return;
@@ -201,7 +201,7 @@ namespace MMWebUI {
     }
 
     void yieldSettings() {
-      Log.trace("Web Request: /dev/settings");
+      Log.trace(F("Web Request: /dev/settings"));
       if (!WebUI::authenticationOK()) { return; }
 
       DynamicJsonDocument *doc = MultiMon::settings.asJSON();
@@ -211,7 +211,7 @@ namespace MMWebUI {
     }
 
     void yieldScreenShot() {
-      Log.trace("Web Request: /dev/screenShot");
+      Log.trace(F("Web Request: /dev/screenShot"));
       if (!WebUI::authenticationOK()) { return; }
 
       WebUI::sendArbitraryContent("image/bmp", GUI::getSizeOfScreenShotAsBMP(), GUI::streamScreenShotAsBMP);
@@ -221,7 +221,7 @@ namespace MMWebUI {
 
   namespace Pages {
     void presentWeatherConfig() {
-      Log.trace("Web Request: Handle Weather Configure");
+      Log.trace(F("Web Request: Handle Weather Configure"));
       if (!WebUI::authenticationOK()) { return; }
 
       String langTarget = "SL" + MM::settings.owm.language;
@@ -242,7 +242,7 @@ namespace MMWebUI {
     }
 
     void presentHomePage() {
-      Log.trace("Web Request: Display Home Page");
+      Log.trace(F("Web Request: Display Home Page"));
       if (!WebUI::authenticationOK()) { return; }
 
       auto mapper =[](String &key) -> String {
@@ -278,7 +278,7 @@ namespace MMWebUI {
     }
 
     void presentPrinterConfig() {
-      Log.trace("Web Request: Handle Printer Configure");
+      Log.trace(F("Web Request: Handle Printer Configure"));
       if (!WebUI::authenticationOK()) { return; }
 
       auto mapper =[](String &key) -> String {
@@ -305,7 +305,7 @@ namespace MMWebUI {
     }
 
     void presentDisplayConfig() {
-      Log.trace("Web Request: Handle Display Configure");
+      Log.trace(F("Web Request: Handle Display Configure"));
       if (!WebUI::authenticationOK()) { return; }
 
       auto mapper =[](String &key) -> String {

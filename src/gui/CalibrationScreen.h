@@ -34,12 +34,12 @@ public:
       GUI::Font::setUsingID(GUI::Font::FontID::SB9, tft);
       tft.setTextColor(GUI::Color_AlertGood);
       tft.setTextDatum(MC_DATUM);
-      tft.drawString("Touch to begin calibration", Screen::XCenter, Screen::YCenter);
+      tft.drawString(F("Touch to begin calibration"), Screen::XCenter, Screen::YCenter);
     } else if (state == post) {
       GUI::Font::setUsingID(GUI::Font::FontID::SB9, tft);
       tft.setTextColor(GUI::Color_AlertGood);
       tft.setTextDatum(MC_DATUM);
-      tft.drawString("Done! Touch to continue", Screen::XCenter, Screen::YCenter);
+      tft.drawString(F("Done! Touch to continue"), Screen::XCenter, Screen::YCenter);
       state = complete;
     }
   }
@@ -54,21 +54,21 @@ private:
   void init() {
     auto buttonHandler =[&](int id, Button::PressType type) -> void {
       (void)type; // We don't use this parameter - avoid a warning...
-      Log.verbose("In CalibrationScreenButtonHandler, id = %d", id);
+      Log.verbose(F("In CalibrationScreenButtonHandler, id = %d"), id);
       switch (state) {
         case pre:
           tft.fillScreen(GUI::Color_Background);
           GUI::Font::setUsingID(GUI::Font::FontID::SB9, tft);
           tft.setTextColor(GUI::Color_AlertGood);
           tft.setTextDatum(MC_DATUM);
-          tft.drawString("Touch each corner arrow", Screen::XCenter, Screen::YCenter);
+          tft.drawString(F("Touch each corner arrow"), Screen::XCenter, Screen::YCenter);
           tft.calibrateTouch(MultiMon::settings.calibrationData, TFT_WHITE, TFT_BLACK, 15);
           state = post;
           break;
         case complete:
-          Log.verbose("Finished calibration, saving settings : [");
-          for (int i = 0; i < MMSettings::nCalReadings; i++) { Log.verbose("  %d,", MultiMon::settings.calibrationData[i]); }
-          Log.verbose("]");
+          Log.verbose(F("Finished calibration, saving settings : ["));
+          for (int i = 0; i < MMSettings::nCalReadings; i++) { Log.verbose(F("  %d,"), MultiMon::settings.calibrationData[i]); }
+          Log.verbose(F("]"));
           MultiMon::Protected::saveSettings();
           GUI::displayHomeScreen();
           break;

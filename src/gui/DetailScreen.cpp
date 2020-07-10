@@ -71,7 +71,7 @@ static const uint8_t FullScreenButtonID = 1;
 
 DetailScreen::DetailScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
-    Log.verbose("In DetailScreen ButtonHandler, id = %d", id);
+    Log.verbose(F("In DetailScreen ButtonHandler, id = %d"), id);
     if (id == FileNameButtonID) {  // The file name was tapped
       revealFullFileName();
       return;

@@ -15,7 +15,7 @@ String BlynkClient::readPin(String blynkAppID, String pin) {
 
     DynamicJsonDocument *root = blynkService.issueGET(endpoint, 256);
     if (!root) {
-      Log.warning("BlynkClient::readPin(): issueGet failed");
+      Log.warning(F("BlynkClient::readPin(): issueGet failed"));
       return FailedRead;
     }
     //serializeJsonPretty(*root, Serial); Serial.println();

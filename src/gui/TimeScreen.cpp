@@ -101,7 +101,7 @@ static const int ClockAreaIndex = 5;
 
 TimeScreen::TimeScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
-    Log.verbose("In TimeScreen Button Handler, id = %d", id);
+    Log.verbose(F("In TimeScreen Button Handler, id = %d"), id);
     if (id < MultiMon::MaxServers) {
       if (MultiMon::settings.printer[id].isActive &&
           MultiMon::printer[id]->getState() > PrintClient::State::Operational)
@@ -209,7 +209,7 @@ void TimeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, fl
 
 void TimeScreen::drawWeather(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
-  if (!MultiMon::owmClient) { Log.verbose("owmClient = NULL"); return; }
+  if (!MultiMon::owmClient) { Log.verbose(F("owmClient = NULL")); return; }
   if (!MultiMon::settings.owm.enabled) return;
   String readout;
 

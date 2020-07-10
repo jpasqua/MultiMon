@@ -213,10 +213,10 @@ namespace GUI {
     if (sum) {
       // All zeroes in the calibration data means that it isn't set. 
       // We've got some values, so pass it in to the tft
-      Log.trace("GUI::init: Applying calibration data from settings");
+      Log.trace(F("GUI::init: Applying calibration data from settings"));
       tft.setTouch(MultiMon::settings.calibrationData);
     } else {
-      Log.trace("GUI::init: No valid calibration data in settings");
+      Log.trace(F("GUI::init: No valid calibration data in settings"));
     }
 
     Internal::initInfoIcon();
@@ -273,7 +273,7 @@ namespace GUI {
         return;
       }
     }
-    Log.error("Requesting a non-existent screen: %s", name.c_str());
+    Log.error(F("Requesting a non-existent screen: %s"), name.c_str());
   }
 
   bool createFlexScreen(
@@ -281,7 +281,7 @@ namespace GUI {
       uint32_t refreshInterval,
       const Basics::StringMapper &vc) {
     if (nFlexScreens == MaxFlexScreens) {
-      Log.warning("Maximum number of FlexScreens exceeded");
+      Log.warning(F("Maximum number of FlexScreens exceeded"));
       return false;
     }
 

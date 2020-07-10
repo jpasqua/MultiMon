@@ -46,23 +46,23 @@ public:
   String error;           // Error reported by OWM
 
   void dumpToLog() {
-    Log.verbose("----- Location -----");
-    Log.verbose("  Coords = (%F, %F)", location.lat, location.lon);
-    Log.verbose("  %s, %s (%d)", location.country.c_str(), location.city.c_str(), location.cityID);
-    Log.verbose("----- Time Related -----");
-    Log.verbose("  TZOffset: %d, sunrise: %d, sunset: %d", time.tz, time.sunrise, time.sunset);
-    Log.verbose("----- Description -----");
-    Log.verbose("  %s (%s)", description.basic.c_str(), description.longer.c_str());
-    Log.verbose("  Icon: %s, Code: %d", description.icon.c_str(), description.code);
-    Log.verbose("----- Readings -----");
-    Log.verbose("  temp: %F, feelsLike: %F", readings.temp, readings.feelsLike);
-    Log.verbose("  MinTemp: %F, MaxTemp: %F", readings.minTemp, readings.maxTemp);
-    Log.verbose("  Pressure: %d, Humidity: %d", readings.pressure, readings.humidity);
-    Log.verbose("  Wind Speed: %F, Visibility: %d, Cloudiness: %d", readings.windSpeed, readings.visibility, readings.cloudiness);
-    Log.verbose("----- Response data -----");
-    Log.verbose("  Time of readings: %d", dt);
-    Log.verbose("  Cached: %T", cached);
-    Log.verbose("  Error: %s", error.c_str());
+    Log.verbose(F("----- Location -----"));
+    Log.verbose(F("  Coords = (%F, %F)"), location.lat, location.lon);
+    Log.verbose(F("  %s, %s (%d)"), location.country.c_str(), location.city.c_str(), location.cityID);
+    Log.verbose(F("----- Time Related -----"));
+    Log.verbose(F("  TZOffset: %d, sunrise: %d, sunset: %d"), time.tz, time.sunrise, time.sunset);
+    Log.verbose(F("----- Description -----"));
+    Log.verbose(F("  %s (%s)"), description.basic.c_str(), description.longer.c_str());
+    Log.verbose(F("  Icon: %s, Code: %d"), description.icon.c_str(), description.code);
+    Log.verbose(F("----- Readings -----"));
+    Log.verbose(F("  temp: %F, feelsLike: %F"), readings.temp, readings.feelsLike);
+    Log.verbose(F("  MinTemp: %F, MaxTemp: %F"), readings.minTemp, readings.maxTemp);
+    Log.verbose(F("  Pressure: %d, Humidity: %d"), readings.pressure, readings.humidity);
+    Log.verbose(F("  Wind Speed: %F, Visibility: %d, Cloudiness: %d"), readings.windSpeed, readings.visibility, readings.cloudiness);
+    Log.verbose(F("----- Response data -----"));
+    Log.verbose(F("  Time of readings: %d"), dt);
+    Log.verbose(F("  Cached: %T"), cached);
+    Log.verbose(F("  Error: %s"), error.c_str());
   }
 };
 
@@ -75,9 +75,9 @@ public:
   String   icon;          // Specifier for the associated weather icon
 
   void dumpToLog() {
-    Log.verbose("----- Forecast Time: %d-%d %d:%d (%d)", month(dt), day(dt), hour(dt), minute(dt), dt);
-    Log.verbose("  low: %F, hi: %F", loTemp, hiTemp);
-    Log.verbose("  Icon: %s", icon.c_str());
+    Log.verbose(F("----- Forecast Time: %d-%d %d:%d (%d)"), month(dt), day(dt), hour(dt), minute(dt), dt);
+    Log.verbose(F("  low: %F, hi: %F"), loTemp, hiTemp);
+    Log.verbose(F("  Icon: %s"), icon.c_str());
   }
 
 };

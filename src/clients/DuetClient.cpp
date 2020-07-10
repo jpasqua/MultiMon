@@ -113,10 +113,10 @@ void DuetClient::acknowledgeCompletion() {
 static const char *_PrintStateNames[] = {"Offline", "Operational", "Complete", "Printing"};
 
 void DuetClient::dumpToLog() {
-  Log.verbose("----- Derived Values -----");
-  Log.verbose("  printerState: %s", _PrintStateNames[printerState]);
-  Log.verbose("  printTimeEstimate: %d", printTimeEstimate);
-  Log.verbose("  elapsed: %F", elapsed);
+  Log.verbose(F("----- Derived Values -----"));
+  Log.verbose(F("  printerState: %s"), _PrintStateNames[printerState]);
+  Log.verbose(F("  printTimeEstimate: %d"), printTimeEstimate);
+  Log.verbose(F("  elapsed: %F"), elapsed);
   fileInfo.dumpToLog();
   rrState.dumpToLog();
 }
@@ -134,7 +134,7 @@ bool DuetClient::connect() {
   RRConnectEndpoint += (details.pass.isEmpty()) ? "reprap" : details.pass;
   DynamicJsonDocument *root = service->issueGET(RRConnectEndpoint, RRConnectJSONSize);
   if (!root) {
-    Log.warning("issueGET failed for RRConnect (%s)", RRConnectEndpoint.c_str());
+    Log.warning(F("issueGET failed for RRConnect (%s)"), RRConnectEndpoint.c_str());
     return false;
   }
   // serializeJsonPretty(*root, Serial); Serial.println();
@@ -142,7 +142,7 @@ bool DuetClient::connect() {
   int err = (*root)["err"];
   delete root;
 
-  if (err) { Log.warning("rr_connect error: %d", err); return false; }
+  if (err) { Log.warning(F("rr_connect error: %d"), err); return false; }
   return true;
 }
 
@@ -152,7 +152,7 @@ bool DuetClient::disconnect() {
 
   DynamicJsonDocument *root = service->issueGET(RRDisconnectEndpoint, RRDisonnectJSONSize);
   if (!root) {
-    Log.warning("issueGET failed for RRDisconnect");
+    Log.warning(F("issueGET failed for RRDisconnect"));
     return false;
   }
   // serializeJsonPretty(*root, Serial); Serial.println();
@@ -160,7 +160,7 @@ bool DuetClient::disconnect() {
   int err = (*root)["err"];
   delete root;
 
-  if (err) { Log.warning("rr_disconnect error: %d", err); return false; }
+  if (err) { Log.warning(F("rr_disconnect error: %d"), err); return false; }
   return true;
 }
 
@@ -170,7 +170,7 @@ void DuetClient::getRRState() {
 
   DynamicJsonDocument *root = service->issueGET(RRStateEndpoint, RRStateJSONSize);
   if (!root) {
-    Log.warning("issueGET failed for RRState");
+    Log.warning(F("issueGET failed for RRState"));
     rrState.reset();
     return;
   }
@@ -199,7 +199,7 @@ void DuetClient::getFileInfo() {
 
   DynamicJsonDocument *root = service->issueGET(FileInfoEndpoint, FileInfoJSONSize);
   if (!root) {
-    Log.warning("issueGET failed for FileInfo");
+    Log.warning(F("issueGET failed for FileInfo"));
     fileInfo.reset();
     return;
   }

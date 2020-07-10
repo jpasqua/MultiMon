@@ -73,7 +73,7 @@ void OctoClient::getJobState() {
 
   DynamicJsonDocument *root = service->issueGET(JobStateEndpoint, JobStateJSONSize);
   if (!root) {
-    Log.warning("issueGET failed, giving up");
+    Log.warning(F("issueGET failed, giving up"));
     jobState.reset();
     return;
   }
@@ -106,7 +106,7 @@ void OctoClient::getPrinterState() {
 
   DynamicJsonDocument *root = service->issueGET(PrinterStateEndpoint, PrinterStateJSONSize);
   if (!root) {
-    Log.warning("issueGET failed, giving up");
+    Log.warning(F("issueGET failed, giving up"));
     printerState.reset();
     return;
   }

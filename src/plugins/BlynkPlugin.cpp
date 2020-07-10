@@ -22,7 +22,7 @@ BlynkPlugin::~BlynkPlugin() {
 }
 
 bool BlynkPlugin::init(JsonObject &obj) {
-  // Log.trace("BlynkPlugin::init()");
+  // Log.trace(F("BlynkPlugin::init()"));
 
   // Get type-specific data
   _refreshInterval = obj["refreshInterval"];

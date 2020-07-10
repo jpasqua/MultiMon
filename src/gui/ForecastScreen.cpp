@@ -47,7 +47,7 @@ static int16_t TinyFont = 2;  // A small 5x7 font
 
 ForecastScreen::ForecastScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
-    Log.verbose("In ForecastScreen Button Handler, id = %d, type = %d", id, type);
+    Log.verbose(F("In ForecastScreen Button Handler, id = %d, type = %d"), id, type);
     if (type > Button::PressType::NormalPress) GUI::displayWeatherScreen();
     GUI::displayHomeScreen();
   };

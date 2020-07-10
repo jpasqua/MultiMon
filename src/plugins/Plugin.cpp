@@ -35,7 +35,7 @@ Plugin* Plugin::_plugins[MaxPlugins];
 
 void Plugin::newPlugin(DynamicJsonDocument &doc) {
   if (_nPlugins == Plugin::MaxPlugins) {
-    Log.warning("Maximum number of plugins exceeded");
+    Log.warning(F("Maximum number of plugins exceeded"));
   }
 
   String type = doc["type"].as<String>();
@@ -87,13 +87,13 @@ void Plugin::loadAll(String filePath) {
     File file = SPIFFS.open(name.c_str(), "r");
 #pragma GCC diagnostic pop
     if (!file) {
-      Log.warning("Can't read Plugin descriptor even though it exists: %s", name.c_str());
+      Log.warning(F("Can't read Plugin descriptor even though it exists: %s"), name.c_str());
       continue;
     }
 
     size_t size = file.size();
     if (size > MaxFileSize) {
-      Log.error("Plugin descriptor (%s) is too large (%d)", name.c_str(), size);
+      Log.error(F("Plugin descriptor (%s) is too large (%d)"), name.c_str(), size);
       continue;
     }
 
@@ -102,7 +102,7 @@ void Plugin::loadAll(String filePath) {
     auto error = deserializeJson(doc, file);
     file.close();
     if (error) {
-      Log.warning("Failed to parse plugin descriptor (%s): %s", name.c_str(), error.c_str());
+      Log.warning(F("Failed to parse plugin descriptor (%s): %s"), name.c_str(), error.c_str());
       continue;
     }
     // serializeJsonPretty(doc, Serial); Serial.println();

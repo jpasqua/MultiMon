@@ -62,7 +62,7 @@ static const uint16_t TimeDisplayWidth = 6*TimeFontWidth + 2*TimeFontColonWidth;
 
 WeatherScreen::WeatherScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
-    Log.verbose("In WeatherScreen Button Handler, id = %d, type = %d", id, type);
+    Log.verbose(F("In WeatherScreen Button Handler, id = %d, type = %d"), id, type);
     if (type > Button::PressType::NormalPress) GUI::displayHomeScreen();
     else GUI::displayForecastScreen();
   };

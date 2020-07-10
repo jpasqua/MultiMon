@@ -38,11 +38,11 @@ public:
     tft.setTextSize(1);
     tft.setTextDatum(TC_DATUM);
     tft.setTextColor(GUI::Color_NormalText);
-    tft.drawString("Initial",    160+(160/2), 50);
-    tft.drawString("Setup:",     160+(160/2), 72);
+    tft.drawString(F("Initial"),    160+(160/2), 50);
+    tft.drawString(F("Setup:"),     160+(160/2), 72);
     tft.setTextColor(GUI::Color_AlertGood);
-    tft.drawString("Connect to", 160+(160/2), 100);
-    tft.drawString("WiFi named", 160+(160/2), 122);
+    tft.drawString(F("Connect to"), 160+(160/2), 100);
+    tft.drawString(F("WiFi named"), 160+(160/2), 122);
     tft.setTextColor(GUI::Color_NormalText);
     tft.drawString(_ssid,        160+(160/2), 156);
     tft.setTextDatum(TL_DATUM);

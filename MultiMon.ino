@@ -201,13 +201,13 @@ namespace MultiMon {
 
       cachePrinterIP(i);
       if (printerIPs[i].isEmpty()) {
-        Log.warning("Unable to resolve server address for %s", ps->server.c_str());
+        Log.warning(F("Unable to resolve server address for %s"), ps->server.c_str());
         ps->isActive = false;
         return;
       }
 
       if (printer[i] != NULL) {
-        Log.warning("Trying to activate a printer this is already active: %s", ps->server.c_str());
+        Log.warning(F("Trying to activate a printer this is already active: %s"), ps->server.c_str());
         return;
       }
 
@@ -218,17 +218,17 @@ namespace MultiMon {
         MockPrintClient *mc = new MockPrintClient();
         printer[i] = mc;
       } else if (ps->type == Type_Octo) {
-        Log.verbose("Setting up an OctoClient for %s: ", ps->server.c_str());
+        Log.verbose(F("Setting up an OctoClient for %s: "), ps->server.c_str());
         OctoClient *oc = new OctoClient();
         oc->init(ps->apiKey, printerIPs[i], ps->port, ps->user, ps->pass);
         printer[i] = oc;
       } else if (ps->type == Type_Duet) {
-        Log.verbose("Setting up an DuetClient for %s: ", ps->server.c_str());
+        Log.verbose(F("Setting up an DuetClient for %s: "), ps->server.c_str());
         DuetClient *dc = new DuetClient();
         dc->init(printerIPs[i], ps->port, ps->pass);
         printer[i] = dc;
       } else {
-        Log.warning("Bad printer type: %s", ps->type.c_str());
+        Log.warning(F("Bad printer type: %s"), ps->type.c_str());
         ps->isActive = false;
       }
     }
@@ -324,7 +324,7 @@ void loop() {
   static uint32_t nextStats = 0;
 
   if (millis() > nextStats) {
-    Log.verbose("Heap: free=%d, frag=%d%%", ESP.getFreeHeap(), ESP.getHeapFragmentation());
+    Log.verbose(F("Heap: free=%d, frag=%d%%"), ESP.getFreeHeap(), ESP.getHeapFragmentation());
     nextStats = millis() + 60 * 1000L;
   }
 }

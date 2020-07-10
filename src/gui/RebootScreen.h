@@ -32,7 +32,7 @@ class RebootScreen : public Screen {
 public:
   RebootScreen() {
     auto buttonHandler =[&](int id, Button::PressType type) -> void {
-      Log.verbose("In RebootScreen ButtonHandler, id = %d", id);
+      Log.verbose(F("In RebootScreen ButtonHandler, id = %d"), id);
       if (id == RebootButtonID && type > Button::PressType::NormalPress) { ESP.restart(); }
       if (id == CancelButtonID) GUI::displayHomeScreen();
     };

@@ -24,14 +24,14 @@ class StaticPlugin : public Plugin {
   }
 
   bool init(JsonObject &obj) {
-    Log.trace("StaticPlugin::init()");
+    Log.trace(F("StaticPlugin::init()"));
     // There is no type specific data for a StaticPlugin...
     (void)obj;  // Avoid "unused" compiler warning
     
     _refreshInterval = UINT32_MAX;
 
     _mapper = [&](String& key) -> String {
-        Log.verbose("StaticPlugin::mapper %s", key.c_str());
+        Log.verbose(F("StaticPlugin::mapper %s"), key.c_str());
         return "";
       };
 

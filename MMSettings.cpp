@@ -64,14 +64,14 @@ void PrinterSettings::toJSON(JsonObject settings) const {
 }
 
 void PrinterSettings::logSettings() {
-  Log.verbose("  ----- %s: %s", nickname.c_str(), type.c_str());
-  Log.verbose("  isActive: %T", isActive);
-  Log.verbose("  server: %s", server.c_str());
-  Log.verbose("  port: %d", port);
-  Log.verbose("  apiKey: %s", apiKey.c_str());
-  Log.verbose("  user: %s", user.c_str());
-  Log.verbose("  pass: %s", pass.c_str());
-  Log.verbose("  mock: %T", mock);
+  Log.verbose(F("  ----- %s: %s"), nickname.c_str(), type.c_str());
+  Log.verbose(F("  isActive: %T"), isActive);
+  Log.verbose(F("  server: %s"), server.c_str());
+  Log.verbose(F("  port: %d"), port);
+  Log.verbose(F("  apiKey: %s"), apiKey.c_str());
+  Log.verbose(F("  user: %s"), user.c_str());
+  Log.verbose(F("  pass: %s"), pass.c_str());
+  Log.verbose(F("  mock: %T"), mock);
 }
 
 
@@ -172,31 +172,31 @@ void MMSettings::toJSON(JsonDocument &doc) {
 
 void MMSettings::logSettings() {
   for (int i = 0; i < MaxServers; i++) {
-    Log.verbose("Printer Settings %d", i);
+    Log.verbose(F("Printer Settings %d"), i);
     printer[i].logSettings();
   }
-  Log.verbose("Printer refresh interval: %d", printerRefreshInterval);
-  Log.verbose("Display Settings");
-  Log.verbose("  use24Hour: %T", use24Hour);
-  Log.verbose("  useMetric: %T", useMetric);
-  Log.verbose("  blynk enabled: %T", blynk.enabled);
-  Log.verbose("    blynk ID1: %s", blynk.id1.c_str());
-  Log.verbose("    blynk ID2: %s", blynk.id2.c_str());
-  Log.verbose("    blynk Nickname 1: %s", blynk.nickname1.c_str());
-  Log.verbose("    blynk Nickname 2: %s", blynk.nickname2.c_str());
-  Log.verbose("  show dev menu: %T", showDevMenu);
-  Log.verbose("HW Settings");
-  Log.verbose("  invertDisplay: %T", invertDisplay);
-  Log.verbose("  CalibrationData: [");
-  for (int i = 0; i < nCalReadings; i++) { Log.verbose("    %d,", calibrationData[i]); }
-  Log.verbose("  ]");
-  Log.verbose("OpenWeatherMap Settings");
-  Log.verbose("  enabled: %T", owm.enabled);
-  Log.verbose("  API Key: %s", owm.key.c_str());
-  Log.verbose("  City ID: %d", owm.cityID);
-  Log.verbose("  Language: %s", owm.language.c_str());
-  Log.verbose("Schedules (active: %T)", scheduleActive);
-  Log.verbose("  Morning: [time: %d:%d, %d]", morning.hr, morning.min, morning.brightness);
-  Log.verbose("  Evening: [time: %d:%d, %d]", evening.hr, evening.min, evening.brightness);
+  Log.verbose(F("Printer refresh interval: %d"), printerRefreshInterval);
+  Log.verbose(F("Display Settings"));
+  Log.verbose(F("  use24Hour: %T"), use24Hour);
+  Log.verbose(F("  useMetric: %T"), useMetric);
+  Log.verbose(F("  blynk enabled: %T"), blynk.enabled);
+  Log.verbose(F("    blynk ID1: %s"), blynk.id1.c_str());
+  Log.verbose(F("    blynk ID2: %s"), blynk.id2.c_str());
+  Log.verbose(F("    blynk Nickname 1: %s"), blynk.nickname1.c_str());
+  Log.verbose(F("    blynk Nickname 2: %s"), blynk.nickname2.c_str());
+  Log.verbose(F("  show dev menu: %T"), showDevMenu);
+  Log.verbose(F("HW Settings"));
+  Log.verbose(F("  invertDisplay: %T"), invertDisplay);
+  Log.verbose(F("  CalibrationData: ["));
+  for (int i = 0; i < nCalReadings; i++) { Log.verbose(F("    %d,"), calibrationData[i]); }
+  Log.verbose(F("  ]"));
+  Log.verbose(F("OpenWeatherMap Settings"));
+  Log.verbose(F("  enabled: %T"), owm.enabled);
+  Log.verbose(F("  API Key: %s"), owm.key.c_str());
+  Log.verbose(F("  City ID: %d"), owm.cityID);
+  Log.verbose(F("  Language: %s"), owm.language.c_str());
+  Log.verbose(F("Schedules (active: %T)"), scheduleActive);
+  Log.verbose(F("  Morning: [time: %d:%d, %d]"), morning.hr, morning.min, morning.brightness);
+  Log.verbose(F("  Evening: [time: %d:%d, %d]"), evening.hr, evening.min, evening.brightness);
 }
 
