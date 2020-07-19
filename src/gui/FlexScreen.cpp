@@ -121,6 +121,9 @@ void FlexScreen::display(bool activating) {
   auto mapper = [&](String& key) -> String {
     if (key.isEmpty()) return "";
     if (key.equals(F("SCREEN_NAME"))) return _name;
+    // TO DO: Introduce the notion of a global mapper. If the key starts with '$', then it
+    // refers to a global piece of state such as the time the next print is going to
+    // complete ($NEXT_COMP) or the current temperature ($TEMP).
     else return _vc(key);
   };
 

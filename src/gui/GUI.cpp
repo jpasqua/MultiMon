@@ -277,7 +277,7 @@ namespace GUI {
   }
 
   bool createFlexScreen(
-      JsonObjectConst &descriptor,
+      JsonDocument &doc,
       uint32_t refreshInterval,
       const Basics::StringMapper &vc) {
     if (nFlexScreens == MaxFlexScreens) {
@@ -286,6 +286,7 @@ namespace GUI {
     }
 
     FlexScreen *flexScreen = new FlexScreen();
+    JsonObjectConst descriptor = doc.as<JsonObjectConst>();
     if (!flexScreen->init(descriptor, refreshInterval, vc)) {
       delete flexScreen;
       return false;

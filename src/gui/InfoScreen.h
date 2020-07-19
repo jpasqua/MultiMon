@@ -67,8 +67,8 @@ public:
         displayCurrentBrightness(true);
       } else if (id == RefreshButtonIndex) {
         MultiMon::Protected::updateAllData();
-      } else if (id == BlynkButtonIndex && MultiMon::settings.blynk.enabled) {
-        GUI::displayFlexScreen("blynk");
+      } else if (id == BlynkButtonIndex /*&& MultiMon::settings.blynk.enabled*/) {
+        GUI::displayFlexScreen("Blynk");
       } else {
         if (type > Button::PressType::NormalPress) GUI::displayCalibrationScreen();
         else GUI::displayHomeScreen();
@@ -119,7 +119,7 @@ public:
 
     for (int i = DimButtonIndex; i <= BrightButtonIndex; i++) { drawButton(label[i], i); }
     drawButton("Refresh", RefreshButtonIndex);
-    if (MultiMon::settings.blynk.enabled) drawButton("Blynk", BlynkButtonIndex);
+    /*if (MultiMon::settings.blynk.enabled)*/ drawButton("Blynk", BlynkButtonIndex);
 
     y = displayCurrentBrightness(false);
 

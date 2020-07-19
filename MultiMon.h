@@ -10,20 +10,22 @@
 #include "src/Basics.h"
 #include "src/clients/OctoClient.h"
 #include "src/clients/OWMClient.h"
+#include "src/plugins/PluginMgr.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
 
 namespace MultiMon {
   // ----- Constants
-  static const String VersionString = "0.6";
+  static const String VersionString = "0.7";
   static const int MaxServers = 4;
 
   // ----- State
   extern MMSettings settings;
   extern PrintClient *printer[MultiMon::MaxServers];
   extern OWMClient *owmClient;
-
+  extern PluginMgr pluginMgr;
+  
   // ----- Exported Functions
   namespace Protected {
     void askToReboot();

@@ -57,12 +57,6 @@ public:
   bool use24Hour = false;             // 23:00 military 24 hour clock
   bool useMetric = false;
   bool showDevMenu = false;
-  
-  struct {
-    bool enabled;
-    String id1, id2;
-    String nickname1, nickname2;
-  } blynk;
 
   // HW Settings
   bool     invertDisplay = false;      // true = pins at top | false = pins at the bottom

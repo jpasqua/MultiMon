@@ -10,27 +10,44 @@
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 #include <Arduino.h>
-#include <ArduinoLog.h>
 //                                  Third Party Libraries
+#include <ArduinoLog.h>
+#include <BaseSettings.h>
 //                                  App Libraries and Includes
 #include "Plugin.h"
 //--------------- End:    Includes ---------------------------------------------
 
+class BlynkSettings : public BaseSettings {
+public:
+  // ----- Constructors and methods
+  BlynkSettings();
+  void fromJSON(JsonDocument &doc);
+  void fromJSON(String& settings);
+  void toJSON(JsonDocument &doc);
+  void toJSON(String &serialized);
+  void logSettings();
+
+  // ----- Settings
+  bool      enabled;
+  uint8_t   nBlynkIDs;
+  String*   blynkIDs;
+  String*   nicknames;
+  uint8_t   nPins;
+  String*   pins;
+  uint32_t  refreshInterval;
+};
+
 class BlynkPlugin : public Plugin {
 public:
-  ~BlynkPlugin();
-  bool init(JsonObject &obj);
-  void refresh(bool force = false);
+  BlynkSettings settings;
 
-protected:
-  String getValue(String key);
+  ~BlynkPlugin();
+  bool typeSpecificInit();
+  void refresh(bool force = false);
+  void getSettings(String& serializedSettings);
+  void newSettings(String& serializedSettings);
 
 private:
-  uint8_t   _nBlynkIDs;
-  String*   _blynkIDs;
-  String*   _nicknames;
-  uint8_t   _nPins;
-  String*   _pins;
   String*   _pinVals;
   uint32_t  _nextRefresh = 0;
 };

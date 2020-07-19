@@ -22,97 +22,42 @@
 //                                  Local Includes
 #include "../../MultiMon.h"
 #include "../gui/GUI.h"
-#include "Plugin.h"
-#include "BlynkPlugin.h"
-#include "StaticPlugin.h"
+#include "PluginMgr.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
-static uint32_t MaxFileSize = 6 * 1024;
-
-uint8_t Plugin::_nPlugins = 0;
-Plugin* Plugin::_plugins[MaxPlugins];
-
-void Plugin::newPlugin(DynamicJsonDocument &doc) {
-  if (_nPlugins == Plugin::MaxPlugins) {
-    Log.warning(F("Maximum number of plugins exceeded"));
-  }
-
-  String type = doc["type"].as<String>();
-  JsonObject typeSpecific = doc["typeSpecific"];
-  JsonObjectConst screen = doc["screen"];
-
-  Plugin *p = NULL;
-  if (type.equalsIgnoreCase("static")) {
-    p = new StaticPlugin();
-  } else if (type.equalsIgnoreCase("blynk")) {
-    if (MultiMon::settings.blynk.enabled) {
-      p = new BlynkPlugin();
-      // Override plugin values from general settings if available
-      if (!MultiMon::settings.blynk.id1.isEmpty()) typeSpecific["blynkIDs"][0] = MultiMon::settings.blynk.id1;
-      if (!MultiMon::settings.blynk.nickname1.isEmpty()) typeSpecific["nicknames"][0] = MultiMon::settings.blynk.nickname1;
-      if (!MultiMon::settings.blynk.id2.isEmpty()) typeSpecific["blynkIDs"][1] = MultiMon::settings.blynk.id2;
-      if (!MultiMon::settings.blynk.nickname2.isEmpty()) typeSpecific["nicknames"][1] = MultiMon::settings.blynk.nickname2;
-    }
-  } 
-
-  if (p == NULL) return;
-  if (!p->init(typeSpecific)) {
-    delete p;
-    return;
-  }
-
-  if (!GUI::createFlexScreen(screen, p->_refreshInterval, p->_mapper)) {
-    delete p;
-    return;
-  }
-
-  _plugins[_nPlugins++] = p;
-} 
-
-void Plugin::loadAll(String filePath) {
-  _nPlugins = 0;
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  Dir dir = SPIFFS.openDir(filePath);
+  inline File FS_open(const char* path, const char* mode) { return SPIFFS.open(path, mode); }
 #pragma GCC diagnostic pop
 
-  while (dir.next()) {
-    String name = dir.fileName();
-    if (!name.endsWith(".json")) continue;
-
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-    File file = SPIFFS.open(name.c_str(), "r");
-#pragma GCC diagnostic pop
-    if (!file) {
-      Log.warning(F("Can't read Plugin descriptor even though it exists: %s"), name.c_str());
-      continue;
-    }
-
-    size_t size = file.size();
-    if (size > MaxFileSize) {
-      Log.error(F("Plugin descriptor (%s) is too large (%d)"), name.c_str(), size);
-      continue;
-    }
-
-
-    DynamicJsonDocument doc(MaxFileSize);
-    auto error = deserializeJson(doc, file);
-    file.close();
-    if (error) {
-      Log.warning(F("Failed to parse plugin descriptor (%s): %s"), name.c_str(), error.c_str());
-      continue;
-    }
-    // serializeJsonPretty(doc, Serial); Serial.println();
-
-    newPlugin(doc);
-  }
+bool Plugin::init(String& name, String& pluginDir) {
+  _name = name;
+  _pluginDir = pluginDir;
+  if (!typeSpecificInit()) return false;
+  return createUI();
 }
 
-void Plugin::refreshAll(bool force) {
-  for (int i = 0; i < _nPlugins; i++) {
-    _plugins[i]->refresh(force);
+bool Plugin::createUI() {
+  DynamicJsonDocument* doc = PluginMgr::getDoc(_pluginDir + "/screen.json", MaxScreenDescriptorSize);
+  if (doc == NULL) return false;
+  bool success = GUI::createFlexScreen(*doc, _refreshInterval, _mapper);
+  delete doc;
+  return success;
+}
+
+void Plugin::getForm(String& form) {
+  String fullPath = _pluginDir+"/form.json";
+Log.verbose("PluginMgr::getForm() path = %s", fullPath.c_str());
+  File f = FS_open(fullPath.c_str(), "r");
+  if (!f) { form = "{ }"; }
+
+  size_t size = f.size();
+  form.reserve(size);
+
+  while (f.available()) {
+    String line = f.readString();
+    if (!line.isEmpty()) form += line;
   }
+  f.close();
 }

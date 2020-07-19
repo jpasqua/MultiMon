@@ -63,7 +63,7 @@
 #include "MMWebUI.h"
 #include "src/Basics.h"
 #include "src/gui/GUI.h"
-#include "src/plugins/Plugin.h"
+#include "src/plugins/PluginMgr.h"
 #include "src/clients/PrintClient.h"
 #include "src/clients/DuetClient.h"
 #include "src/clients/MockPrintClient.h"
@@ -74,12 +74,13 @@
 namespace MultiMon {
   // ---- State
   MMSettings settings;
-  String printerIPs[MaxServers];
   PrintClient *printer[MaxServers];
   OWMClient *owmClient;
+  PluginMgr pluginMgr;
 
   namespace Internal {
     static const String SettingsFileName = "/settings.json";
+    String printerIPs[MaxServers];
 
     void cachePrinterIP(int i) {
       IPAddress printerIP;
@@ -258,7 +259,7 @@ namespace MultiMon {
     void updateAllData() {
       Internal::refreshPrinterData(true);
       Internal::refreshWeatherData(true);
-      Plugin::refreshAll(true);
+      pluginMgr.refreshAll(true);
     }
 
     void updateWeatherData() { Internal::refreshWeatherData(true); }
@@ -302,10 +303,10 @@ void setup() {
   GUI::displaySplashScreen();
   Internal::prepPrintClients();
   Internal::prepWeather();
-  Plugin::loadAll("/plugins");
+  pluginMgr.loadAll("/plugins");
   Internal::refreshPrinterData(true);   // Initial update of printer status
   Internal::refreshWeatherData(true);   // Initial update of weather info
-  Plugin::refreshAll(true);             // Initial update of plugin data
+  pluginMgr.refreshAll(true);           // Initial update of plugin data
 
   GUI::displayHomeScreen();
 
@@ -317,7 +318,7 @@ void loop() {
 
   Internal::refreshWeatherData();       // Updates weather data periodically
   Internal::refreshPrinterData();       // Updates printer status periodically
-  Plugin::refreshAll();                 // Update plugin related data
+  pluginMgr.refreshAll();               // Update plugin related data
 
   GUI::loop();
 

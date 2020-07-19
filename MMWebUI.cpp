@@ -33,7 +33,9 @@ namespace MMWebUI {
       "<a class='w3-bar-item w3-button' href='/presentDisplayConfig'>"
       "<i class='fa fa-desktop'></i> Configure Display</a>"
       "<a class='w3-bar-item w3-button' href='/presentWeatherConfig'>"
-      "<i class='fa fa-thermometer-three-quarters'></i> Configure Weather</a>";
+      "<i class='fa fa-thermometer-three-quarters'></i> Configure Weather</a>"
+      "<a class='w3-bar-item w3-button' href='/presentPluginConfig'>"
+      "<i class='fa fa-plug'></i> Configure Plugins</a>";
 
     String DEV_ACTION =
       "<a class='w3-bar-item w3-button' href='/dev'>"
@@ -108,6 +110,38 @@ namespace MMWebUI {
       WebUI::redirectHome();
     }
 
+    void updatePluginConfig() {
+      if (!WebUI::authenticationOK()) { return; }
+
+      String responseType = "text/plain";
+
+      if (!WebUI::hasArg(F("pID"))) {
+        Log.warning(F("No plugin ID was supplied"));
+        WebUI::sendStringContent(responseType, F("ERR: No plugin ID"));
+        return;
+      }
+
+      uint8_t pID = WebUI::arg(F("pID")).toInt()-1;
+      Plugin *p = MM::pluginMgr.getPlugin(pID);
+      if (p == NULL) {
+        Log.warning(F("Invalid plugin ID: %d"), pID);
+        WebUI::sendStringContent(responseType, F("ERR: Invalid plugin ID"));
+        return;
+      }
+
+      if (!WebUI::hasArg(F("plain"))) {
+        Log.warning(F("No payload supplied"));
+        WebUI::sendStringContent(responseType, F("ERR: No payload"));
+        return;
+      }
+
+      String settings = WebUI::arg("plain");
+Log.verbose("New settings: %s", settings.c_str());
+      p->newSettings(settings);        
+
+      WebUI::sendStringContent(responseType, F("OK: settings updated"));
+    }
+
     void updateDisplayConfig() {
       if (!WebUI::authenticationOK()) { return; }
 
@@ -126,12 +160,6 @@ namespace MMWebUI {
 
       MM::settings.use24Hour = WebUI::hasArg(F("is24hour"));
       MM::settings.invertDisplay = WebUI::hasArg(F("invDisp"));
-
-      MM::settings.blynk.enabled = WebUI::hasArg(F("blynkEnabled"));
-      MM::settings.blynk.id1 = WebUI::arg(F("blynkID1"));
-      MM::settings.blynk.id2 = WebUI::arg(F("blynkID2"));
-      MM::settings.blynk.nickname1 = WebUI::arg(F("blynkNN1"));
-      MM::settings.blynk.nickname2 = WebUI::arg(F("blynkNN2"));
 
       MM::settings.write();
       //MM::settings.logSettings();
@@ -304,6 +332,29 @@ namespace MMWebUI {
       WebUI::finishPage();
     }
 
+    void presentPluginConfig() {
+      Log.trace(F("Web Request: Handle Plugin Configure"));
+      if (!WebUI::authenticationOK()) { return; }
+
+      auto mapper =[](String &key) -> String {
+        if (key.startsWith("_P")) {
+          int i = (key.charAt(2) - '0');
+          key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
+          Plugin *p = MM::pluginMgr.getPlugin(i-1);
+          if (p == NULL) return EmptyString;
+          if (key.equals(F("IDX"))) return String(i);
+          if (key.equals(F("NAME"))) { return p->getName(); }
+          if (key.equals(F("FORM"))) { String v; p->getForm(v); return v; }
+          if (key.equals(F("VALS"))) { String v; p->getSettings(v); return v; }
+        }
+        return EmptyString;
+      };
+
+      WebUI::startPage();
+      templateHandler->send("/ConfigPlugins.html", mapper);
+      WebUI::finishPage();
+    }
+
     void presentDisplayConfig() {
       Log.trace(F("Web Request: Handle Display Configure"));
       if (!WebUI::authenticationOK()) { return; }
@@ -317,11 +368,6 @@ namespace MMWebUI {
 
         if (key.equals(F("USE_24HOUR"))) return checkedOrNot[MM::settings.use24Hour];
         if (key.equals(F("INVERT_DISPLAY"))) return checkedOrNot[MM::settings.invertDisplay];
-        if (key.equals(F("BLYNK_ENABLED"))) return checkedOrNot[MM::settings.blynk.enabled];
-        if (key.equals(F("BLYNK_ID1"))) return MM::settings.blynk.id1;
-        if (key.equals(F("BLYNK_ID2"))) return MM::settings.blynk.id2;
-        if (key.equals(F("BLYNK_NN1"))) return MM::settings.blynk.nickname1;
-        if (key.equals(F("BLYNK_NN2"))) return MM::settings.blynk.nickname2;
         return EmptyString;
       };
 
@@ -343,11 +389,13 @@ namespace MMWebUI {
     WebUI::registerHandler("/presentWeatherConfig",   Pages::presentWeatherConfig);
     WebUI::registerHandler("/presentPrinterConfig",   Pages::presentPrinterConfig);
     WebUI::registerHandler("/presentDisplayConfig",   Pages::presentDisplayConfig);
+    WebUI::registerHandler("/presentPluginConfig",    Pages::presentPluginConfig);
 
     WebUI::registerHandler("/updateStatus",           Endpoints::updateStatus);
     WebUI::registerHandler("/updateWeatherConfig",    Endpoints::updateWeatherConfig);
     WebUI::registerHandler("/updatePrinterConfig",    Endpoints::updatePrinterConfig);
     WebUI::registerHandler("/updateDisplayConfig",    Endpoints::updateDisplayConfig);
+    WebUI::registerHandler("/updatePluginConfig",     Endpoints::updatePluginConfig);
     WebUI::registerHandler("/setBrightness",          Endpoints::setBrightness);
 
     WebUI::registerHandler("/dev",                    Dev::presentDevConfig);

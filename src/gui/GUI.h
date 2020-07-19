@@ -56,7 +56,7 @@ namespace GUI {
   void loop();
 
   bool createFlexScreen(
-      JsonObjectConst &descriptor,
+      JsonDocument &doc,
       uint32_t refreshInterval,
       const Basics::StringMapper &vc);
 
