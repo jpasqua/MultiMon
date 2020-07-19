@@ -1,0 +1,13 @@
+{
+  "schema": {
+    "enabled": {
+      "type": "boolean",
+      "title": "Enabled"
+    },
+    "refreshInterval": {
+      "title": "Minutes between updates",
+      "type": "number",
+      "minimum": 2
+    }
+  }
+}

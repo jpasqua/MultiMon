@@ -1,0 +1,58 @@
+{
+  "schema": {
+    "enabled": {
+      "type": "boolean",
+      "title": "Enabled"
+    },
+    "blynkIDs": {
+      "title":"Blynk IDs",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "type": "string",
+        "title": "Blynk ID"
+      }
+    },
+    "nicknames": {
+      "title":"Station Names",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "type": "string",
+        "title": "Station Name"
+      }
+    },
+    "refreshInterval": {
+      "title": "Minutes between updates",
+      "type": "number",
+      "minimum": 2
+    },
+    "pins": {
+      "title": "Pins",
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "title": "Pin"
+      }
+    }
+  },
+  "form": [
+    "enabled",
+    "blynkIDs",
+    "nicknames",
+    "refreshInterval",
+    {
+      "type": "fieldset",
+      "title": "Advanced",
+      "expandable": true,
+      "items": [ "pins"]
+    },
+    {
+    "type": "submit",
+    "title": "Save Settings"
+    } 
+  ]
+}

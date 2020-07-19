@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "x": 100, "y": 218,
+      "w": 120,  "h": 22,
+      "xOff": 60, "yOff": 11,
+      "justify": "MC",
+      "font": "D20",
+      "color": "0xc354ff",
+      "format": "%02d:%02d:%02d",
+      "type": "CLOCK"
+    }             
+  ],
+  "bkg": "0x000000",
+  "name": "SClock"
+}

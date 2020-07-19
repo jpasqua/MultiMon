@@ -1,0 +1,201 @@
+{
+  "items": [
+    {
+      "x": 0,   "y": 0,
+      "w": 320, "h": 30,
+      "xOff": 160, "yOff": 15,
+      "justify": "MC",
+      "font": "S12",
+      "color": "0x00FF00",
+      "format": "Weather Stations",
+      "strokeWidth": 2
+    },
+    {
+      "x": 0,   "y": 35,
+      "w": 86,  "h": 26,
+      "xOff": 85, "yOff": 25,
+      "justify": "BR",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "Readings"
+    },
+    {
+      "x": 86,  "y": 35,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "SB9",
+      "color": "0xFFFFFF",
+      "format": "%s",
+      "type": "STRING",
+      "key": "NN1"
+    },
+    {
+      "x": 203,  "y": 35,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "SB9",
+      "color": "0xFFFFFF",
+      "format": "%s",
+      "type": "STRING",
+      "key": "NN2"
+    },
+    {
+      "x": 0,   "y": 64,
+      "w": 86,  "h": 26,
+      "xOff": 85, "yOff": 13,
+      "justify": "MR",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "Temp:"
+    },
+    {
+      "x": 86,  "y": 64,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "SB12",
+      "color": "0x00FF00",
+      "format": "%0.1fF",
+      "type": "FLOAT",
+      "key": "0/V0"
+    },
+    {
+      "x": 203,  "y": 64,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "SB12",
+      "color": "0x00FF00",
+      "format": "%0.1fF",
+      "type": "FLOAT",
+      "key": "1/V0"
+    },
+    {
+      "x": 0,   "y": 90,
+      "w": 86,  "h": 26,
+      "xOff": 85, "yOff": 13,
+      "justify": "MR",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "Humidity:"
+    },
+    {
+      "x": 86,  "y": 90,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "S12",
+      "color": "0xFFFFFF",
+      "format": "%.0f%%",
+      "type": "FLOAT",
+      "key": "0/V1"
+    },
+    {
+      "x": 203,  "y": 90,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "S12",
+      "color": "0xFFFFFF",
+      "format": "%.0f%%",
+      "type": "FLOAT",
+      "key": "1/V1"
+    },
+    {
+      "x": 0,   "y": 116,
+      "w": 86,  "h": 26,
+      "xOff": 86, "yOff": 13,
+      "justify": "MR",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "Barometer:"
+    },
+    {
+      "x": 86,  "y": 116,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "S12",
+      "color": "0xFFFFFF",
+      "format": "%.2f",
+      "type": "FLOAT",
+      "key": "0/V2"
+    },
+    {
+      "x": 203,  "y": 116,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "S12",
+      "color": "0xFFFFFF",
+      "format": "%.2f",
+      "type": "FLOAT",
+      "key": "1/V2"
+    },
+    {
+      "x": 0,   "y": 142,
+      "w": 86,  "h": 26,
+      "xOff": 85, "yOff": 13,
+      "justify": "MR",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "Battery:"
+    },
+    {
+      "x": 86,  "y": 142,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "S9",
+      "color": "0xFF0000",
+      "format": "%.2fV",
+      "type": "FLOAT",
+      "key": "0/V7"
+    },
+    {
+      "x": 203,  "y": 142,
+      "w": 117,  "h": 26,
+      "xOff": 58, "yOff": 13,
+      "justify": "MC",
+      "font": "S9",
+      "color": "0xFF0000",
+      "format": "%.2fV",
+      "type": "FLOAT",
+      "key": "1/V7"
+    },
+    {
+      "x": 0,   "y": 168,
+      "w": 160,  "h": 26,
+      "xOff": 0, "yOff": 0,
+      "justify": "ML",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "%s",
+      "key": "0/V8"
+    },  
+    {
+      "x": 160,   "y": 168,
+      "w": 160,  "h": 26,
+      "xOff": 159, "yOff": 0,
+      "justify": "MR",
+      "font": "2",
+      "color": "0xFFFFFF",
+      "format": "%s",
+      "key": "1/V8"
+    },
+    {
+      "x": 100, "y": 218,
+      "w": 120,  "h": 22,
+      "xOff": 60, "yOff": 11,
+      "justify": "MC",
+      "font": "D20",
+      "color": "0xc354ff",
+      "format": "%02d:%02d:%02d",
+      "type": "CLOCK"
+    }             
+  ],
+  "bkg": "0x000000",
+  "name": "Blynk"
+}
