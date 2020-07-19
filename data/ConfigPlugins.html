@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsonform/2.1.6/jsonform.js"></script>
+
+<h2>Plugin Settings</h2>
+<style>
+  .expandable > legend:before {
+    content: '\\25B8';
+    padding-right: 5px;
+  }
+  .expanded > legend:before {
+    content: '\\25BE';
+  }
+</style>
+<div class='card m-4 p-2 shadow'>
+  <h3>%_P1_NAME%</h3>
+  <form id="FORM_%_P1_IDX%"></form>
+  <p id="res_%_P1_IDX%" style='font-size: small;'></p>
+</div>
+<div class='card m-4 p-2 shadow'>
+  <h3>%_P2_NAME%</h3>
+  <form id="FORM_%_P2_IDX%"></form>
+  <p id="res_%_P2_IDX%" style='font-size: small;'></p>
+</div>
+<div class='card m-4 p-2 shadow'>
+  <h3>%_P3_NAME%</h3>
+  <form id="FORM_%_P3_IDX%"></form>
+  <p id="res_%_P3_IDX%" style='font-size: small;'></p>
+</div>
+<div class='card m-4 p-2 shadow'>
+  <h3>%_P4_NAME%</h3>
+  <form id="FORM_%_P4_IDX%"></form>
+  <p id="res_%_P4_IDX%" style='font-size: small;'></p>
+</div>
+<div class='card m-4 p-2 shadow'>
+  <h3>%_P5_NAME%</h3>
+  <form id="FORM_%_P5_IDX%"></form>
+  <p id="res_%_P5_IDX%" style='font-size: small;'></p>
+</div>
+<script type="text/javascript">
+  function doSubmit(values, pID) {
+    $('#res').text('');
+    var xhr = new XMLHttpRequest();
+    var url = "/updatePluginConfig?pID="+pID;
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        if (xhr.responseText.toUpperCase().startsWith("OK")) {
+          console.log("Success: " + xhr.responseText);
+          $('#res_'+pID).css('color', 'green');
+          $('#res_'+pID).text('Settings saved');
+        } else {
+          console.log("Failure: " + xhr.responseText);
+          $('#res_'+pID).css('color', 'red');
+          $('#res_'+pID).text('Error: ' + xhr.responseText);
+        }
+      }
+    };
+    values.refreshInterval = values.refreshInterval * (60 * 1000);
+    xhr.send(JSON.stringify(values));
+  }
+  var descriptor;
+  if ('%_P1_IDX%' != "") {
+    descriptor = JSON.parse(`%_P1_FORM%`);
+    descriptor.value = JSON.parse(`%_P1_VALS%`);
+    descriptor.value.refreshInterval = descriptor.value.refreshInterval/(60 * 1000);
+    descriptor.onSubmitValid = function(values) { doSubmit(values, %_P1_IDX%) };
+    $('#FORM_%_P1_IDX%').jsonForm(descriptor);
+  }
+  if ('%_P2_IDX%' != "") {
+    descriptor = JSON.parse(`%_P2_FORM%`);
+    descriptor.value = JSON.parse(`%_P2_VALS%`);
+    descriptor.value.refreshInterval = descriptor.value.refreshInterval/(60 * 1000);
+    descriptor.onSubmitValid = function(values) { doSubmit(values, %_P2_IDX%) };
+    $('#FORM_%_P2_IDX%').jsonForm(descriptor);
+  }
+  if ('%_P3_IDX%' != "") {
+    descriptor = JSON.parse(`%_P3_FORM%`);
+    descriptor.value = JSON.parse(`%_P3_VALS%`);
+    descriptor.value.refreshInterval = descriptor.value.refreshInterval/(60 * 1000);
+    descriptor.onSubmitValid = function(values) { doSubmit(values, %_P3_IDX%) };
+    $('#FORM_%_P3_IDX%').jsonForm(descriptor);
+  }
+  if ('%_P4_IDX%' != "") {
+    descriptor = JSON.parse(`%_P4_FORM%`);
+    descriptor.value = JSON.parse(`%_P4_VALS%`);
+    descriptor.value.refreshInterval = descriptor.value.refreshInterval/(60 * 1000);
+    descriptor.onSubmitValid = function(values) { doSubmit(values, %_P4_IDX%) };
+    $('#FORM_%_P4_IDX%').jsonForm(descriptor);
+  }
+  if ('%_P5_IDX%' != "") {
+    descriptor = JSON.parse(`%_P5_FORM%`);
+    descriptor.value = JSON.parse(`%_P5_VALS%`);
+    descriptor.value.refreshInterval = descriptor.value.refreshInterval/(60 * 1000);
+    descriptor.onSubmitValid = function(values) { doSubmit(values, %_P5_IDX%) };
+    $('#FORM_%_P5_IDX%').jsonForm(descriptor);
+  }
+
+</script>
