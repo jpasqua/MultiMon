@@ -37,10 +37,15 @@
         "type": "string",
         "title": "Pin"
       }
-    }
+    },
+    "riScale": { "type": "number" }
   },
   "form": [
-    "enabled",
+    {
+      "key": "enabled",
+      "notitle": true,
+      "inlinetitle": " Enable Blynk Weather"
+    },
     "blynkIDs",
     "nicknames",
     "refreshInterval",
@@ -50,9 +55,7 @@
       "expandable": true,
       "items": [ "pins"]
     },
-    {
-    "type": "submit",
-    "title": "Save Settings"
-    } 
+    { "key": "riScale", "type": "hidden" },
+    { "type": "submit", "title": "Save Settings" } 
   ]
 }
