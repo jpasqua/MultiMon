@@ -35,21 +35,6 @@
   <p><input name='is24hour' class='w3-check' type='checkbox' %USE_24HOUR%> Use 24 Hour Clock (13:30 vs 1:30)</p>
   <p><input name='invDisp' class='w3-check' type='checkbox' %INVERT_DISPLAY% onchange='alertRecalibrate()'> Flip display orientation</p>
 
-
-<div class='w3-card-2 w3-round-large'>
-  <header class="w3-container w3-light-grey">
-    <h3>Blynk settings</h3>
-  </header>
-  <div class='w3-container w3-margin-bottom'>
-    <p><input name='blynkEnabled' class='w3-check' type='checkbox' %BLYNK_ENABLED% onclick='alert("Changes will take effect on the next reboot");'> Enable Blynk Support</p>
-    <label>Device 1: ID</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='blynkID1' value='%BLYNK_ID1%' maxlength='60'>
-    <label>Device 1: Nickname</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='blynkNN1' value='%BLYNK_NN1%' maxlength='60'>
-    <label>Device 2: ID</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='blynkID2' value='%BLYNK_ID2%' maxlength='60'>
-    <label>Device 2: Nickname</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='blynkNN2' value='%BLYNK_NN2%' maxlength='60'>
-  </div>
-</div>
-
-
   <button class='w3-button w3-block w3-round-large w3-grey w3-section w3-padding' type='submit'>Save</button>
 
   <script>
