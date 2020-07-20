@@ -143,8 +143,17 @@ void PluginMgr::loadAll(String pluginRoot) {
     for (i = 0; i < nPluginsFound; i++) {
       if (pluginDirNames[i] == pluginDirName) break;
     }
-    if (i == nPluginsFound) {
+    if (i == nPluginsFound && validatePluginFiles(pluginRoot+pluginDirName)) {
       pluginDirNames[nPluginsFound++] = pluginDirName;
+    }
+  }
+
+  // Sort the plugins by name
+  for (size_t i = 1; i < nPluginsFound; i++) {
+    for (size_t j = i; j > 0 && (pluginDirNames[j-1] >  pluginDirNames[j]); j--) {
+      String tmp = pluginDirNames[j-1];
+      pluginDirNames[j-1] = pluginDirNames[j];
+      pluginDirNames[j] = tmp;
     }
   }
 

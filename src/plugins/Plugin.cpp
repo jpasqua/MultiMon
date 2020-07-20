@@ -35,13 +35,11 @@ bool Plugin::init(String& name, String& pluginDir) {
   _name = name;
   _pluginDir = pluginDir;
   if (!typeSpecificInit()) return false;
-  return createUI();
-}
-
-bool Plugin::createUI() {
+  
+  // Create the FlexScreen UI
   DynamicJsonDocument* doc = PluginMgr::getDoc(_pluginDir + "/screen.json", MaxScreenDescriptorSize);
   if (doc == NULL) return false;
-  bool success = GUI::createFlexScreen(*doc, _refreshInterval, _mapper);
+  bool success = GUI::createFlexScreen(*doc, getUIRefreshInterval(), _mapper);
   delete doc;
   return success;
 }

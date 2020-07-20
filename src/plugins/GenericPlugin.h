@@ -30,6 +30,7 @@ public:
   // ----- Settings
   bool      enabled;
   uint32_t  refreshInterval;
+  uint32_t  riScale;  // NOT a user-visible setting!
 };
 
 class GenericPlugin : public Plugin {
@@ -41,6 +42,7 @@ public:
   void refresh(bool force = false);
   void getSettings(String& serializedSettings);
   void newSettings(String& serializedSettings);
+  uint32_t getUIRefreshInterval();
 };
 
 #endif  // GenericPlugin_h

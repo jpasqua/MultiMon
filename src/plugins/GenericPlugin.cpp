@@ -27,7 +27,8 @@ GenericSettings::GenericSettings() {
   maxFileSize = 256;
 
   enabled = true;
-  refreshInterval = 10 * 60 * 1000L;  // 10 Minutes
+  riScale = 1 * 1000L;    // Operate in seconds
+  refreshInterval = 60;   // 1 Minute
 }
 
 void GenericSettings::fromJSON(JsonDocument& doc) {
@@ -46,8 +47,9 @@ void GenericSettings::fromJSON(String& settings) {
 }
 
 void GenericSettings::toJSON(JsonDocument& doc) {
-  doc[F("refreshInterval")] = refreshInterval;
   doc[F("enabled")] = enabled;
+  doc[F("refreshInterval")] = refreshInterval;
+  doc[F("riScale")] = riScale;
 }
 
 void GenericSettings::toJSON(String& serialized) {
@@ -60,6 +62,7 @@ void GenericSettings::logSettings() {
   Log.verbose(F("----- GenericSettings"));
   Log.verbose(F("  enabled: %T"), enabled);
   Log.verbose(F("  refreshInterval: %d"), refreshInterval);
+  Log.verbose(F("  riScale: %d"), riScale);
 }
 
 
@@ -82,12 +85,13 @@ void GenericPlugin::newSettings(String& serializedSettings) {
   settings.write();
 }
 
+uint32_t GenericPlugin::getUIRefreshInterval() { return settings.refreshInterval * settings.riScale; }
+
 bool GenericPlugin::typeSpecificInit() {
   settings.init(_pluginDir + "/settings.json");
   settings.read();
   settings.logSettings();
 
-  _refreshInterval = settings.refreshInterval;
   _enabled = settings.enabled;
 
   _mapper = [&](String& key) -> String {

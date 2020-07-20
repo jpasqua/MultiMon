@@ -33,7 +33,8 @@ BlynkSettings::BlynkSettings() {
   blynkIDs = NULL;
   nicknames = NULL;
   pins = NULL;
-  refreshInterval = 10 * 60 * 1000L;  // 10 Minutes
+  riScale = 60 * 1000L;   // Operate in minutes
+  refreshInterval = 10;   // 10 Minutes
 }
 
 void BlynkSettings::fromJSON(JsonDocument &doc) {
@@ -58,6 +59,7 @@ void BlynkSettings::fromJSON(JsonDocument &doc) {
 
   enabled = doc[F("enabled")];
   refreshInterval = doc[F("refreshInterval")];
+  riScale = doc[F("riScale")];
 }
 
 void BlynkSettings::fromJSON(String& settings) {
@@ -84,6 +86,7 @@ void BlynkSettings::toJSON(JsonDocument &doc) {
   }
 
   doc[F("refreshInterval")] = refreshInterval;
+  doc[F("riScale")] = riScale;
   doc[F("enabled")] = enabled;
 }
 
@@ -103,6 +106,7 @@ void BlynkSettings::logSettings() {
   }
   Log.verbose(F("  enabled: %T"), enabled);
   Log.verbose(F("  refreshInterval: %d"), refreshInterval);
+  Log.verbose(F("  riScale: %d"), riScale);
 }
 
 
@@ -125,12 +129,13 @@ void BlynkPlugin::newSettings(String& serializedSettings) {
   settings.write();
 }
 
+uint32_t BlynkPlugin::getUIRefreshInterval() { return settings.refreshInterval * settings.riScale; }
+
 bool BlynkPlugin::typeSpecificInit() {
   settings.init(_pluginDir + "/settings.json");
   settings.read();
   settings.logSettings();
 
-  _refreshInterval = settings.refreshInterval;
   _enabled = settings.enabled;
   _pinVals = new String[settings.nPins];
 
@@ -158,6 +163,6 @@ void BlynkPlugin::refresh(bool force) {
     String rawPin = settings.pins[i].substring(index+1);
     _pinVals[i] = BlynkClient::readPin(settings.blynkIDs[blynkIndex], rawPin);
   }
-  _nextRefresh = millis() + _refreshInterval;
+  _nextRefresh = millis() + (settings.refreshInterval * settings.riScale);
   GUI::hideUpdatingIcon();
 }

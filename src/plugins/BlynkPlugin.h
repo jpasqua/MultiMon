@@ -35,6 +35,7 @@ public:
   uint8_t   nPins;
   String*   pins;
   uint32_t  refreshInterval;
+  uint32_t  riScale;  // NOT a user-visible setting!
 };
 
 class BlynkPlugin : public Plugin {
@@ -46,6 +47,7 @@ public:
   void refresh(bool force = false);
   void getSettings(String& serializedSettings);
   void newSettings(String& serializedSettings);
+  uint32_t getUIRefreshInterval();
 
 private:
   String*   _pinVals;

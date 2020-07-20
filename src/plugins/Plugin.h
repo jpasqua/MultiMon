@@ -27,13 +27,18 @@ public:
 	virtual void refresh(bool force = false) = 0;
   virtual void getSettings(String &settings) = 0;
   virtual void newSettings(String &settings) = 0;
+  virtual uint32_t getUIRefreshInterval() = 0;
 
   // Implemented by Plugin class
   bool init(String& name, String& pluginDir);
-  bool createUI();
+    // Called immediately after the Plugin's constructor. Will invoke
+    // typeSpecificInit() after _name and _pluginDir are set
   void getForm(String& form);
+    // Return a serialized version of the JSON doc representing the screen
   String getName() { return _name; }
+    // Return a serialized version of the JSON doc representing the settings
   bool enabled() { return _enabled; }
+    // Is this plugin enabled?
 
 protected:
   String   _name;
@@ -43,10 +48,6 @@ protected:
   bool _enabled;
     // Is this plugin enabled. This may always be true, may be a setting, or may be
     // set based on some operational parameters
-  uint32_t _refreshInterval = UINT32_MAX;
-    // How often to refresh the plugin. This is relevant to many, but not all
-    // all plugins. It's up to sublclasses to set this to a sensible value.
-    // It may read it from a settings file or it may use a constant value
   Basics::StringMapper _mapper;
     // Implemented by the concrete subclass. Maps names in the UI description
     // to values provided by one or more data sources
