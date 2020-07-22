@@ -16,7 +16,7 @@ public:
     float   lat;          // Data is for this location: latitude
     float   lon;          // Data is for this location: longitude
     String   country;     // Name of containing country
-    String   city;        // Name of containing country
+    String   city;        // Name of city
     uint32_t cityID;      // ID of City
   } location;
   struct {
