@@ -1,5 +1,5 @@
 /*
- * PluginSelectorScreen:
+ * UtilityScreen:
  *    Display info about the MultiMon including things like the server name,
  *    wifi address, heap stats, etc. Also allow brightness adjustment 
  *                    
@@ -27,11 +27,11 @@ static const uint16_t pis_colors[6] = {
   GUI::Color_Inactive,   GUI::Color_DimText,    GUI::Color_NormalText,
   GUI::Color_NormalText, GUI::Color_NormalText, GUI::Color_AlertGood};
 
-class PluginSelectorScreen : public Screen {
+class UtilityScreen : public Screen {
 public:
-  PluginSelectorScreen() {
+  UtilityScreen() {
     auto buttonHandler =[&](int id, Button::PressType type) -> void {
-      Log.verbose(F("In PluginSelectorScreen Button Handler, id = %d, type = %d"), id, type);
+      Log.verbose(F("In UtilityScreen Button Handler, id = %d, type = %d"), id, type);
 
       if (id < MaxPlugins) {
         Plugin *p = MultiMon::pluginMgr.getPlugin(id);

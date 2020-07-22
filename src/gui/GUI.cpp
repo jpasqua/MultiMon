@@ -36,7 +36,7 @@
 #include "ConfigScreen.h"
 #include "DetailScreen.h"
 #include "ForecastScreen.h"
-#include "PluginSelectorScreen.h"
+#include "UtilityScreen.h"
 #include "RebootScreen.h"
 #include "SplashScreen.h"
 #include "StatusScreen.h"
@@ -64,7 +64,7 @@ namespace GUI {
   ForecastScreen forecastScreen;
   CalibrationScreen calibrationScreen;
   WiFiScreen wiFiScreen;
-  PluginSelectorScreen pluginScreen;
+  UtilityScreen pluginScreen;
   FlexScreen blynkScreen;
   Screen *curScreen = NULL;
 
