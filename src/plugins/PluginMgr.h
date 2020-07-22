@@ -29,7 +29,7 @@ public:
   Plugin* getPlugin(uint8_t index);
 
 private:
-  static const uint8_t MaxPlugins = 5;
+  static const uint8_t MaxPlugins = 4;
   uint8_t _nPlugins;
   Plugin* _plugins[MaxPlugins];
 

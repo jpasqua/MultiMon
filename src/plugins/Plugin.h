@@ -37,6 +37,8 @@ public:
     // Return a serialized version of the JSON doc representing the screen
   String getName() { return _name; }
     // Return a serialized version of the JSON doc representing the settings
+  String getScreenName() { return _screenName; }
+    // Return the name of the associated screen
   bool enabled() { return _enabled; }
     // Is this plugin enabled?
 
@@ -51,6 +53,7 @@ protected:
   Basics::StringMapper _mapper;
     // Implemented by the concrete subclass. Maps names in the UI description
     // to values provided by one or more data sources
+  String _screenName;
 
 private:
   static const uint32_t MaxScreenDescriptorSize = 6*1024;

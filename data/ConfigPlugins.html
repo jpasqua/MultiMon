@@ -12,7 +12,7 @@
 <div id="fc" class="bootstrapiso"></div>
 <script type="text/javascript">
   function doSubmit(values, pID) {
-    $('#res').text('');
+    $('#res_'+pID).text('...');
     var xhr = new XMLHttpRequest();
     var url = "/updatePluginConfig?pID="+pID;
     xhr.open("POST", url, true);

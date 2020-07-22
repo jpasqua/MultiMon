@@ -1,9 +1,16 @@
 #ifndef GUI_h
 #define GUI_h
 
+//--------------- Begin:  Includes ---------------------------------------------
+//                                  Core Libraries
+#include <Arduino.h>
+//                                  Third Party Libraries
 #include <TFT_eSPI.h>
 #include <ArduinoJson.h>
+//                                  Local Includes
 #include "../Basics.h"
+//--------------- End:    Includes ---------------------------------------------
+
 
 namespace GUI {
   static const uint32_t Color_Online = TFT_GREEN;
@@ -16,7 +23,7 @@ namespace GUI {
 
   static const uint32_t Color_Nickname = 0xE51D;      // Light Purple
   static const uint32_t Color_NormalText = TFT_WHITE;
-  static const uint32_t Color_DimText = TFT_LIGHTGREY;
+  static const uint32_t Color_DimText = 0xAD75;       // Darker than TFT_LIGHTGREY
 
   static const uint32_t Color_Border = TFT_WHITE;
   static const uint32_t Color_Background = TFT_BLACK;
@@ -55,7 +62,7 @@ namespace GUI {
   
   void loop();
 
-  bool createFlexScreen(
+  String createFlexScreen(
       JsonDocument &doc,
       uint32_t refreshInterval,
       const Basics::StringMapper &vc);
@@ -65,13 +72,13 @@ namespace GUI {
   void displayConfigScreen(String &ssid);
   void displayDetailScreen(int index);
   void displayForecastScreen();
-  void displayInfoScreen();
   void displayRebootScreen();
   void displaySplashScreen();
   void displayStatusScreen();
   void displayTimeScreen();
   void displayWeatherScreen();
   void displayWiFiScreen();
+  void displayPluginScreen();
   void displayFlexScreen(String name);
 
   /**

@@ -17,6 +17,7 @@
 //                                  Third Party Libraries
 #include <TimeLib.h>
 //                                  Local Includes
+#include "../../DataBroker.h"
 #include "TimeScreen.h"
 #include "../Basics.h"
 //--------------- End:    Includes ---------------------------------------------
@@ -108,7 +109,7 @@ TimeScreen::TimeScreen() {
         GUI::displayDetailScreen(id);
       return;
     }
-    if (type > Button::PressType::NormalPress) { GUI::displayInfoScreen(); return; }
+    if (type > Button::PressType::NormalPress) { GUI::displayPluginScreen(); return; }
     if (id == ClockAreaIndex) { GUI::displayStatusScreen(); return; }
     if (id == WeatherAreaIndex) { GUI::displayWeatherScreen(); return; }
   };
@@ -241,48 +242,25 @@ void TimeScreen::drawWeather(bool force) {
 
 void TimeScreen::drawNextComplete(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
+
   sprite->setColorDepth(1);
   sprite->createSprite(NCWidth, NCHeight);
   sprite->fillSprite(GUI::Mono_Background);
 
-  uint32_t minCompletion = UINT32_MAX;
-  int printerWithNextCompletion;
-  for (int i = 0; i < MultiMon::MaxServers; i++) {
-    if (!MultiMon::settings.printer[i].isActive) continue;
-    if (MultiMon::printer[i]->getState() == PrintClient::State::Printing) {
-      uint32_t thisCompletion = MultiMon::printer[i]->getPrintTimeLeft();
-      if (thisCompletion < minCompletion) {
-        minCompletion = thisCompletion;
-        printerWithNextCompletion = i;
-      }
-    }
-  }
-
-  if (minCompletion != UINT32_MAX) {
-    PrinterSettings *ps = &MultiMon::settings.printer[printerWithNextCompletion];
-    time_t theTime = now() + minCompletion;
-
-    String readout =  (ps->nickname.isEmpty()) ? readout = ps->server : ps->nickname;
-    readout += ": ";
-    readout += String(dayShortStr(weekday(theTime)));
-    readout += " ";
-    readout += (MultiMon::settings.use24Hour) ? hour(theTime) : hourFormat12(theTime);
-    readout += ":";
-    int theMinute =  minute(theTime);
-    if (theMinute < 10) readout += '0';
-    readout += theMinute;
-    if (!MultiMon::settings.use24Hour) readout += isAM(theTime) ? "AM" : "PM";
+  String printerName, formattedTime;
+  uint32_t delta;
+  DataBroker::Printing::nextCompletion(printerName, formattedTime, delta);
+  if (!printerName.isEmpty()) {
     GUI::Font::setUsingID(NCFont, sprite);
     sprite->setTextColor(GUI::Mono_Foreground);
     sprite->setTextDatum(TC_DATUM);
-    sprite->drawString(readout, NCWidth/2, 0);
+    sprite->drawString(printerName +": " + formattedTime, NCWidth/2, 0);
   }
 
-  uint16_t color = minCompletion < (15*60) ? GUI::Color_AlertGood : GUI::Color_NormalText;
+  uint16_t color = delta < (15*60) ? GUI::Color_AlertGood : GUI::Color_NormalText;
   sprite->setBitmapColor(color, GUI::Color_Background);
   sprite->pushSprite(NCXOrigin, NCYOrigin);
   sprite->deleteSprite();
-
 }
 
 void TimeScreen::drawPrinterNames(bool force) {

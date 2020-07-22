@@ -39,9 +39,9 @@ bool Plugin::init(String& name, String& pluginDir) {
   // Create the FlexScreen UI
   DynamicJsonDocument* doc = PluginMgr::getDoc(_pluginDir + "/screen.json", MaxScreenDescriptorSize);
   if (doc == NULL) return false;
-  bool success = GUI::createFlexScreen(*doc, getUIRefreshInterval(), _mapper);
+  _screenName = GUI::createFlexScreen(*doc, getUIRefreshInterval(), _mapper);
   delete doc;
-  return success;
+  return !_screenName.isEmpty();
 }
 
 void Plugin::getForm(String& form) {

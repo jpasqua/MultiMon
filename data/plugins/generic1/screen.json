@@ -1,16 +1,81 @@
 {
   "items": [
     {
-      "x": 100, "y": 218,
-      "w": 120,  "h": 22,
-      "xOff": 60, "yOff": 11,
+      "x": 0, "y": 0,
+      "w": 106,  "h": 22,
+      "xOff": 0, "yOff": 22,
+      "justify": "BL",
+      "font": "SB9",
+      "color": "0xFFFFFF",
+      "format": "%s",
+      "type": "String",
+      "key": "$W.city"
+    },
+    {
+      "x": 106, "y": 0,
+      "w": 106,  "h": 22,
+      "xOff": 53, "yOff": 22,
+      "justify": "BC",
+      "font": "SB9",
+      "color": "0xFFFFFF",
+      "format": "%0.1fF",
+      "type": "FLOAT",
+      "key": "$W.temp"
+    },
+    {
+      "x": 212, "y": 0,
+      "w": 106,  "h": 22,
+      "xOff": 106, "yOff": 22,
+      "justify": "BR",
+      "font": "SB9",
+      "color": "0xFFFFFF",
+      "format": "%s",
+      "type": "String",
+      "key": "$W.ldesc"
+    },
+    {
+      "x": 0, "y": 22,
+      "w": 320,  "h": 22,
+      "xOff": 160, "yOff": 11,
       "justify": "MC",
-      "font": "D20",
-      "color": "0xc354ff",
-      "format": "%02d:%02d:%02d",
+      "font": "SB9",
+      "color": "0x00ff00",
+      "format": "%s",
+      "type": "String",
+      "key": "$P.next"
+    },    {
+      "x": 0, "y": 44,
+      "w": 320,  "h": 22,
+      "xOff": 160, "yOff": 11,
+      "justify": "MC",
+      "font": "2",
+      "color": "0xCCCCCC",
+      "format": "%s",
+      "type": "String",
+      "key": "$S.heap"
+    },
+    {
+      "x": 0, "y": 80,
+      "w": 320,  "h":79,
+      "xOff": 160, "yOff": 40,
+      "justify": "MC",
+      "font": "D72",
+      "color": "0x00ff00",
+      "format": "%2d:%02d",
       "type": "CLOCK"
+    },
+    {
+      "x": 0, "y": 218,
+      "w": 320,  "h": 22,
+      "xOff": 160, "yOff": 11,
+      "justify": "MC",
+      "font": "SB9",
+      "color": "0xc354ff",
+      "format": "Written by: %s",
+      "type": "STRING",
+      "key": "$S.author"
     }             
   ],
   "bkg": "0x000000",
-  "name": "SClock"
+  "name": "Mix1"
 }

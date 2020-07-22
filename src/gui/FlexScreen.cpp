@@ -16,6 +16,7 @@
 //                                  Third Party Libraries
 //                                  Local Includes
 #include "../Basics.h"
+#include "../../DataBroker.h"
 #include "MMScreen.h"
 #include "FlexScreen.h"
 //--------------- End:    Includes ---------------------------------------------
@@ -121,9 +122,10 @@ void FlexScreen::display(bool activating) {
   auto mapper = [&](String& key) -> String {
     if (key.isEmpty()) return "";
     if (key.equals(F("SCREEN_NAME"))) return _name;
-    // TO DO: Introduce the notion of a global mapper. If the key starts with '$', then it
-    // refers to a global piece of state such as the time the next print is going to
-    // complete ($NEXT_COMP) or the current temperature ($TEMP).
+    if (key[0] == '$') {
+Log.verbose("FlexScreen::display, key = %s", key.c_str());
+      return DataBroker::map(key);
+    }
     else return _vc(key);
   };
 
@@ -144,7 +146,7 @@ String nullMapper(String& k) {
 void FlexScreen:: processPeriodicActivity() {
   uint32_t curMillis = millis();
   if (curMillis - lastDisplayTime > _refreshInterval) display(false);
-  else if (_clock != NULL  && curMillis - lastClockTime) {
+  else if (_clock != NULL  && (curMillis - lastClockTime > 1000L)) {
     _clock->display(_bkg, nullMapper);
     lastClockTime = curMillis;
   }

@@ -36,7 +36,7 @@
 #include "ConfigScreen.h"
 #include "DetailScreen.h"
 #include "ForecastScreen.h"
-#include "InfoScreen.h"
+#include "PluginSelectorScreen.h"
 #include "RebootScreen.h"
 #include "SplashScreen.h"
 #include "StatusScreen.h"
@@ -63,8 +63,8 @@ namespace GUI {
   WeatherScreen weatherScreen;
   ForecastScreen forecastScreen;
   CalibrationScreen calibrationScreen;
-  InfoScreen infoScreen;
   WiFiScreen wiFiScreen;
+  PluginSelectorScreen pluginScreen;
   FlexScreen blynkScreen;
   Screen *curScreen = NULL;
 
@@ -261,9 +261,9 @@ namespace GUI {
 
   void displayCalibrationScreen() { display(calibrationScreen); }
 
-  void displayInfoScreen() { display(infoScreen); }
-
   void displayForecastScreen() { display(forecastScreen); }
+
+  void displayPluginScreen() { display(pluginScreen); }
 
   void displayFlexScreen(String name)  {
     for (int i = 0; i < nFlexScreens; i++) {
@@ -276,24 +276,24 @@ namespace GUI {
     Log.error(F("Requesting a non-existent screen: %s"), name.c_str());
   }
 
-  bool createFlexScreen(
+  String createFlexScreen(
       JsonDocument &doc,
       uint32_t refreshInterval,
       const Basics::StringMapper &vc) {
     if (nFlexScreens == MaxFlexScreens) {
       Log.warning(F("Maximum number of FlexScreens exceeded"));
-      return false;
+      return "";
     }
 
     FlexScreen *flexScreen = new FlexScreen();
     JsonObjectConst descriptor = doc.as<JsonObjectConst>();
     if (!flexScreen->init(descriptor, refreshInterval, vc)) {
       delete flexScreen;
-      return false;
+      return "";
     }
 
     flexScreens[nFlexScreens++] = flexScreen;
-    return true;
+    return flexScreen->getName();
   }
 
   void showUpdatingIcon(uint16_t accentColor) { Internal::showUpdating(accentColor); }
