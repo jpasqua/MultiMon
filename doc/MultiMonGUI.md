@@ -6,7 +6,7 @@ MultiMon is designed to monitor up to four printers which are driven by either [
 
 The GUI is organized around the concept of "Screens" of information that are navigated using touches. Touches can either be a press or a long press and typically result in moving to another screen. they may also cause an action to occur, but remain on the current screen.
 
-MultiMon regularly calls out to the printers to get their status. If a printer is offline, MultiMon checks it every 5-10 minutes to see if it has come back online. If a printer is online, but not printing, MultiMon checks it every 1-3 minutes to see if it has changed. If a printer is actually in the process of printing, MultiMon updates its status every 30 seconds. This is [configurable](../README.md#configure-printers). You can force a refresh sooner using either the Web UI or the [GUI](#info-screen). You can also change the interval using the Web UI.
+MultiMon regularly calls out to the printers to get their status. If a printer is offline, MultiMon checks it every 5-10 minutes to see if it has come back online. If a printer is online, but not printing, MultiMon checks it every 1-3 minutes to see if it has changed. If a printer is actually in the process of printing, MultiMon updates its status every 30 seconds. This is [configurable](../README.md#configure-printers). You can force a refresh sooner using either the Web UI or the [GUI](#utility-screen). You can also change the interval using the Web UI.
 
 These calls can take a second or two depending  on how many printers are being checked and how responsive they are. During these periods the GUI is not responsive. To let the user know when this is happening, the GUI overlays a small info icon in the upper right hand corner of the screen. It is automatically removed when the calls are complete. When the info icon has a green border it means that MultiMon is talking to a printer. When it has an orange border it means that MultiMon is getting weather information.
 
@@ -18,7 +18,7 @@ Index of Screens (alphabetical):
 
 * [Calibration Screen](#calibration-screen)
 * [Config Screen](#config-screen)
-* [Info Screen](#info-screen)
+* [Utility Screen](#utility-screen)
 * [Forecast Screen](#forecast-screen)
 * [Printer Status Screen](#printer-status-screen)
 * [Printer Detail Screen](#printer-detail-screen)
@@ -80,7 +80,7 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 * Pressing anywhere within the weather area navigates to the Weather Screen. Note that since this area is not very tall, the actual sensitivity area extends below the weather line to make it easier to press with a finger (rather than a stylus).
 * Pressing in the clock area navigates to the [Printer Status Screen](#printer-status-screen).
 * Pressing any of the printer status areas navigates to a detail screen for that printer.
-* A long press anywhere on the screen navigates to the Info Screen.
+* A long press anywhere on the screen navigates to the Utility Screen.
 
 <a name="printer-status-screen"></a>
 ### Printer Status Screen
@@ -161,25 +161,26 @@ Note: Since the first entry corresponds to the current conditions, it only shows
 * Pressing anywhere on the screen navigates back to the [Home Screen](#home-screen).
 * A long press anywhere on the screen navigates back to the [Weather Screen](#weather-screen).
 
-<a name="info-screen"></a>
-### Info Screen
+<a name="utility-screen"></a>
+### Utility Screen
 
-The Info Screen displays various low level pieces of information also provides a few buttons that allow the user to take actions. The layout of the screen is:
+The Utility Screen provides access to [plugins](), if any, as well as other commands and system information. The layout of the screen is:
 
 * The header line just shows the the MultiMon version number
-* Below that is the name of the monitor and its current IP address. If you use a computer/phone/tablet that has Bonjour support, you can access MultiMon by typing the unit's name followed by ".local" into the address bar of your browser. In the example below, the name of this unit is "MyMonitor" so you could access it by entering `http://MyMonitor.local` into your browser.
-* To the right of that are bars indicating the WiFi signal strength (0 to 4 bars).
-* Next is the `Refresh` button. Pressing it will cause MultiMon to ask each printer for fresh status information. The Info Icon will flash on the screen while that is happening. 
-* The next row of buttons allows you to change the brightness of the screen to Dim, Medium, or Bright. The brightness can also be changed from the Web UI interactively or via a schedule. The current brightness level is displayed below the buttons.
-* Finally, there are statistics about how much memory MultiMon is using. This is only of interest to developers.
+* Below that is the name of the monitor and its current IP address. If you use a computer/phone/tablet that has Bonjour support, you can access MultiMon by typing the unit's name followed by ".local" into the address bar of your browser. In the example below, the name of this unit is "QuadMon" so you could access it by entering `http://QuadMon` into your browser.
+* To the right of those two lines is a WiFi signal strength meter (0 to 4 bars).
+* Next is a grid of buttons that give access to up to 4 configured [plugins]().  In this example there are two plugins ("Blynk Weather" and "Custom Layout"). The other two slots are not in use.
+* The next row of buttons allows you to change the brightness of the screen to Dim, Medium, or Bright. The brightness can also be changed from the [Web UI interactively](../README.md#home-page) or via a [schedule](../README.md#configure-display).
+* The next row of buttons are:
+  * Refresh: Pressing it will cause MultiMon to ask each printer for fresh status information. The Info Icon will flash on the screen while that is happening. 
+  * Calibrate:This button takes you to the [Calibration Screen](#calibration-screen) where the touch screen can be calibrated.
+  * Home: Navigates back to the home screen.
 
-![](images/ss/InfoScreen.png)
+![](images/ss/UtilityScreen.png)
 
 **Actions**:
 
 * Pressing any of the buttons causes the actions described above (refreshing printer data or setting the brightness)
-* Pressing anywhere else on the screen navigates back to the [Home Screen](#home-screen).
-* A long press anywhere else on the screen navigates to the [Calibration Screen](#calibration-screen)
 
 <a name="config-screen"></a>
 ### Config Screen
