@@ -143,7 +143,11 @@ To use this plugin you would have to have a data publisher (a weather system) th
 
 ## The Generic Plugin Example
 
-The generic plugin example shows how to create a custom screen with your own layout that displays existing data from the [system](#sysvalues). In this case, there is no code - just the JSON descriptor files. Some things to notice in the descriptor files:
+The generic plugin example shows how to create a custom screen with your own layout that displays existing data from the [system](#sysvalues). In this case, there is no code - just the JSON descriptor files.
+
+![](images/ss/GenericPluginScreen.png)
+
+Some things to notice in the descriptor files:
 
 * **plugin.json**:
   * The name specified here is the display name. It gets used in the [Utility screen](MultiMonGUI.md/#utility-screen) to label a button and the [plugin settings page](../Readme.md#configure-plugins) in the Web UI.
