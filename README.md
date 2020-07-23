@@ -237,6 +237,13 @@ The rest of the settings are as follows:
 - Weather Language: Language used for weather descriptions (e.g. Clouds, Mist, Rain)
 - Use Metric: Use metric or imperial units in the interface
 
+<a name="configure-plugins"></a>
+![](doc/images/ConfigurePlugins.png)  
+Use this menu item to configure the settings for any loaded plugins. The settings will vary completely depending on the type of plugin. You must be asked to configure things like API keys, refresh times, or names of devices. Each configured plugin will have a separate section on the page with it's own "Save" button. Hitting save will save the settings, but not leave the page as you may have other changes you'd like to make. An example of a plugin configuration page is shown below.
+
+![](doc/images/PluginPage.png)
+
+
 <a name="home-page"></a>
 ## Home Page
 

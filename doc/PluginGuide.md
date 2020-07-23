@@ -14,6 +14,7 @@ You can have many instances of the same type of plugin or of different types of 
 
 A plugin consists of a number of JSON descriptors described below, and optionally C++ code for any deeper customizations. To create a no-code plugin (called a Generic plugin), only the JSON files are needed.
 
+<a name="descriptors"></a>
 ### JSON Descriptors
 
 Each plugin requires 4 JSON descriptors. All descriptors for a plugin are placed in a subdirectory of `/data/plugins` which can have any name you'd like. The directory name is not germane to the plugin. The four JSON files are listed below and must have these names:
@@ -123,7 +124,14 @@ Any plugin (generic or custom) may access values made available by an app-wide d
 
 ## The Blynk Weather Plugin Example
 
-As mentioned above, the example included with *MultiMon* use Blynk to display weather station information. It is disabled by default and is enabled using the [Configure Display](#configure-display) page. The components of the example are``:
-
+The Blynk Weather Plugin is an example of a custom plugin that provides a new data source and custom plugin code. The new data source is for the [Blynk](https://blynk.io) service. In this example a weather station such as [JAWS](https://github.com/jpasqua/JAWS) writes readings like temperature and humidity to the Blynk service. The Blynk Weather plugin collects data from up to two weather stations and displays the information in a new screen:
 
 ![](images/ss/BlynkScreen.png)
+
+This plugin consists of a number of files:
+
+* `src/clients/BlynkClient.[cpp,h]`: The client code that reads data from the Blynk service that was written there by a weather station. Though BlynkClient is used by the BlynkWeather plugin, it can also be used by any plugin that wants to read arbitrary information from Blynk.
+* `src/plugins/BlynkPlugin.[cpp,h]`: The custom plugin code that manages settings and maps names to values. 
+* `data/plugins/blynk1/*.json`: The JSON plugin descriptors as [described above](#descriptors).
+
+This plugin has a number of settings that need to be specified by the user such as the Blynk IDs associated with the two weather stations and nicknames for each station that will be displayed in the GUI. The `form.json` file describes the web form that will be used to present the settings to the user. [jsonform](https://github.com/jsonform/jsonform) is a very rich tool that is well described on github. Please refer to its [wiki](https://github.com/jsonform/jsonform/wiki) to learn more. 
