@@ -31,7 +31,7 @@
       "color": "0xFFFFFF",
       "format": "%s",
       "type": "String",
-      "key": "$W.ldesc"
+      "key": "$W.desc"
     },
     {
       "x": 0, "y": 22,
