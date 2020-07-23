@@ -49,8 +49,8 @@ public:
   void logSettings();
 
   // ----- Settings
-  static const uint8_t MaxServers = 4;
-  PrinterSettings printer[MaxServers];
+  static const uint8_t MaxPrinters = 4;
+  PrinterSettings printer[MaxPrinters];
   uint32_t printerRefreshInterval = 10;
 
   // Display Options

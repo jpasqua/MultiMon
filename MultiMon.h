@@ -17,12 +17,12 @@
 
 namespace MultiMon {
   // ----- Constants
-  static const String VersionString = "0.7";
-  static const int MaxServers = 4;
+  static const String VersionString = "0.2.0";
+  static const int MaxPrinters = 4;
 
   // ----- State
   extern MMSettings settings;
-  extern PrintClient *printer[MultiMon::MaxServers];
+  extern PrintClient *printer[MultiMon::MaxPrinters];
   extern OWMClient *owmClient;
   extern PluginMgr pluginMgr;
   

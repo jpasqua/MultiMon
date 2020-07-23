@@ -103,7 +103,7 @@ static const int ClockAreaIndex = 5;
 TimeScreen::TimeScreen() {
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose(F("In TimeScreen Button Handler, id = %d"), id);
-    if (id < MultiMon::MaxServers) {
+    if (id < MultiMon::MaxPrinters) {
       if (MultiMon::settings.printer[id].isActive &&
           MultiMon::printer[id]->getState() > PrintClient::State::Operational)
         GUI::displayDetailScreen(id);
@@ -114,11 +114,11 @@ TimeScreen::TimeScreen() {
     if (id == WeatherAreaIndex) { GUI::displayWeatherScreen(); return; }
   };
 
-  nButtons = MultiMon::MaxServers + 2;  // The weather area, the clock face, and the printer status areas
+  nButtons = MultiMon::MaxPrinters + 2;  // The weather area, the clock face, and the printer status areas
                                         // are each a button.
   buttons = new Button[nButtons];
   uint16_t x = PB_XOrigin;
-  for (int i = 0; i < MultiMon::MaxServers; i++) {
+  for (int i = 0; i < MultiMon::MaxPrinters; i++) {
     buttons[i].init(x, PB_YOrigin, PB_Width, PB_Height, buttonHandler, i);
     x += PB_Width - PB_FrameSize;
   }
@@ -266,11 +266,11 @@ void TimeScreen::drawNextComplete(bool force) {
 void TimeScreen::drawPrinterNames(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
   uint16_t yPos = PB_YOrigin;
-  uint16_t xDelta = Screen::Width/MultiMon::MaxServers;
+  uint16_t xDelta = Screen::Width/MultiMon::MaxPrinters;
   uint16_t xPos = 0 + xDelta/2;
   tft.setTextDatum(BC_DATUM);
   tft.setTextColor(GUI::Color_NormalText);
-  for (int i = 0; i < MultiMon::MaxServers; i++) {
+  for (int i = 0; i < MultiMon::MaxPrinters; i++) {
     String name;
     if (!MultiMon::settings.printer[i].isActive) name = "";
     else name = MultiMon::settings.printer[i].nickname;
@@ -281,7 +281,7 @@ void TimeScreen::drawPrinterNames(bool force) {
 
 void TimeScreen::drawStatus(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
-  for (int i = 0; i < MultiMon::MaxServers; i++) {
+  for (int i = 0; i < MultiMon::MaxPrinters; i++) {
     PrintClient *printer = MultiMon::printer[i];
 
     if (!MultiMon::settings.printer[i].isActive) {

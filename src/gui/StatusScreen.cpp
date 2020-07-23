@@ -52,8 +52,8 @@ StatusScreen::StatusScreen() {
     GUI::displayHomeScreen();
   };
 
-  buttons = new Button[(nButtons = MultiMon::MaxServers)];
-  for (int i = 0; i < MultiMon::MaxServers; i++) {
+  buttons = new Button[(nButtons = MultiMon::MaxPrinters)];
+  for (int i = 0; i < MultiMon::MaxPrinters; i++) {
     buttons[i].init(i%2*160, (i>1)*120, 160, 120, buttonHandler, i);
   }
 }
@@ -63,7 +63,7 @@ void StatusScreen::display(bool activating) {
     tft.fillScreen(GUI::Color_Background);
 
     // Draw all the static elements
-    for (int i = 0; i < MultiMon::MaxServers; i++) {
+    for (int i = 0; i < MultiMon::MaxPrinters; i++) {
       displayStaticElements(i, activating);
     }
 
@@ -76,7 +76,7 @@ void StatusScreen::display(bool activating) {
     tft.drawRect(159,   0, 2, Screen::Height, GUI::Color_Border);
     tft.drawRect(318,   0, 2, Screen::Height, GUI::Color_Border);
   }
-  for (int i = 0; i < MultiMon::MaxServers; i++) {
+  for (int i = 0; i < MultiMon::MaxPrinters; i++) {
     displaySingleStatus(i, activating);
   }
   nextUpdateTime = millis() + 10 * 1000L;

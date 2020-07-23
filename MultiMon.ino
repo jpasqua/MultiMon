@@ -74,13 +74,13 @@
 namespace MultiMon {
   // ---- State
   MMSettings settings;
-  PrintClient *printer[MaxServers];
+  PrintClient *printer[MaxPrinters];
   OWMClient *owmClient;
   PluginMgr pluginMgr;
 
   namespace Internal {
     static const String SettingsFileName = "/settings.json";
-    String printerIPs[MaxServers];
+    String printerIPs[MaxPrinters];
 
     void cachePrinterIP(int i) {
       IPAddress printerIP;
@@ -116,9 +116,9 @@ namespace MultiMon {
     }
 
     void refreshPrinterData(bool force = false) {
-      static uint32_t lastUpdateTime[MultiMon::MaxServers] = {0, 0, 0, 0};
+      static uint32_t lastUpdateTime[MultiMon::MaxPrinters] = {0, 0, 0, 0};
 
-      for (int i = 0; i < MultiMon::MaxServers; i++) {
+      for (int i = 0; i < MultiMon::MaxPrinters; i++) {
         if (settings.printer[i].isActive) {
           uint32_t threshold = UINT32_MAX;
           // Randomize the refresh times a little so we aren't do all the updates
@@ -235,7 +235,7 @@ namespace MultiMon {
     }
 
     void prepPrintClients() {
-      for (int i = 0; i < MultiMon::MaxServers; i++) { activatePrinter(i); }
+      for (int i = 0; i < MultiMon::MaxPrinters; i++) { activatePrinter(i); }
     }
 
   } // ----- END: MultiMon::Internal namespace

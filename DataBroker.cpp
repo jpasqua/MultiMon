@@ -23,7 +23,7 @@ namespace DataBroker {
     void nextCompletion(String &printer, String &formattedTime, uint32_t &delta) {
       uint32_t minCompletion = UINT32_MAX;
       int printerWithNextCompletion;
-      for (int i = 0; i < MM::MaxServers; i++) {
+      for (int i = 0; i < MM::MaxPrinters; i++) {
         if (!MM::settings.printer[i].isActive) continue;
         if (MM::printer[i]->getState() == PrintClient::State::Printing) {
           uint32_t thisCompletion = MM::printer[i]->getPrintTimeLeft();

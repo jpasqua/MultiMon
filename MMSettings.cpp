@@ -84,7 +84,7 @@ void PrinterSettings::logSettings() {
 MMSettings::MMSettings() {
   version = MMSettings::CurrentVersion;
   maxFileSize = 2048;
-  for (int i = 0; i < MaxServers; i++) { printer[i].init(); }
+  for (int i = 0; i < MaxPrinters; i++) { printer[i].init(); }
   memset(&calibrationData[0], 0, sizeof(calibrationData));
   scheduleActive = true;
   morning.hr =  8; morning.min = 0; morning.brightness = 100;
@@ -96,7 +96,7 @@ void MMSettings::fromJSON(JsonDocument &doc) {
   int i = 0;
   for (JsonObjectConst os : osArray) {
     printer[i++].fromJSON(os);
-    if (i == MaxServers) break;
+    if (i == MaxPrinters) break;
   }
   printerRefreshInterval = doc[F("printerRefreshInterval")];
 
@@ -125,7 +125,7 @@ void MMSettings::fromJSON(JsonDocument &doc) {
 
 void MMSettings::toJSON(JsonDocument &doc) {
   JsonArray printerSettings = doc.createNestedArray(F("printerSettings"));
-  for (int i = 0; i < MaxServers; i++) {
+  for (int i = 0; i < MaxPrinters; i++) {
     printer[i].toJSON(printerSettings.createNestedObject());
   }
   doc[F("printerRefreshInterval")] = printerRefreshInterval;
@@ -158,7 +158,7 @@ void MMSettings::toJSON(JsonDocument &doc) {
 }
 
 void MMSettings::logSettings() {
-  for (int i = 0; i < MaxServers; i++) {
+  for (int i = 0; i < MaxPrinters; i++) {
     Log.verbose(F("Printer Settings %d"), i);
     printer[i].logSettings();
   }
