@@ -258,20 +258,21 @@ The home page for *MultiMon* (see below for screen shot) contains three primary 
 <a name="dev-info"></a>
 ## Operational Info for Developers
 
-Though it is not normally part of the main menu, a developer can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into their browser. If you wish, you can make it part of the main menu by uploading a `settings.json` file with an additional entry. To get the current settings file which you can then add to, see the [section below](#get-settings). Add the following line at the top level to enable the developer menu:
+Though it is not normally part of the main menu, you can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into your browser. If you wish, you can make it part of the main menu by uploading a `settings.json` file with an additional entry. Add the following line at the top level to enable the developer menu:
 
 ````
 ...
   "showDevMenu": true,
 ...
 ````  
+To get the current settings file which you can then add to, refer to the [section below](#get-settings).
 
 ### Mock (Simulated) Printer Operation
 
 The `/dev` page allows you to make any one of the printers a "mock" printer meaning that it will produce artificial values that mimic what a real printer might produce. This can be useful for testing, debugging, and tuning the GUI or WebUI. To make any of the configured printers act as a mock printer, just check the associated box and then `Save`. These settings will not take effect until the next time *MultiMon* boots.
 
 <a name="get-settings"></a>
-### Capturing the Current State
+### Capturing the Current Settings
 
 It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings as JSON` button which will go to a page with the JSON content. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`. If you save these settings as a file named `settings.json` and place it in your `data` directory, it can be uploaded to your device using `ESP8266 Sketch Data Uploader`. There is no need to do this, but developers may find it useful to easily switch between batches of settings.
 
@@ -284,7 +285,7 @@ Finally, the `/dev` page also has a `Request Reboot` button. If you press the bu
 ## Adding Screens
 To add a news Screen, you need to implment a new subclass of Screen that knows how to display itself (using the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI) library), and how to update itself on a periodic basis if the data it displays changes. The screen must also implement at least minimal navigation capability (i.e. a tap that takes the user to the next screen or back to the home screen). Look at some of the existing screens for examples.
 
-If you'd rather not deal with the graphics library yourself, you can create screens without code using the experimental [`FlexScreen`[(#dev-exp) mechanism described below.
+If you'd rather not deal with the graphics library yourself, you can create screens without code using the [plugin](#dev-exp) mechanism described below.
 
 **Implementation Note**: For a fairly [convoluted set of reasons](https://github.com/Bodmer/TFT_eSPI/issues/664), *MultiMon* has a wrapper for the `TFT_eSPI::setFreeFont` function. Though you can call `setFreeFont` directly, it will result in the code size growing significantly. As a result, you should use the wrapper functions (`GUI::Font:setUsingID`).
 

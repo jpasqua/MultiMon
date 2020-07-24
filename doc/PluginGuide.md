@@ -98,13 +98,14 @@ The elements are as follows:
   * S18, SB18, SO18, SBO18: 18 point Sans fonts in all styles
   * S24, SB24, SO24, SBO24: 24 point Sans fonts in all styles
   * D20, D72, D100: 7-Segment Digital Font in large sizes
-
-* `color`: *Required*. The color of the content of the field. This is a 24-bit (888) hex color specifier (not a name) which may begin with `#` or `0x`.
-* `format`: *Optional*. The format is used to display the content of the field. It is a `printf` style format. For example if the field is meant to display a temperature, then the format might be: `"Temp: %0.1fF"`. If the field is just a static label, then the format specifies the label. Note: while optional, if this is not supplied, then no content will be displayed other than a border if specified. 
-* `strokeWidth`: *Optional*. If supplied it specifies the size of a border to be drawn around (inside of) the bounding box. If not supplied, then no border will be drawn.
-* `type`: *Optional*. Specifies the type of the value to be displayed in the field. Allowed values are: `INT`, `FLOAT`,  `STRING`, `BOOL`, and `CLOCK`. `CLOCK` is a special value which substitutes the current time.
   
-  The `type` must correspond to the `format`. For example, if the `type` is `FLOAT`, then the `format` must include some variation of `%f`.
+  `font` may also be a number correspondig to a built-in font in the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI). If this item is omitted, it defaults to built-in font 2.
+* `color`: *Required*. The color of the content of the field. This is a 24-bit (888) hex color specifier (not a name) which may begin with `#` or `0x`.
+* `format`: *Required*. The format is used to display the content of the field. It is a `printf` style format. For example if the field is meant to display a temperature, then the format might be: `"Temp: %0.1fF"`. If the field is just a static label, then the format specifies the label. Note: while optional, if this is not supplied, then no content will be displayed other than a border if specified.   The `format` must correspond to the `type`. For example, if the `type` is `FLOAT`, then the `format` must include some variation of `%f`.
+* `strokeWidth`: *Optional*. If supplied it specifies the size of a border to be drawn around (inside of) the bounding box. If not supplied, then no border will be drawn.
+* `type`: *Optional*. Specifies the type of the value to be displayed in the field. Allowed values are: `INT`, `FLOAT`, `STRING`, `BOOL`, `CLOCK`, `PB` (progress bar). The last two are special types:
+  * `CLOCK`: No key needs to be specified. The value for this is the current time in the form of three values: Hour, minute, and second. A typical format might be `%2d:%02d`, which would display the hour and minute, or `%2d:%02d:%02d`, which would display the hour, minute, and seconds.
+  * `PB`: This type does not require a format. The value must be a percentage between 0.0 and 1.0. An item of this type will display a progress bar filled to the corresponding percentage. The specified color is used for the bar. The border and % value are shown in the default text color (white).
 * `key`: The name of a data value that should be supplied by the Plugin framework when the screen is displayed. Allowed values are defined by the custom Plugin code ***or*** a system value may be used (see [below]()). For example, a custom Plugin that reads sensor data might have a value called "stress". This name may be used as a key.
 
 <a name="sysvalues"></a>
