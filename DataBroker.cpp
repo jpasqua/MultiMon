@@ -20,6 +20,18 @@ namespace DataBroker {
   String EmptyString = "";
 
   namespace Printing {
+    void completionTime(String &formattedTime, uint32_t timeLeft) {
+      time_t theTime = now() + timeLeft;
+      formattedTime = String(dayShortStr(weekday(theTime)));
+      formattedTime += " ";
+      formattedTime += (MM::settings.use24Hour) ? hour(theTime) : hourFormat12(theTime);
+      formattedTime += ":";
+      int theMinute =  minute(theTime);
+      if (theMinute < 10) formattedTime += '0';
+      formattedTime += theMinute;
+      if (!MM::settings.use24Hour) formattedTime += isAM(theTime) ? "AM" : "PM";
+    }
+
     void nextCompletion(String &printer, String &formattedTime, uint32_t &delta) {
       uint32_t minCompletion = UINT32_MAX;
       int printerWithNextCompletion;
@@ -36,18 +48,10 @@ namespace DataBroker {
 
       if (minCompletion != UINT32_MAX) {
         PrinterSettings *ps = &MM::settings.printer[printerWithNextCompletion];
-        time_t theTime = now() + minCompletion;
 
-        delta = minCompletion;
         printer =  (ps->nickname.isEmpty()) ? formattedTime = ps->server : ps->nickname;
-        formattedTime = String(dayShortStr(weekday(theTime)));
-        formattedTime += " ";
-        formattedTime += (MM::settings.use24Hour) ? hour(theTime) : hourFormat12(theTime);
-        formattedTime += ":";
-        int theMinute =  minute(theTime);
-        if (theMinute < 10) formattedTime += '0';
-        formattedTime += theMinute;
-        if (!MM::settings.use24Hour) formattedTime += isAM(theTime) ? "AM" : "PM";
+        delta = minCompletion;
+        completionTime(formattedTime, delta);
       } else {
         printer = "";
         formattedTime = "";
@@ -57,7 +61,6 @@ namespace DataBroker {
   };
 
   String map(String& key) {
-Log.verbose("DataBroker::map(%s)", key.c_str());
     int length = key.length();
     if (length < 3) return EmptyString;
     if (key[0] != '$') return EmptyString;
@@ -78,9 +81,7 @@ Log.verbose("DataBroker::map(%s)", key.c_str());
       if (name.equalsIgnoreCase("temp")) return String(MM::owmClient->weather.readings.temp);
       if (name.equalsIgnoreCase("city")) return MM::owmClient->weather.location.city;
       if (name.equalsIgnoreCase("desc")) return MM::owmClient->weather.description.basic;
-      if (name.equalsIgnoreCase("ldesc")) {
-        return MM::owmClient->weather.description.longer;
-      }
+      if (name.equalsIgnoreCase("ldesc")) return MM::owmClient->weather.description.longer;
     } else if (prefix.equalsIgnoreCase("P")) {
       // Map printer related keys
       if (name.equalsIgnoreCase("next")) {
@@ -89,6 +90,31 @@ Log.verbose("DataBroker::map(%s)", key.c_str());
         Printing::nextCompletion(printer, formattedTime, delta);
         if (printer.isEmpty()) return "No print in progress";
         return printer + ": " + formattedTime;
+      }
+      if (isDigit(name[0]) && name[1] == '.') {
+        int index = (name[0] - '0') - 1;
+        if (index > MM::MaxPrinters) return EmptyString;
+        PrintClient *p = MM::printer[index];
+        PrinterSettings *ps = &MM::settings.printer[index];
+        name.remove(0, 2);
+        bool active = ps->isActive;
+
+        if (name.equalsIgnoreCase("name")) {
+          if (!ps->nickname.isEmpty()) { return ps->nickname; }
+          else if (!ps->server.isEmpty()) { return ps->server; }
+          else return "Inactive";
+        }
+
+        if (name.equalsIgnoreCase("pct")) {
+          if (active && p->getState() >= PrintClient::State::Complete) { return String((int)p->getPctComplete()); }
+          else return EmptyString;
+        }
+
+        if (name.equalsIgnoreCase("next")) {
+          if (!active) return EmptyString;
+          if (p->isPrinting()) { String s; Printing::completionTime(s, p->getPrintTimeLeft()); return s; }
+          else return EmptyString;
+        }
       }
     }
     return EmptyString;

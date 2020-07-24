@@ -45,6 +45,7 @@ FlexItem::Type mapType(String t) {
   if (t.equalsIgnoreCase(F("STRING"))) return FlexItem::Type::STRING;
   if (t.equalsIgnoreCase(F("BOOL"))) return FlexItem::Type::BOOL;
   if (t.equalsIgnoreCase(F("CLOCK"))) return FlexItem::Type::CLOCK;
+  if (t.equalsIgnoreCase(F("PB"))) return FlexItem::Type::PB;
   return FlexItem::Type::STRING;
 }
 
@@ -204,6 +205,17 @@ void FlexItem::fromJSON(JsonObjectConst& item) {
 }
 
 void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
+  String value = _isLiteral ? _key : vc(_key);
+
+  if (_dataType == FlexItem::Type::PB) {
+    Button b(_x, _y, _w, _h, NULL, 0);
+    b.drawProgress(
+      value.toFloat()/100.0, "", _font, _strokeWidth,
+      GUI::Color_Border, GUI::Color_NormalText, 
+      _color, bkg, true);
+    return;
+  }
+
   sprite->setColorDepth(1);
   sprite->createSprite(_w, _h);
   sprite->fillSprite(GUI::Mono_Background);
@@ -213,7 +225,6 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
     int bufSize = Screen::Width/6 + 1; // Assume 6 pixel spacing is smallest font
     char buf[bufSize];
 
-    String value = _isLiteral ? _key : vc(_key);
     switch (_dataType) {
       case FlexItem::Type::INT:
         sprintf(buf, fmt, value.toInt());
@@ -234,6 +245,7 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
       case FlexItem::Type::CLOCK:
         sprintf(buf, fmt, hourFormat12(), minute(), second());
         break;
+      case FlexItem::Type::PB: break; // ASSERT(Can't Happen)
     }
     if (_gfxFont >= 0) { GUI::Font::setUsingID(_gfxFont, sprite); }
     else { sprite->setTextFont(_font);}
