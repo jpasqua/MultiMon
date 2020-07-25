@@ -21,7 +21,7 @@
       "type": "String", "key": "$P.next"
     },
     {
-      "x": 0, "y": 50, "w": 320,  "h":79, "xOff": 160, "yOff": 40,
+      "x": 0, "y": 44, "w": 320,  "h":79, "xOff": 160, "yOff": 39,
       "justify": "MC", "font": "D72", "color": "0x00ff00", "format": "%2d:%02d",
       "type": "CLOCK"
     },
@@ -32,8 +32,8 @@
     },
     {
       "x": 100, "y": 132, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "strokeWidth": 1,
-      "type": "PB", "key": "$P.1.pct"
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "type": "STATUS", "key": "$P.1.status"
     },
     {
       "x": 215, "y": 132, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
@@ -47,8 +47,8 @@
     },
     {
       "x": 100, "y": 153, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "strokeWidth": 1,
-      "type": "PB", "key": "$P.2.pct"
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "type": "STATUS", "key": "$P.2.status"
     },
     {
       "x": 215, "y": 153, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
@@ -62,8 +62,8 @@
     },
     {
       "x": 100, "y": 174, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "strokeWidth": 1,
-      "type": "PB", "key": "$P.3.pct"
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "type": "STATUS", "key": "$P.3.status"
     },
     {
       "x": 215, "y": 174, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
@@ -77,8 +77,8 @@
     },
     {
       "x": 100, "y": 195, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "strokeWidth": 1,
-      "type": "PB", "key": "$P.4.pct"
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "type": "STATUS", "key": "$P.4.status"
     },
     {
       "x": 215, "y": 195, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
