@@ -110,6 +110,24 @@ namespace DataBroker {
           else return EmptyString;
         }
 
+        if (name.equalsIgnoreCase("status")) {
+          String ss = "Unused";
+          int pct = 100;
+          if (active) {
+            PrintClient::State state = p->getState();
+            switch (state) {
+              case PrintClient::State::Offline: ss = "Offline"; break;
+              case PrintClient::State::Operational: ss = "Online"; break;
+              case PrintClient::State::Complete: ss = "Complete"; break;
+              case PrintClient::State::Printing:
+                ss = "";  // When we have a non-zero percentage, that is the relevant status
+                pct = (int)p->getPctComplete();
+                break;
+            }
+          }
+         return String(pct) + '|' + ss;
+        }
+
         if (name.equalsIgnoreCase("next")) {
           if (!active) return EmptyString;
           if (p->isPrinting()) { String s; Printing::completionTime(s, p->getPrintTimeLeft()); return s; }

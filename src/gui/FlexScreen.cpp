@@ -45,7 +45,7 @@ FlexItem::Type mapType(String t) {
   if (t.equalsIgnoreCase(F("STRING"))) return FlexItem::Type::STRING;
   if (t.equalsIgnoreCase(F("BOOL"))) return FlexItem::Type::BOOL;
   if (t.equalsIgnoreCase(F("CLOCK"))) return FlexItem::Type::CLOCK;
-  if (t.equalsIgnoreCase(F("PB"))) return FlexItem::Type::PB;
+  if (t.equalsIgnoreCase(F("STATUS"))) return FlexItem::Type::STATUS;
   return FlexItem::Type::STRING;
 }
 
@@ -207,21 +207,10 @@ void FlexItem::fromJSON(JsonObjectConst& item) {
 void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
   String value = _isLiteral ? _key : vc(_key);
 
-  if (_dataType == FlexItem::Type::PB) {
-    Button b(_x, _y, _w, _h, NULL, 0);
-    b.drawProgress(
-      value.toFloat()/100.0, "", _font, _strokeWidth,
-      GUI::Color_Border, GUI::Color_NormalText, 
-      _color, bkg, true);
-    return;
-  }
-
-  sprite->setColorDepth(1);
-  sprite->createSprite(_w, _h);
-  sprite->fillSprite(GUI::Mono_Background);
 
   const char *fmt = _format.c_str();
   if (fmt[0] != 0) {
+    // TO DO: Use snprintf to determine the correct buffer size
     int bufSize = Screen::Width/6 + 1; // Assume 6 pixel spacing is smallest font
     char buf[bufSize];
 
@@ -245,8 +234,29 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
       case FlexItem::Type::CLOCK:
         sprintf(buf, fmt, hourFormat12(), minute(), second());
         break;
-      case FlexItem::Type::PB: break; // ASSERT(Can't Happen)
+      case FlexItem::Type::STATUS:
+        // A Status value consists of a number (often a status code) and a message
+        // The form is code|message
+        int index = value.indexOf('|');
+        if (index != -1) {
+          int code = value.substring(0, index).toInt();
+          value.remove(0, index+1);
+          if (strcasecmp(fmt, "#progress") == 0) {
+            Button b(_x, _y, _w, _h, NULL, 0);
+            b.drawProgress(
+              ((float)code)/100.0, value, _font, _strokeWidth,
+              GUI::Color_Border, GUI::Color_NormalText, 
+              _color, bkg, true);
+            return;
+          } else {
+            sprintf(buf, fmt, value.c_str(), code);
+          }
+        }
+        break;
     }
+    sprite->setColorDepth(1);
+    sprite->createSprite(_w, _h);
+    sprite->fillSprite(GUI::Mono_Background);
     if (_gfxFont >= 0) { GUI::Font::setUsingID(_gfxFont, sprite); }
     else { sprite->setTextFont(_font);}
     sprite->setTextColor(GUI::Mono_Foreground);
