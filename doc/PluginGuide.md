@@ -101,11 +101,13 @@ The elements are as follows:
   
   `font` may also be a number correspondig to a built-in font in the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI). If this item is omitted, it defaults to built-in font 2.
 * `color`: *Required*. The color of the content of the field. This is a 24-bit (888) hex color specifier (not a name) which may begin with `#` or `0x`.
-* `format`: *Required*. The format is used to display the content of the field. It is a `printf` style format. For example if the field is meant to display a temperature, then the format might be: `"Temp: %0.1fF"`. If the field is just a static label, then the format specifies the label. Note: while optional, if this is not supplied, then no content will be displayed other than a border if specified.   The `format` must correspond to the `type`. For example, if the `type` is `FLOAT`, then the `format` must include some variation of `%f`.
+* `format`: *Required*. The format is used to display the content of the field. It is a `printf` style format. For example if the field is meant to display a temperature, then the format might be: `"Temp: %0.1fF"`. If the field is just a static label, then the format specifies the label. Note: while optional, if this is not supplied, then no content will be displayed other than a border if specified.   The `format` must correspond to the `type`. For example, if the `type` is `FLOAT`, then the `format` must include some variation of `%f`. 
+  There are special values of the format string that begin with '#'. These format strings indicate that a a custom display element should be used rather than displaying the result textually. The current set of custom display elements are:
+  * `#progress`: Display a progress bar.
 * `strokeWidth`: *Optional*. If supplied it specifies the size of a border to be drawn around (inside of) the bounding box. If not supplied, then no border will be drawn.
 * `type`: *Optional*. Specifies the type of the value to be displayed in the field. Allowed values are: `INT`, `FLOAT`, `STRING`, `BOOL`, `CLOCK`, `PB` (progress bar). The last two are special types:
   * `CLOCK`: No key needs to be specified. The value for this is the current time in the form of three values: Hour, minute, and second. A typical format might be `%2d:%02d`, which would display the hour and minute, or `%2d:%02d:%02d`, which would display the hour, minute, and seconds.
-  * `PB`: This type does not require a format. The value must be a percentage between 0.0 and 1.0. An item of this type will display a progress bar filled to the corresponding percentage. The specified color is used for the bar. The border and % value are shown in the default text color (white).
+  * `STATUS`: A Status value consists of a number (often a status code) and a message. The form of the composite result is "code|message". The associated format must have the `%s` for the message before the `%d` for the code. For example: `"Error %s (%d)"`. A value of type `STATUS` may also be used in conjunction with the `#progress` format which will display a progress bar.
 * `key`: The name of a data value that should be supplied by the Plugin framework when the screen is displayed. Allowed values are defined by the custom Plugin code ***or*** a system value may be used (see [below]()). For example, a custom Plugin that reads sensor data might have a value called "stress". This name may be used as a key.
 
 <a name="sysvalues"></a>
@@ -124,9 +126,17 @@ Any plugin (generic or custom) may access values made available by an app-wide d
 | `$W.desc`   | STRING  | Short description of weather conditions  |
 | `$W.ldesc`  | STRING  | Longer description of weather conditions |
 | **Printers**   |   | |
-| `$P.next`  | STRING | A composite string giving the name of the printer that will complete a job next and the time at which it will be complete|             	|
+| `$P.name`  | STRING | Nickname of the printer. If no nickname was set, the hostname will be returned. This could be in the form of an IP address. |
+| `$P.next`  | STRING | A composite string giving the name of the printer that will complete a job next and the time at which it will be complete|
+| `$pct`  | INT | If the printer is active and printer, the returned INT will be the percentage complete (0-100). If the printer is either no active or not printing, an empty string will be returned. |
+| `$P.status`  | STATUS | The status of the printer and percent complete (0-100). If there is a print in progress, only the status part of the result will be empty and the percentage will reflect the percent complete. Otherwise the percentage will be 100 and the status will be either "Offline", "Online", or "Complete". |
 
-## The Blynk Weather Plugin Example
+
+## Plugin Examples
+
+MultiMon has two example plugins: one custom and one generic. All of the JSON descriptor files for these plugins are in the `data/plugins/` directory, but the settings files are named `sample.json` rather than `settings.json`. Without a valid settings file, neither will load. If you'd like to experiment with plugins, simply rename the `sample.json` to `settings.json`.
+
+### The Blynk Weather Plugin Example
 
 The Blynk Weather Plugin is an example of a custom plugin that provides a new data source and custom plugin code. The new data source is for the [Blynk](https://blynk.io) service. In this example a weather station such as [JAWS](https://github.com/jpasqua/JAWS) writes readings like temperature and humidity to the Blynk service. The Blynk Weather plugin collects data from up to two weather stations and displays the information in a new screen:
 
@@ -142,7 +152,7 @@ This plugin has a number of settings that need to be specified by the user such 
 
 To use this plugin you would have to have a data publisher (a weather system) that publishes data out to Blynk. However, it should be easily adapted to other sensor data that is available through that service.
 
-## The Generic Plugin Example
+### The Generic Plugin Example
 
 The generic plugin example shows how to create a custom screen with your own layout that displays existing data from the [system](#sysvalues). In this case, there is no code - just the JSON descriptor files.
 
