@@ -47,5 +47,7 @@ namespace Basics {
   inline float ft_to_in(float ft) { return ft / 12.0f; }
   inline float m_to_km(float m) { return m * 1.60934f; }
   inline float km_to_m(float km) { return km / 1.60934f; }
+
+  static String EmptyString("");
 };
 #endif  // Basics_h
