@@ -31,7 +31,6 @@ public:
   uint8_t _strokeWidth; 
 
   String _key;        // The key that will be used to get the value
-  bool _isLiteral;    // If true, the key is really a literal value
   Type _dataType;
 
   void display(uint16_t bkg, Basics::StringMapper vc);

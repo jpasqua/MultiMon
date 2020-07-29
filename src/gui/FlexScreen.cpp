@@ -49,19 +49,6 @@ FlexItem::Type mapType(String t) {
   return FlexItem::Type::STRING;
 }
 
-void mapKey(String input, String &key, bool &isLiteral) {
-  if (input.isEmpty()) {
-    isLiteral = true;
-    key = input;    
-  } else if (input[0] == '#') {
-    isLiteral = true;
-    key = input.substring(1);
-  } else {
-    isLiteral = false;
-    key = input;
-  }
-}
-
 uint8_t mapDatum(String justify) {
   if (justify.equalsIgnoreCase(F("TL"))) { return TL_DATUM;}
   if (justify.equalsIgnoreCase(F("TC"))) { return TC_DATUM;}
@@ -122,9 +109,7 @@ bool FlexScreen::init(
 void FlexScreen::display(bool activating) {
   if (activating) { tft.fillScreen(_bkg); }
   for (int i = 0; i < _nItems; i++) {
-    if (activating || !_items[i]._isLiteral) {
-      _items[i].display(_bkg, _mapper);
-    }
+    if (activating) { _items[i].display(_bkg, _mapper); }
   }
   lastDisplayTime = lastClockTime = millis();
 }
@@ -173,7 +158,7 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
 void FlexItem::fromJSON(JsonObjectConst& item) {
   // What it is...
   _dataType = mapType(item[F("type")].as<String>());
-  mapKey(String(item[F("key")]|""), _key, _isLiteral);
+  _key = item[F("key")].as<String>();
 
   // Where it goes...
   _x = item[F("x")]; _y = item[F("y")];
@@ -190,8 +175,7 @@ void FlexItem::fromJSON(JsonObjectConst& item) {
 }
 
 void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
-  String value = _isLiteral ? _key : mapper(_key);
-
+  String value = mapper(_key);
 
   const char *fmt = _format.c_str();
   if (fmt[0] != 0) {
@@ -200,15 +184,9 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
     char buf[bufSize];
 
     switch (_dataType) {
-      case FlexItem::Type::INT:
-        sprintf(buf, fmt, value.toInt());
-        break;
-      case FlexItem::Type::FLOAT:
-        sprintf(buf, fmt, value.toFloat());
-        break;
-      case FlexItem::Type::STRING:
-        sprintf(buf, fmt, value.c_str());
-        break;
+      case FlexItem::Type::INT: sprintf(buf, fmt, value.toInt()); break;
+      case FlexItem::Type::FLOAT: sprintf(buf, fmt, value.toFloat()); break;
+      case FlexItem::Type::STRING: sprintf(buf, fmt, value.c_str()); break;
       case FlexItem::Type::BOOL: {
         char c = value[0];
         bool bv = (c == 't' || c == 'T' || c == '1') ;
@@ -220,7 +198,7 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
         int secondDelim = value.lastIndexOf('|');
         int theHour = value.substring(0, firstDelim).toInt();
         int theMinute = value.substring(firstDelim+1, secondDelim).toInt();
-        int theSecond = value.substring(secondDelim).toInt();
+        int theSecond = value.substring(secondDelim+1).toInt();
         sprintf(buf, fmt, theHour, theMinute, theSecond);
         break;
       }
@@ -231,13 +209,14 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
         if (index != -1) {
           int code = value.substring(0, index).toInt();
           value.remove(0, index+1);
-          if (strcasecmp(fmt, "#progress") == 0) {
-            static String printing("Printing");
+          if (strncasecmp(fmt, "#progress", 9) == 0) {
+            String showPct = Basics::EmptyString;
+            if (fmt[9] == '|' && fmt[10] != 0) showPct = String(&fmt[10]);
             Button b(_x, _y, _w, _h, NULL, 0);
             b.drawProgress(
               ((float)code)/100.0, value, _font, _strokeWidth,
               GUI::Color_Border, GUI::Color_NormalText, 
-              _color, bkg, printing, true);
+              _color, bkg, showPct, true);
             return;
           } else {
             sprintf(buf, fmt, value.c_str(), code);
