@@ -265,15 +265,15 @@ namespace GUI {
 
   void displayPluginScreen() { display(pluginScreen); }
 
-  void displayFlexScreen(String name)  {
+  void displayFlexScreen(String screenID)  {
     for (int i = 0; i < nFlexScreens; i++) {
-      if (name.equalsIgnoreCase(flexScreens[i]->getName())) {
+      if (screenID.equalsIgnoreCase(flexScreens[i]->getScreenID())) {
         curScreen = flexScreens[i];
         curScreen->activate();
         return;
       }
     }
-    Log.error(F("Requesting a non-existent screen: %s"), name.c_str());
+    Log.error(F("Requesting a non-existent screen: %s"), screenID.c_str());
   }
 
   String createFlexScreen(
@@ -293,7 +293,7 @@ namespace GUI {
     }
 
     flexScreens[nFlexScreens++] = flexScreen;
-    return flexScreen->getName();
+    return flexScreen->getScreenID();
   }
 
   void showUpdatingIcon(uint16_t accentColor) { Internal::showUpdating(accentColor); }

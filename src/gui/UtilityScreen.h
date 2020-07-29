@@ -35,7 +35,7 @@ public:
 
       if (id < MaxPlugins) {
         Plugin *p = MultiMon::pluginMgr.getPlugin(id);
-        if (p && p->enabled()) { GUI::displayFlexScreen(p->getScreenName()); }
+        if (p && p->enabled()) { GUI::displayFlexScreen(p->getScreenID()); }
         return;
       }
 
