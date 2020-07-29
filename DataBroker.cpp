@@ -73,15 +73,14 @@ namespace DataBroker {
     if (prefix.equalsIgnoreCase("S")) {
       // Map system-related keys
       if (name.equalsIgnoreCase("time")) {
+        char timeValBuf[9];
         time_t theTime = now();
-        char buf[9];
-        snprintf(buf, 8, "%2d|%2d|%2d", hourFormat12(theTime), minute(theTime), second(theTime));
-        return String(buf);
+        sprintf(timeValBuf, "%2d|%2d|%2d", hourFormat12(theTime), minute(theTime), second(theTime));
+        return String(timeValBuf);
       }
       if (name.equalsIgnoreCase("author")) return String(F("Joe Pasqua"));
       if (name.equalsIgnoreCase("heap"))
         return ("Heap: Free="+String(ESP.getFreeHeap())+", Frag="+String(ESP.getHeapFragmentation())+"%");
-      // ...
     } else if (prefix.equalsIgnoreCase("W")) {
       // Map weather-related keys
       if (name.equalsIgnoreCase("temp")) return String(MM::owmClient->weather.readings.temp);
