@@ -1,18 +1,18 @@
 {
   "items": [
     {
-      "x": 0, "y": 0, "w": 106,  "h": 22, "xOff": 0, "yOff": 22,
-      "justify": "BL", "font": "S9", "color": "0xFFFFFF", "format": "%s",
+      "x": 0, "y": 0, "w": 136,  "h": 22, "xOff": 0, "yOff": 22,
+      "justify": "BL", "font": "2", "color": "0xFFFFFF", "format": "%s",
       "type": "String", "key": "$W.city"
     },
     {
-      "x": 106, "y": 0, "w": 106,  "h": 22, "xOff": 53, "yOff": 22,
-      "justify": "BC", "font": "SB9", "color": "0xFFFFFF", "format": "%0.1fF",
+      "x": 136, "y": 0, "w": 48,  "h": 22, "xOff": 38, "yOff": 22,
+      "justify": "BC", "font": "SB9", "color": "0x00FF00", "format": "%0.0fF",
       "type": "FLOAT", "key": "$W.temp"
     },
     {
-      "x": 212, "y": 0, "w": 106,  "h": 22, "xOff": 106, "yOff": 22,
-      "justify": "BR", "font": "S9", "color": "0xFFFFFF", "format": "%s",
+      "x": 184, "y": 0, "w": 136,  "h": 22, "xOff": 135, "yOff": 22,
+      "justify": "BR", "font": "2", "color": "0xFFFFFF", "format": "%s",
       "type": "String", "key": "$W.ldesc"
     },
     {
@@ -32,12 +32,12 @@
     },
     {
       "x": 100, "y": 132, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.1.status"
     },
     {
-      "x": 215, "y": 132, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
-      "justify": "BR", "font": "S9", "color": "0x00FF00", "format": "%s",
+      "x": 215, "y": 132, "w": 105,  "h": 22, "xOff": 106, "yOff": 11,
+      "justify": "MR", "font": "2", "color": "0x00FF00", "format": "%s",
       "type": "String", "key": "$P.1.next"
     },
     {
@@ -47,12 +47,12 @@
     },
     {
       "x": 100, "y": 153, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.2.status"
     },
     {
-      "x": 215, "y": 153, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
-      "justify": "BR", "font": "S9", "color": "0x00FF00", "format": "%s",
+      "x": 215, "y": 153, "w": 105,  "h": 22, "xOff": 106, "yOff": 11,
+      "justify": "MR", "font": "2", "color": "0x00FF00", "format": "%s",
       "type": "String", "key": "$P.2.next"
     },
     {
@@ -62,12 +62,12 @@
     },
     {
       "x": 100, "y": 174, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.3.status"
     },
     {
-      "x": 215, "y": 174, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
-      "justify": "BR", "font": "S9", "color": "0x00FF00", "format": "%s",
+      "x": 215, "y": 174, "w": 105,  "h": 22, "xOff": 106, "yOff": 11,
+      "justify": "MR", "font": "2", "color": "0x00FF00", "format": "%s",
       "type": "String", "key": "$P.3.next"
     },
     {
@@ -77,12 +77,12 @@
     },
     {
       "x": 100, "y": 195, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.4.status"
     },
     {
-      "x": 215, "y": 195, "w": 105,  "h": 22, "xOff": 106, "yOff": 22,
-      "justify": "BR", "font": "S9", "color": "0x00FF00", "format": "%s",
+      "x": 215, "y": 195, "w": 105,  "h": 22, "xOff": 106, "yOff": 11,
+      "justify": "MR", "font": "2", "color": "0x00FF00", "format": "%s",
       "type": "String", "key": "$P.4.next"
     },
     {
