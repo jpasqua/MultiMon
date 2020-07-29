@@ -205,7 +205,7 @@ void TimeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, fl
   buttons[i].drawProgress(
         pct, txt, PB_Font, PB_FrameSize,
         txtColor, GUI::Color_Border, barColor, GUI::Color_Background,
-        true);
+        Basics::EmptyString, true);
 }
 
 void TimeScreen::drawWeather(bool force) {

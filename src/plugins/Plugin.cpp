@@ -42,7 +42,7 @@ bool Plugin::init(String& name, String& pluginDir) {
     if (key[0] == '$') {
       return DataBroker::map(key);
     }
-    else return typeSpecificMapper(key);
+    return typeSpecificMapper(key);
   };
 
   // Create the FlexScreen UI
