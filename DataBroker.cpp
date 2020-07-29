@@ -72,6 +72,12 @@ namespace DataBroker {
 
     if (prefix.equalsIgnoreCase("S")) {
       // Map system-related keys
+      if (name.equalsIgnoreCase("time")) {
+        time_t theTime = now();
+        char buf[9];
+        snprintf(buf, 8, "%2d|%2d|%2d", hourFormat12(theTime), minute(theTime), second(theTime));
+        return String(buf);
+      }
       if (name.equalsIgnoreCase("author")) return String(F("Joe Pasqua"));
       if (name.equalsIgnoreCase("heap"))
         return ("Heap: Free="+String(ESP.getFreeHeap())+", Frag="+String(ESP.getHeapFragmentation())+"%");
@@ -110,6 +116,20 @@ namespace DataBroker {
           else return EmptyString;
         }
 
+        if (name.equalsIgnoreCase("state")) {
+          String ss = "Unused";
+          if (active) {
+            PrintClient::State state = p->getState();
+            switch (state) {
+              case PrintClient::State::Offline: ss = "Offline"; break;
+              case PrintClient::State::Operational: ss = "Online"; break;
+              case PrintClient::State::Complete: ss = "Complete"; break;
+              case PrintClient::State::Printing: ss = "Printing"; break;
+            }
+          }
+         return ss;
+        }
+
         if (name.equalsIgnoreCase("status")) {
           String ss = "Unused";
           int pct = 100;
@@ -119,10 +139,7 @@ namespace DataBroker {
               case PrintClient::State::Offline: ss = "Offline"; break;
               case PrintClient::State::Operational: ss = "Online"; break;
               case PrintClient::State::Complete: ss = "Complete"; break;
-              case PrintClient::State::Printing:
-                ss = "";  // When we have a non-zero percentage, that is the relevant status
-                pct = (int)p->getPctComplete();
-                break;
+              case PrintClient::State::Printing: ss = "Printing"; pct = (int)p->getPctComplete(); break;
             }
           }
          return String(pct) + '|' + ss;
