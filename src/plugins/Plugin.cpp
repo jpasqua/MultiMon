@@ -21,6 +21,7 @@
 #include <ArduinoJson.h>
 //                                  Local Includes
 #include "../../MultiMon.h"
+#include "../../DataBroker.h"
 #include "../gui/GUI.h"
 #include "PluginMgr.h"
 //--------------- End:    Includes ---------------------------------------------
@@ -35,13 +36,21 @@ bool Plugin::init(String& name, String& pluginDir) {
   _name = name;
   _pluginDir = pluginDir;
   if (!typeSpecificInit()) return false;
-  
+
+  _mapper = [&](String& key) -> String {
+    if (key.isEmpty()) return Basics::EmptyString;
+    if (key[0] == '$') {
+      return DataBroker::map(key);
+    }
+    else return typeSpecificMapper(key);
+  };
+
   // Create the FlexScreen UI
   DynamicJsonDocument* doc = PluginMgr::getDoc(_pluginDir + "/screen.json", MaxScreenDescriptorSize);
   if (doc == NULL) return false;
-  _screenName = GUI::createFlexScreen(*doc, getUIRefreshInterval(), _mapper);
+  _screenID = GUI::createFlexScreen(*doc, getUIRefreshInterval(), _mapper);
   delete doc;
-  return !_screenName.isEmpty();
+  return !_screenID.isEmpty();
 }
 
 void Plugin::getForm(String& form) {

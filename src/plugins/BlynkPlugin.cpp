@@ -139,19 +139,20 @@ bool BlynkPlugin::typeSpecificInit() {
   _enabled = settings.enabled;
   _pinVals = new String[settings.nPins];
 
-  _mapper = [&](String& key) -> String {
-      for (int i = 0; i < settings.nPins; i++) {
-        if (key == settings.pins[i]) return _pinVals[i];
-      }
-      if (key.startsWith("NN")) {
-        int whichNN = key.substring(2).toInt();
-        if (whichNN > 0 && whichNN <= settings.nBlynkIDs) return settings.nicknames[whichNN-1];
-        else return "";
-      }
-      return "";
-    };
 
   return true;
+}
+
+String BlynkPlugin::typeSpecificMapper(String& key) {
+  for (int i = 0; i < settings.nPins; i++) {
+    if (key == settings.pins[i]) return _pinVals[i];
+  }
+  if (key.startsWith("NN")) {
+    int whichNN = key.substring(2).toInt();
+    if (whichNN > 0 && whichNN <= settings.nBlynkIDs) return settings.nicknames[whichNN-1];
+    else return Basics::EmptyString;
+  }
+  return Basics::EmptyString;
 }
 
 void BlynkPlugin::refresh(bool force) {

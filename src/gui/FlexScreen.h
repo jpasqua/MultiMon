@@ -47,7 +47,7 @@ public:
       JsonObjectConst& screen,
       uint32_t refreshInterval,
       const Basics::StringMapper &vc);
-  String getName() { return _name; }
+  String getScreenID() { return _screenID; }
 
   // ----- Functions defined in Screen class
   void display(bool activating = false);
@@ -55,13 +55,13 @@ public:
 
 
 private:
-  FlexItem* _items;   // An array of items on the screen
-  uint8_t   _nItems;  // How many items there are
-  uint16_t  _bkg;     // Background color of the screen
-  String    _name;    // Name of the screen
-  uint32_t _refreshInterval;  // How often to refresh the display
-  Basics::StringMapper _vc;   // A function to call to get a value for an item
-  uint32_t  lastDisplayTime;  // Last time the display() function ran
+  FlexItem* _items;             // An array of items on the screen
+  uint8_t   _nItems;            // Number of items
+  uint16_t  _bkg;               // Background color of the screen
+  String    _screenID;          // String identifier of the screen - must be unique
+  uint32_t _refreshInterval;    // How often to refresh the display
+  Basics::StringMapper _mapper; // Maps a key from thee screen definition to a value
+  uint32_t  lastDisplayTime;    // Last time the display() function ran
   uint32_t  lastClockTime;
   FlexItem* _clock;
 

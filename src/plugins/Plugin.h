@@ -24,6 +24,7 @@ public:
   // Implemented by subclasses
   virtual ~Plugin() { }
   virtual bool typeSpecificInit() = 0;
+  virtual String typeSpecificMapper(String& key) = 0;
 	virtual void refresh(bool force = false) = 0;
   virtual void getSettings(String &settings) = 0;
   virtual void newSettings(String &settings) = 0;
@@ -36,8 +37,8 @@ public:
   void getForm(String& form);
     // Return a serialized version of the JSON doc representing the screen
   String getName() { return _name; }
-    // Return a serialized version of the JSON doc representing the settings
-  String getScreenName() { return _screenName; }
+    // Return the UI name of the plugin
+  String getScreenID() { return _screenID; }
     // Return the name of the associated screen
   bool enabled() { return _enabled; }
     // Is this plugin enabled?
@@ -50,13 +51,11 @@ protected:
   bool _enabled;
     // Is this plugin enabled. This may always be true, may be a setting, or may be
     // set based on some operational parameters
-  Basics::StringMapper _mapper;
-    // Implemented by the concrete subclass. Maps names in the UI description
-    // to values provided by one or more data sources
-  String _screenName;
+  String _screenID;
 
 private:
   static const uint32_t MaxScreenDescriptorSize = 6*1024;
+  Basics::StringMapper _mapper;
 };
 
 #endif // Plugin_h

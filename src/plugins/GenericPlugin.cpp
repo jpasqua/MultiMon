@@ -94,13 +94,12 @@ bool GenericPlugin::typeSpecificInit() {
 
   _enabled = settings.enabled;
 
-  _mapper = [&](String& key) -> String {
-    // TO DO: map to global content
-    (void)key;  // Avoid compiler warning
-    return "";    
-  };
-
   return true;
+}
+
+String GenericPlugin::typeSpecificMapper(String& key) {
+  (void)key;  // Unused parameter;
+  return Basics::EmptyString;
 }
 
 void GenericPlugin::refresh(bool force) {

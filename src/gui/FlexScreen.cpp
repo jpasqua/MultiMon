@@ -102,14 +102,14 @@ FlexScreen::~FlexScreen() {
 bool FlexScreen::init(
     JsonObjectConst& screen,
     uint32_t refreshInterval,
-    const Basics::StringMapper &vc) {
+    const Basics::StringMapper &mapper) {
 
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose(F("In Flex Screen Button Handler, id = %d, type = %d"), id, type);
     GUI::displayHomeScreen();
   };
 
-  _vc = vc;
+  _mapper = mapper;
   _refreshInterval = refreshInterval;
 
   buttons = new Button[(nButtons = 1)];
@@ -120,35 +120,20 @@ bool FlexScreen::init(
 }
 
 void FlexScreen::display(bool activating) {
-  auto mapper = [&](String& key) -> String {
-    if (key.isEmpty()) return "";
-    if (key.equals(F("SCREEN_NAME"))) return _name;
-    if (key[0] == '$') {
-Log.verbose("FlexScreen::display, key = %s", key.c_str());
-      return DataBroker::map(key);
-    }
-    else return _vc(key);
-  };
-
   if (activating) { tft.fillScreen(_bkg); }
   for (int i = 0; i < _nItems; i++) {
     if (activating || !_items[i]._isLiteral) {
-      _items[i].display(_bkg, mapper);
+      _items[i].display(_bkg, _mapper);
     }
   }
   lastDisplayTime = lastClockTime = millis();
-}
-
-String nullMapper(String& k) {
-  (void)k;  // Avoid warning for unused parameter
-  return "";
 }
 
 void FlexScreen:: processPeriodicActivity() {
   uint32_t curMillis = millis();
   if (curMillis - lastDisplayTime > _refreshInterval) display(false);
   else if (_clock != NULL  && (curMillis - lastClockTime > 1000L)) {
-    _clock->display(_bkg, nullMapper);
+    _clock->display(_bkg, _mapper);
     lastClockTime = curMillis;
   }
 }
@@ -173,7 +158,7 @@ bool FlexScreen::fromJSON(JsonObjectConst& screen) {
   }
 
   _bkg = mapColor(screen[F("bkg")].as<String>());
-  _name = screen[F("name")].as<String>();
+  _screenID = screen[F("screenID")].as<String>();
 
   return true;
 }
@@ -204,8 +189,8 @@ void FlexItem::fromJSON(JsonObjectConst& item) {
   _strokeWidth = item[F("strokeWidth")];
 }
 
-void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
-  String value = _isLiteral ? _key : vc(_key);
+void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
+  String value = _isLiteral ? _key : mapper(_key);
 
 
   const char *fmt = _format.c_str();
@@ -224,16 +209,21 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
       case FlexItem::Type::STRING:
         sprintf(buf, fmt, value.c_str());
         break;
-      case FlexItem::Type::BOOL:
-        {
-          char c = value[0];
-          bool bv = (c == 't' || c == 'T' || c == '1') ;
-          sprintf(buf, fmt, bv ? F("True") : F("False"));
-          break;
-        }
-      case FlexItem::Type::CLOCK:
-        sprintf(buf, fmt, hourFormat12(), minute(), second());
+      case FlexItem::Type::BOOL: {
+        char c = value[0];
+        bool bv = (c == 't' || c == 'T' || c == '1') ;
+        sprintf(buf, fmt, bv ? F("True") : F("False"));
         break;
+      }
+      case FlexItem::Type::CLOCK: {
+        int firstDelim = value.indexOf('|');
+        int secondDelim = value.lastIndexOf('|');
+        int theHour = value.substring(0, firstDelim).toInt();
+        int theMinute = value.substring(firstDelim+1, secondDelim).toInt();
+        int theSecond = value.substring(secondDelim).toInt();
+        sprintf(buf, fmt, theHour, theMinute, theSecond);
+        break;
+      }
       case FlexItem::Type::STATUS:
         // A Status value consists of a number (often a status code) and a message
         // The form is code|message
@@ -242,11 +232,12 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper vc) {
           int code = value.substring(0, index).toInt();
           value.remove(0, index+1);
           if (strcasecmp(fmt, "#progress") == 0) {
+            static String printing("Printing");
             Button b(_x, _y, _w, _h, NULL, 0);
             b.drawProgress(
               ((float)code)/100.0, value, _font, _strokeWidth,
               GUI::Color_Border, GUI::Color_NormalText, 
-              _color, bkg, true);
+              _color, bkg, printing, true);
             return;
           } else {
             sprintf(buf, fmt, value.c_str(), code);
