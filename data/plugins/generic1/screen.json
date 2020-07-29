@@ -23,7 +23,7 @@
     {
       "x": 0, "y": 44, "w": 320,  "h":79, "xOff": 160, "yOff": 39,
       "justify": "MC", "font": "D72", "color": "0x00ff00", "format": "%2d:%02d",
-      "type": "CLOCK"
+      "type": "CLOCK", "key": "$S.time"
     },
     {
       "x": 0, "y": 132, "w": 90,  "h": 22, "xOff": 0, "yOff": 11,
@@ -97,5 +97,5 @@
     }
   ],
   "bkg": "0x000000",
-  "name": "Mix1"
+  "screenID": "Mix1"
 }
