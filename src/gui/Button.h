@@ -76,7 +76,7 @@ public:
   // @param pct         The progess to be reflected in the bar (0.0-1.0).
   // @param label       The text to be displayed. It is the callers responsibility to ensure
   //                    it will fit within the bounds of the button. It will be drawn middle center.
-  //                    If the label is empty, the pct will be drawn (0% - 100%)
+  //                    If label is equal to showPct, then the pct will be drawn rather than the label
   // @param font        The font that will be used to draw the label
   // @param borderSize  The size in pixels of the border
   // @param labelColor  The color to be used to draw the label
@@ -85,9 +85,9 @@ public:
   // @param bgColor     The color to be used for the unfilled part of the progress bar
   // @param buffer      Should this be buffered offscreen then copied to the display
   void drawProgress(
-        float pct, String label, uint8_t font, uint8_t borderSize,
+        float pct, String &label, uint8_t font, uint8_t borderSize,
         uint16_t labelColor, uint16_t borderColor,
-        uint16_t barColor, uint16_t bgColor,
+        uint16_t barColor, uint16_t bgColor, String &showPct,
         bool buffer = false);
 
 private:

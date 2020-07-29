@@ -83,11 +83,11 @@ void Button::drawSimple(
 }
 
 void Button::drawProgress(
-      float pct, String label, uint8_t font, uint8_t borderSize,
+      float pct, String &label, uint8_t font, uint8_t borderSize,
       uint16_t labelColor, uint16_t borderColor,
-      uint16_t barColor, uint16_t bgColor,
+      uint16_t barColor, uint16_t bgColor, String &showPct,
       bool buffer) {
-  String note = (label.isEmpty()) ? String((int)(pct*100)) + "%" : label;
+  String note = (label == showPct) ? String((int)(pct*100)) + "%" : label;
   if (buffer) {
     static const uint8_t BackgroundIndex = 0;
     static const uint8_t BarIndex = 1;
