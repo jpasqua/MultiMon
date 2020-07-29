@@ -20,7 +20,7 @@ namespace DataBroker {
     void nextCompletion(String &printer, String &formattedTime, uint32_t &delta);
   };
 
-  String map(String& key);
+  void map(const String& key, String& value);
 };
 
 #endif  // DataBroker_h

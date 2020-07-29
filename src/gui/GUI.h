@@ -65,7 +65,7 @@ namespace GUI {
   String createFlexScreen(
       JsonDocument &doc,
       uint32_t refreshInterval,
-      const Basics::StringMapper &vc);
+      const Basics::ReferenceMapper &mapper);
 
   void displayHomeScreen();
   void displayCalibrationScreen();

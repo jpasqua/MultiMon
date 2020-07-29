@@ -15,6 +15,7 @@
 namespace Basics {
   // ----- Basic Types
   typedef std::function<String(String&)> StringMapper;
+  typedef std::function<void(const String&, String&)> ReferenceMapper;
 
   // ----- Time Related Constants
   static const uint32_t  MillisPerSecond = 1000L;

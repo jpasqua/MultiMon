@@ -37,12 +37,10 @@ bool Plugin::init(String& name, String& pluginDir) {
   _pluginDir = pluginDir;
   if (!typeSpecificInit()) return false;
 
-  _mapper = [&](String& key) -> String {
-    if (key.isEmpty()) return Basics::EmptyString;
-    if (key[0] == '$') {
-      return DataBroker::map(key);
-    }
-    return typeSpecificMapper(key);
+  _mapper = [&](const String& key, String &value) -> void {
+    if (key.isEmpty()) return;
+    if (key[0] == '$') { DataBroker::map(key, value); return; }
+    else typeSpecificMapper(key, value);;
   };
 
   // Create the FlexScreen UI

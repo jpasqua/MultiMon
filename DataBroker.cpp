@@ -60,12 +60,12 @@ namespace DataBroker {
     }
   };
 
-  String map(String& key) {
+  // Upon entering this function, value is an empty String
+  void map(const String& key, String& value) {
     int length = key.length();
-    if (length < 3) return EmptyString;
-    if (key[0] != '$') return EmptyString;
+    if (length < 3 || key[0] != '$') return;
     int index = key.indexOf('.');
-    if (index < 1 || index == length - 1) return EmptyString;
+    if (index < 1 || index == length - 1) return;
 
     String prefix = key.substring(1, index);
     String name = key.substring(index+1);
@@ -76,81 +76,90 @@ namespace DataBroker {
         char timeValBuf[9];
         time_t theTime = now();
         sprintf(timeValBuf, "%2d|%2d|%2d", hourFormat12(theTime), minute(theTime), second(theTime));
-        return String(timeValBuf);
+        value += timeValBuf;
+        return;
       }
-      if (name.equalsIgnoreCase("author")) return String(F("Joe Pasqua"));
-      if (name.equalsIgnoreCase("heap"))
-        return ("Heap: Free="+String(ESP.getFreeHeap())+", Frag="+String(ESP.getHeapFragmentation())+"%");
+      if (name.equalsIgnoreCase("author")) value = F("Joe Pasqua");
+      if (name.equalsIgnoreCase("heap")) {
+        value += F("Heap: Free=");
+        value += ESP.getFreeHeap();
+        value += ", Frag=";
+        value += ESP.getHeapFragmentation();
+        value += '%';
+        return;
+      }
     } else if (prefix.equalsIgnoreCase("W")) {
       // Map weather-related keys
-      if (name.equalsIgnoreCase("temp")) return String(MM::owmClient->weather.readings.temp);
-      if (name.equalsIgnoreCase("city")) return MM::owmClient->weather.location.city;
-      if (name.equalsIgnoreCase("desc")) return MM::owmClient->weather.description.basic;
-      if (name.equalsIgnoreCase("ldesc")) return MM::owmClient->weather.description.longer;
+      if (name.equalsIgnoreCase("temp")) value += MM::owmClient->weather.readings.temp; return;
+      if (name.equalsIgnoreCase("city")) value += MM::owmClient->weather.location.city; return;
+      if (name.equalsIgnoreCase("desc")) value += MM::owmClient->weather.description.basic; return;
+      if (name.equalsIgnoreCase("ldesc")) value += MM::owmClient->weather.description.longer; return;
     } else if (prefix.equalsIgnoreCase("P")) {
       // Map printer related keys
       if (name.equalsIgnoreCase("next")) {
         uint32_t delta;
         String printer, formattedTime;
         Printing::nextCompletion(printer, formattedTime, delta);
-        if (printer.isEmpty()) return "No print in progress";
-        return printer + ": " + formattedTime;
+        if (printer.isEmpty()) value += F("No print in progress");
+        value += printer; value += ": "; value += formattedTime;
+        return;
       }
       if (isDigit(name[0]) && name[1] == '.') {
         int index = (name[0] - '0') - 1;
-        if (index > MM::MaxPrinters) return EmptyString;
+        if (index > MM::MaxPrinters) return;
         PrintClient *p = MM::printer[index];
         PrinterSettings *ps = &MM::settings.printer[index];
         name.remove(0, 2);
         bool active = ps->isActive;
 
         if (name.equalsIgnoreCase("name")) {
-          if (!ps->nickname.isEmpty()) { return ps->nickname; }
-          else if (!ps->server.isEmpty()) { return ps->server; }
-          else return "Inactive";
+          if (!ps->nickname.isEmpty()) { value += ps->nickname; }
+          else if (!ps->server.isEmpty()) { value += ps->server; }
+          else value += "Inactive";
+          return;
         }
 
         if (name.equalsIgnoreCase("pct")) {
-          if (active && p->getState() >= PrintClient::State::Complete) { return String((int)p->getPctComplete()); }
-          else return EmptyString;
+          if (active && p->getState() >= PrintClient::State::Complete) { value += (int)(p->getPctComplete()); }
+          return;
         }
 
         if (name.equalsIgnoreCase("state")) {
-          String ss = "Unused";
           if (active) {
-            PrintClient::State state = p->getState();
-            switch (state) {
-              case PrintClient::State::Offline: ss = "Offline"; break;
-              case PrintClient::State::Operational: ss = "Online"; break;
-              case PrintClient::State::Complete: ss = "Complete"; break;
-              case PrintClient::State::Printing: ss = "Printing"; break;
+            switch (p->getState()) {
+              case PrintClient::State::Offline: value += F("Offline"); break;
+              case PrintClient::State::Operational: value += F("Online"); break;
+              case PrintClient::State::Complete: value += F("Complete"); break;
+              case PrintClient::State::Printing: value += F("Printing"); break;
             }
-          }
-         return ss;
+          } else value += F("Unused");
+         return;
         }
 
         if (name.equalsIgnoreCase("status")) {
-          String ss = "Unused";
           int pct = 100;
           if (active) {
-            PrintClient::State state = p->getState();
-            switch (state) {
-              case PrintClient::State::Offline: ss = "Offline"; break;
-              case PrintClient::State::Operational: ss = "Online"; break;
-              case PrintClient::State::Complete: ss = "Complete"; break;
-              case PrintClient::State::Printing: ss = "Printing"; pct = (int)p->getPctComplete(); break;
+            switch (p->getState()) {
+              case PrintClient::State::Offline: value += F("Offline"); break;
+              case PrintClient::State::Operational: value += F("Online"); break;
+              case PrintClient::State::Complete: value += F("Complete"); break;
+              case PrintClient::State::Printing:
+                value += "Printing";
+                pct = (int)p->getPctComplete();
+                break;
             }
-          }
-         return String(pct) + '|' + ss;
+          } else value += F("Unused");
+          value += '|'; value += pct;
+          return;
         }
 
         if (name.equalsIgnoreCase("next")) {
-          if (!active) return EmptyString;
-          if (p->isPrinting()) { String s; Printing::completionTime(s, p->getPrintTimeLeft()); return s; }
-          else return EmptyString;
+          if (!active) return;
+          if (p->isPrinting()) Printing::completionTime(value, p->getPrintTimeLeft());
+          return;
         }
       }
     }
-    return EmptyString;
+    return;
   }
 };

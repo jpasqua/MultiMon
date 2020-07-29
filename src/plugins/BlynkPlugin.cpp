@@ -143,16 +143,14 @@ bool BlynkPlugin::typeSpecificInit() {
   return true;
 }
 
-String BlynkPlugin::typeSpecificMapper(String& key) {
+void BlynkPlugin::typeSpecificMapper(const String& key, String& value) {
   for (int i = 0; i < settings.nPins; i++) {
-    if (key == settings.pins[i]) return _pinVals[i];
+    if (key == settings.pins[i]) { value = _pinVals[i]; return; }
   }
   if (key.startsWith("NN")) {
     int whichNN = key.substring(2).toInt();
-    if (whichNN > 0 && whichNN <= settings.nBlynkIDs) return settings.nicknames[whichNN-1];
-    else return Basics::EmptyString;
+    if (whichNN > 0 && whichNN <= settings.nBlynkIDs) { value = settings.nicknames[whichNN-1]; }
   }
-  return Basics::EmptyString;
 }
 
 void BlynkPlugin::refresh(bool force) {

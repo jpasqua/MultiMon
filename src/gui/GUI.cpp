@@ -279,7 +279,7 @@ namespace GUI {
   String createFlexScreen(
       JsonDocument &doc,
       uint32_t refreshInterval,
-      const Basics::StringMapper &vc) {
+      const Basics::ReferenceMapper &mapper) {
     if (nFlexScreens == MaxFlexScreens) {
       Log.warning(F("Maximum number of FlexScreens exceeded"));
       return "";
@@ -287,7 +287,7 @@ namespace GUI {
 
     FlexScreen *flexScreen = new FlexScreen();
     JsonObjectConst descriptor = doc.as<JsonObjectConst>();
-    if (!flexScreen->init(descriptor, refreshInterval, vc)) {
+    if (!flexScreen->init(descriptor, refreshInterval, mapper)) {
       delete flexScreen;
       return "";
     }

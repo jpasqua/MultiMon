@@ -39,7 +39,7 @@ public:
 
   ~GenericPlugin();
   bool typeSpecificInit();
-  String typeSpecificMapper(String& key);
+  void typeSpecificMapper(const String& key, String& value);
   void refresh(bool force = false);
   void getSettings(String& serializedSettings);
   void newSettings(String& serializedSettings);

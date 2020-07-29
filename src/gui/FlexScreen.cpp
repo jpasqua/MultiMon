@@ -89,7 +89,7 @@ FlexScreen::~FlexScreen() {
 bool FlexScreen::init(
     JsonObjectConst& screen,
     uint32_t refreshInterval,
-    const Basics::StringMapper &mapper) {
+    const Basics::ReferenceMapper &mapper) {
 
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose(F("In Flex Screen Button Handler, id = %d, type = %d"), id, type);
@@ -174,8 +174,9 @@ void FlexItem::fromJSON(JsonObjectConst& item) {
   _strokeWidth = item[F("strokeWidth")];
 }
 
-void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
-  String value = mapper(_key);
+void FlexItem::display(uint16_t bkg, Basics::ReferenceMapper mapper) {
+  String value;
+  mapper(_key, value);
 
   const char *fmt = _format.c_str();
   if (fmt[0] != 0) {
@@ -207,14 +208,14 @@ void FlexItem::display(uint16_t bkg, Basics::StringMapper mapper) {
         // The form is code|message
         int index = value.indexOf('|');
         if (index != -1) {
-          int code = value.substring(0, index).toInt();
-          value.remove(0, index+1);
+          String msg = value.substring(0, index);
+          int code = value.substring(index+1).toInt();
           if (strncasecmp(fmt, "#progress", 9) == 0) {
             String showPct = Basics::EmptyString;
             if (fmt[9] == '|' && fmt[10] != 0) showPct = String(&fmt[10]);
             Button b(_x, _y, _w, _h, NULL, 0);
             b.drawProgress(
-              ((float)code)/100.0, value, _font, _strokeWidth,
+              ((float)code)/100.0, msg, _font, _strokeWidth,
               GUI::Color_Border, GUI::Color_NormalText, 
               _color, bkg, showPct, true);
             return;

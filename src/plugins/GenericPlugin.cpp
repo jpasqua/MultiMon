@@ -97,9 +97,9 @@ bool GenericPlugin::typeSpecificInit() {
   return true;
 }
 
-String GenericPlugin::typeSpecificMapper(String& key) {
-  (void)key;  // Unused parameter;
-  return Basics::EmptyString;
+void GenericPlugin::typeSpecificMapper(const String& key, String& value) {
+  (void)key;    // Unused parameter;
+  (void)value;  // Unused parameter;
 }
 
 void GenericPlugin::refresh(bool force) {

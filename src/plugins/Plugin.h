@@ -24,7 +24,7 @@ public:
   // Implemented by subclasses
   virtual ~Plugin() { }
   virtual bool typeSpecificInit() = 0;
-  virtual String typeSpecificMapper(String& key) = 0;
+  virtual void typeSpecificMapper(const String& key, String &value) = 0;
 	virtual void refresh(bool force = false) = 0;
   virtual void getSettings(String &settings) = 0;
   virtual void newSettings(String &settings) = 0;
@@ -55,7 +55,7 @@ protected:
 
 private:
   static const uint32_t MaxScreenDescriptorSize = 6*1024;
-  Basics::StringMapper _mapper;
+  Basics::ReferenceMapper _mapper;
 };
 
 #endif // Plugin_h

@@ -33,7 +33,7 @@ public:
   String _key;        // The key that will be used to get the value
   Type _dataType;
 
-  void display(uint16_t bkg, Basics::StringMapper vc);
+  void display(uint16_t bkg, Basics::ReferenceMapper mapper);
 };
 
 
@@ -45,7 +45,7 @@ public:
   bool init(
       JsonObjectConst& screen,
       uint32_t refreshInterval,
-      const Basics::StringMapper &vc);
+      const Basics::ReferenceMapper &mapper);
   String getScreenID() { return _screenID; }
 
   // ----- Functions defined in Screen class
@@ -59,7 +59,7 @@ private:
   uint16_t  _bkg;               // Background color of the screen
   String    _screenID;          // String identifier of the screen - must be unique
   uint32_t _refreshInterval;    // How often to refresh the display
-  Basics::StringMapper _mapper; // Maps a key from thee screen definition to a value
+  Basics::ReferenceMapper _mapper; // Maps a key from thee screen definition to a value
   uint32_t  lastDisplayTime;    // Last time the display() function ran
   uint32_t  lastClockTime;
   FlexItem* _clock;
