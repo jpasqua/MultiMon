@@ -27,7 +27,7 @@ Each plugin requires 4 JSON descriptors. All descriptors for a plugin are placed
 	* How often to refresh the UI
 	* A representation of the units of the refresh interval (i.e. is it seconds, minutes, etc.)
 * **form.json**: A [jsonform](https://github.com/jsonform/jsonform) descriptor that is used by the Web UI to allow the user to display and edit the settings. Using this mechanism, a plugin can augment *MultiMon*'s Web UI without creating a new HTML template or writing custom code.
-* **screen.json**: A description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. FlexScreen can display things like floats, ints, and string using a format you specify. It can also display more complex things like a clock that automatically updates itself.
+* **screen.json**: A description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. FlexScreen can display things like floats, ints, and string using a format you specify. It can also display more complex things like a progreess/status bar. At the moment, that's the only complex thing.
 
 ### Custom Code
 
@@ -105,9 +105,12 @@ The elements are as follows:
   There are special values of the format string that begin with '#'. These format strings indicate that a a custom display element should be used rather than displaying the result textually. The current set of custom display elements are:
   * `#progress`: Display a progress bar.
 * `strokeWidth`: *Optional*. If supplied it specifies the size of a border to be drawn around (inside of) the bounding box. If not supplied, then no border will be drawn.
-* `type`: *Optional*. Specifies the type of the value to be displayed in the field. Allowed values are: `INT`, `FLOAT`, `STRING`, `BOOL`, `CLOCK`, `PB` (progress bar). The last two are special types:
-  * `CLOCK`: No key needs to be specified. The value for this is the current time in the form of three values: Hour, minute, and second. A typical format might be `%2d:%02d`, which would display the hour and minute, or `%2d:%02d:%02d`, which would display the hour, minute, and seconds.
-  * `STATUS`: A Status value consists of a number (often a status code) and a message. The form of the composite result is "code|message". The associated format must have the `%s` for the message before the `%d` for the code. For example: `"Error %s (%d)"`. A value of type `STATUS` may also be used in conjunction with the `#progress` format which will display a progress bar.
+* `type`: *Optional*. Specifies the type of the value to be displayed in the field.
+  * Allowed values are: `INT`, `FLOAT`, `STRING`, `BOOL`.
+  * All of the previous types refer to single values. There are a few pre-defined types which are composite values:
+      * `CLOCK`: This is a composite of three INT values representing an hour, minute, and second. A value of this type should be used with a format such as `%2d:%02d:%02d`, which would display the hour, minute, and seconds. You could also use `%2d:%02d`, which would display only the hour and minute.
+      * `STATUS`: This composite type consists of an `INT` and a `STRING`. For example they might be a status code and a message. The associated format must have the `%s` for the message before the `%d` for the code. For example: `"Error %s (%d)"`.
+      * A value of this type may also be used in conjunction with the `#progress` format which will display a progress bar.
 * `key`: The name of a data value that should be supplied by the Plugin framework when the screen is displayed. Allowed values are defined by the custom Plugin code ***or*** a system value may be used (see [below]()). For example, a custom Plugin that reads sensor data might have a value called "stress". This name may be used as a key.
 
 <a name="sysvalues"></a>
@@ -121,15 +124,17 @@ Any plugin (generic or custom) may access values made available by an app-wide d
 | **System**    |         |	             |
 | `$S.author` | STRING  | MultiMon's author                 |
 | `$S.heap`   | STRING  | Heap free space and fragmentation |
+| `$S.time`.  | CLOCK   | The current time |
 | **Weather**   |   | |
 | `$W.temp`   | FLOAT   | Current temperature |
 | `$W.desc`   | STRING  | Short description of weather conditions  |
 | `$W.ldesc`  | STRING  | Longer description of weather conditions |
 | **Printers**   |   | |
-| `$P.name`  | STRING | Nickname of the printer. If no nickname was set, the hostname will be returned. This could be in the form of an IP address. |
 | `$P.next`  | STRING | A composite string giving the name of the printer that will complete a job next and the time at which it will be complete|
-| `$pct`  | INT | If the printer is active and printer, the returned INT will be the percentage complete (0-100). If the printer is either no active or not printing, an empty string will be returned. |
-| `$P.status`  | STATUS | The status of the printer and percent complete (0-100). If there is a print in progress, only the status part of the result will be empty and the percentage will reflect the percent complete. Otherwise the percentage will be 100 and the status will be either "Offline", "Online", or "Complete". |
+|   |  **Note** | To get data about a specific printer, use a key of the form: `$P.N.key` where `N` is a number form 1-4 which specifies the printer of interest.
+| `$P.N.name`  | STRING | Nickname of the printer. If no nickname was set, the hostname will be returned. This could be in the form of an IP address. |
+| `$P.N.pct`  | INT | If the printer is active and printer, the returned INT will be the percentage complete (0-100). If the printer is either no active or not printing, an empty string will be returned. |
+| `$P.N.status`  | STATUS | The status of the printer and percent complete (0-100). If there is a print in progress, only the status part of the result will be empty and the percentage will reflect the percent complete. Otherwise the percentage will be 100 and the status will be either "Offline", "Online", or "Complete". |
 
 
 ## Plugin Examples
@@ -163,7 +168,7 @@ Some things to notice in the descriptor files:
 * **plugin.json**:
   * The name specified here is the display name. It gets used in the [Utility screen](MultiMonGUI.md/#utility-screen) to label a button and the [plugin settings page](../Readme.md#configure-plugins) in the Web UI.
   * The type is "generic" which tells the system that this is a generic plugin rather than one that requires custom code.
-* **screen.json**: The screen layout has examples of left, right, and center-justifying fields. It uses different fonts, different sizes, and different colors. It pulls data from the system namespace, the printer namespace, and the weather namespace. it also uses the `CLOCK` type which is likely to be subsumed into a more general mechanism for multi-part values over time.
+* **screen.json**: The screen layout has examples of left, right, and center-justifying fields. It uses different fonts, different sizes, and different colors. It pulls data from the system namespace, the printer namespace, and the weather namespace. it also uses the `CLOCK` type, the `STATUS` type and the `#progress` format.
 * **settings.json**: Generic plugins have four elements in their settings file. Only two are visible to the user:
   * `version`: *Not user visible*. This is the version of the settings structure. It is used internally by the system.
   * `enabled`: *User visible*. Is the plugin enabled? That is, will the user be able to select this plugin in the GUI. 
