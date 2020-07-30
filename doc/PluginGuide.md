@@ -19,15 +19,18 @@ A plugin consists of a number of JSON descriptors described below, and optionall
 <a name="descriptors"></a>
 ### JSON Descriptors
 
-Each plugin requires 4 JSON descriptors. All descriptors for a plugin are placed in a subdirectory of `/data/plugins` which can have any name you'd like. The directory name is not germane to the plugin. The four JSON files are listed below and must have these names:
+Each plugin requires four JSON descriptor files. All descriptors for a plugin are placed in a subdirectory of `/data/plugins` which can have any name you'd like. The directory name is not germane to the plugin. The four JSON files are listed below and must have these names:
 
-* **plugin.json**: A simple file which gives the display name of the plugin and its type. The type must either be "generic" for no-code plugins, or must correspond to a name you've given in custom code.
+* **plugin.json**: A simple file which gives:
+  * The display name of the plugin
+  * The plugin type. The type must either be "generic" for no-code plugins, or must correspond to a name you've given in your custom code.
+  * A namespace. If this plugin makes data available to other plugins, the namespace is used to reference it. See the section on [data values](#datavalues).
 * **settings.json**: If the plugin has settings, for example an API key for a REST service it uses, they are given in this file. This is very much like the main *MultiMon* settings file, but the contents are up to the plugin developer. For generic (no-code) plugins, there are just a few settings:
 	* Whether the plugin is enabled
 	* How often to refresh the UI
 	* A representation of the units of the refresh interval (i.e. is it seconds, minutes, etc.)
 * **form.json**: A [jsonform](https://github.com/jsonform/jsonform) descriptor that is used by the Web UI to allow the user to display and edit the settings. Using this mechanism, a plugin can augment *MultiMon*'s Web UI without creating a new HTML template or writing custom code.
-* **screen.json**: A description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. FlexScreen can display things like floats, ints, and string using a format you specify. It can also display more complex things like a progreess/status bar. At the moment, that's the only complex thing.
+* **screen.json**: A description of the layout and content of the screen. The FlexScreen class is responsible for parsing this description and displaying information - no custom code is required. FlexScreen can display things like floats, ints, and string using a format you specify. It can also display more complex things like a progress/status bar. At the moment, that's the only complex thing.
 
 ### Custom Code
 
@@ -99,7 +102,7 @@ The elements are as follows:
   * S24, SB24, SO24, SBO24: 24 point Sans fonts in all styles
   * D20, D72, D100: 7-Segment Digital Font in large sizes
   
-  `font` may also be a number correspondig to a built-in font in the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI). If this item is omitted, it defaults to built-in font 2.
+  `font` may also be a number corresponding to a built-in font in the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI). If this item is omitted, it defaults to built-in font 2.
 * `color`: *Required*. The color of the content of the field. This is a 24-bit (888) hex color specifier (not a name) which may begin with `#` or `0x`.
 * `format`: *Required*. The format is used to display the content of the field. It is a `printf` style format. For example if the field is meant to display a temperature, then the format might be: `"Temp: %0.1fF"`. If the field is just a static label, then the format specifies the label. Note: while optional, if this is not supplied, then no content will be displayed other than a border if specified.   The `format` must correspond to the `type`. For example, if the `type` is `FLOAT`, then the `format` must include some variation of `%f`. 
   There are special values of the format string that begin with '#'. These format strings indicate that a a custom display element should be used rather than displaying the result textually. The current set of custom display elements are:
@@ -113,10 +116,19 @@ The elements are as follows:
       * A value of this type may also be used in conjunction with the `#progress` format which will display a progress bar.
 * `key`: The name of a data value that should be supplied by the Plugin framework when the screen is displayed. Allowed values are defined by the custom Plugin code ***or*** a system value may be used (see [below]()). For example, a custom Plugin that reads sensor data might have a value called "stress". This name may be used as a key.
 
-<a name="sysvalues"></a>
-## System Values
+<a name="datavalues"></a>
+## Data Values
 
-Any plugin (generic or custom) may access values made available by an app-wide data broker. The values are grouped by type; for example, system values, printer values, and weather values. Each group has a unique prefix starting with '$'. The list of available values are given in the table below.
+Any plugin (generic or custom) may access values made available by an app-wide data broker. Values are provided by a number of built-in sources, but can also be provided by plugins and their associated data providers.  For example, the Blynk Weather plugin example makes all of its data available to other plugins.
+
+Values have names that are composed of multiple parts. All keys begin with a '$' followed by a single letter:
+
+* `$S`: Corresponds to the system namespace which contains keys for things like the current time and heap statistics
+* `$P`: Corresponds to the printer namespace which contains keys related to the printers being monitored such as the printing status and percent complete.
+* `$W`: Corresponds to the weather namespace which contains keys such as the temperature in the selected city.
+* `$E`: Corresponds to the ***extension*** namespace which is where plugins can publish their own data values.
+
+The list of available values for `$S`, `$P`, and `$W` are given in the table below.
 
 
 | Full name | Type 	  | Description	|
@@ -124,7 +136,7 @@ Any plugin (generic or custom) may access values made available by an app-wide d
 | **System**    |         |	             |
 | `$S.author` | STRING  | MultiMon's author                 |
 | `$S.heap`   | STRING  | Heap free space and fragmentation |
-| `$S.time`.  | CLOCK   | The current time |
+| `$S.time`   | CLOCK   | The current time |
 | **Weather**   |   | |
 | `$W.temp`   | FLOAT   | Current temperature |
 | `$W.desc`   | STRING  | Short description of weather conditions  |
@@ -136,18 +148,21 @@ Any plugin (generic or custom) may access values made available by an app-wide d
 | `$P.N.pct`  | INT | If the printer is active and printer, the returned INT will be the percentage complete (0-100). If the printer is either no active or not printing, an empty string will be returned. |
 | `$P.N.status`  | STATUS | The status of the printer and percent complete (0-100). If there is a print in progress, only the status part of the result will be empty and the percentage will reflect the percent complete. Otherwise the percentage will be 100 and the status will be either "Offline", "Online", or "Complete". |
 
+Any plugin that publishes data should provide a similar list of available data. See the [Blynk Weather Plugin](#bwp) for an example.
+
 
 ## Plugin Examples
 
 MultiMon has two example plugins: one custom and one generic. All of the JSON descriptor files for these plugins are in the `data/plugins/` directory, but the settings files are named `sample.json` rather than `settings.json`. Without a valid settings file, neither will load. If you'd like to experiment with plugins, simply rename the `sample.json` to `settings.json`.
 
+<a name="bwp"></a>
 ### The Blynk Weather Plugin Example
 
 The Blynk Weather Plugin is an example of a custom plugin that provides a new data source and custom plugin code. The new data source is for the [Blynk](https://blynk.io) service. In this example a weather station such as [JAWS](https://github.com/jpasqua/JAWS) writes readings like temperature and humidity to the Blynk service. The Blynk Weather plugin collects data from up to two weather stations and displays the information in a new screen:
 
 ![](images/ss/BlynkScreen.png)
 
-This plugin consists of a number of files:
+This plugin consists of the following files:
 
 * `src/clients/BlynkClient.[cpp,h]`: The client code that reads data from the Blynk service that was written there by a weather station. Though BlynkClient is used by the BlynkWeather plugin, it can also be used by any plugin that wants to read arbitrary information from Blynk.
 * `src/plugins/BlynkPlugin.[cpp,h]`: The custom plugin code that manages settings and maps names to values. 
@@ -155,11 +170,30 @@ This plugin consists of a number of files:
 
 This plugin has a number of settings that need to be specified by the user such as the Blynk IDs associated with the two weather stations and nicknames for each station that will be displayed in the GUI. The `form.json` file describes the web form that will be used to present the settings to the user. [jsonform](https://github.com/jsonform/jsonform) is a very rich tool that is well described on github. Please refer to its [wiki](https://github.com/jsonform/jsonform/wiki) to learn more.
 
-To use this plugin you would have to have a data publisher (a weather system) that publishes data out to Blynk. However, it should be easily adapted to other sensor data that is available through that service.
+To use this plugin you would have to have a a weather system that publishes data out to Blynk. However, the plugin can be easily adapted to other sensor data that is available through the Blynk service.
+
+This example plugin also acts a data source for other plugins. All of the data it retrieves from Blynk can be accessed through the [data broker](#datavalues). The plugin uses the `BW` namespace, so to access Blynk Virtual pin 0 on device 0, the full key would be `$E.BW.0/V0`:
+
+* `$E.` means this is a request for data from an extension data source (i.e. a plugin)
+* `BW.` means get it from the plugin whose namespace was declared to be `BW`
+* `0/V0` means Blynk device 0, virtual pin 0. For this example, that is the temperature reading.
+
+The full set of available data is:
+
+| Full name | Type 	  | Description	|
+|-----------|:-------:|------------	|
+| `$E.BW.NN1`  | STRING  | The nickname for the first Blynk device      |
+| `$E.BW.NN2`  | STRING  | The nickname for the second Blynk device     |
+| `$E.BW.0/V0` | FLOAT   | The temp reading from the first Blynk device |
+| `$E.BW.0/V1` | FLOAT   | The humidity reading from the first Blynk device |
+| `$E.BW.0/V2` | FLOAT   | The barometer reading from the first Blynk device |
+| `$E.BW.0/V7` | FLOAT   | The battery reading from the first Blynk device |
+| `$E.BW.0/V8` | STRING  | The formatted time of the most recent readings from the first Blynk device |
+|  | **NOTE**  | All of the same readings are available for the second Blynk device. Just replace the leading 0 with a 1. For example, `$E.BW.0/V1` &rarr; `$E.BW.1/V1` |
 
 ### The Generic Plugin Example
 
-The generic plugin example shows how to create a custom screen with your own layout that displays existing data from the [system](#sysvalues). In this case, there is no code - just the JSON descriptor files.
+The generic plugin example shows how to create a custom screen with your own layout that displays existing data from the [system or any other plugin](#datavalues). In this case, there is no code - just the JSON descriptor files.
 
 ![](images/ss/GenericPluginScreen.png)
 
@@ -168,7 +202,7 @@ Some things to notice in the descriptor files:
 * **plugin.json**:
   * The name specified here is the display name. It gets used in the [Utility screen](MultiMonGUI.md/#utility-screen) to label a button and the [plugin settings page](../Readme.md#configure-plugins) in the Web UI.
   * The type is "generic" which tells the system that this is a generic plugin rather than one that requires custom code.
-* **screen.json**: The screen layout has examples of left, right, and center-justifying fields. It uses different fonts, different sizes, and different colors. It pulls data from the system namespace, the printer namespace, and the weather namespace. it also uses the `CLOCK` type, the `STATUS` type and the `#progress` format.
+* **screen.json**: The screen layout has examples of left, right, and center-justifying fields. It uses different fonts, different sizes, and different colors. It pulls data from the system namespace, the printer namespace, the weather namespace, and from the Blynk plugin. If you're not using that plugin you can remove those fields. It also uses the `CLOCK` type, the `STATUS` type and the `#progress` format.
 * **settings.json**: Generic plugins have four elements in their settings file. Only two are visible to the user:
   * `version`: *Not user visible*. This is the version of the settings structure. It is used internally by the system.
   * `enabled`: *User visible*. Is the plugin enabled? That is, will the user be able to select this plugin in the GUI. 
