@@ -17,7 +17,6 @@
 namespace MM = MultiMon;
 
 namespace DataBroker {
-  String EmptyString = "";
 
   namespace Printing {
     void completionTime(String &formattedTime, uint32_t timeLeft) {
@@ -48,7 +47,6 @@ namespace DataBroker {
 
       if (minCompletion != UINT32_MAX) {
         PrinterSettings *ps = &MM::settings.printer[printerWithNextCompletion];
-
         printer =  (ps->nickname.isEmpty()) ? formattedTime = ps->server : ps->nickname;
         delta = minCompletion;
         completionTime(formattedTime, delta);
@@ -58,108 +56,124 @@ namespace DataBroker {
         delta = 0;
       }
     }
-  };
 
-  // Upon entering this function, value is an empty String
-  void map(const String& key, String& value) {
-    int length = key.length();
-    if (length < 3 || key[0] != '$') return;
-    int index = key.indexOf('.');
-    if (index < 1 || index == length - 1) return;
+    void mapPrinterSpecific(const String& key, String& value, int printerIndex) {
+      if (printerIndex > MM::MaxPrinters) return;
+      PrintClient *p = MM::printer[printerIndex];
+      PrinterSettings *ps = &MM::settings.printer[printerIndex];
+      bool active = ps->isActive;
 
-    String prefix = key.substring(1, index);
-    String name = key.substring(index+1);
-
-    if (prefix.equalsIgnoreCase("S")) {
-      // Map system-related keys
-      if (name.equalsIgnoreCase("time")) {
-        char timeValBuf[9];
-        time_t theTime = now();
-        sprintf(timeValBuf, "%2d|%2d|%2d", hourFormat12(theTime), minute(theTime), second(theTime));
-        value += timeValBuf;
+      if (key.equalsIgnoreCase("name")) {
+        if (!ps->nickname.isEmpty()) { value += ps->nickname; }
+        else if (!ps->server.isEmpty()) { value += ps->server; }
+        else value += "Inactive";
         return;
       }
-      if (name.equalsIgnoreCase("author")) value = F("Joe Pasqua");
-      if (name.equalsIgnoreCase("heap")) {
+
+      if (key.equalsIgnoreCase("pct")) {
+        if (active && p->getState() >= PrintClient::State::Complete) { value += (int)(p->getPctComplete()); }
+        return;
+      }
+
+      if (key.equalsIgnoreCase("state")) {
+        if (active) {
+          switch (p->getState()) {
+            case PrintClient::State::Offline: value += F("Offline"); break;
+            case PrintClient::State::Operational: value += F("Online"); break;
+            case PrintClient::State::Complete: value += F("Complete"); break;
+            case PrintClient::State::Printing: value += F("Printing"); break;
+          }
+        } else value += F("Unused");
+        return;
+      }
+
+      if (key.equalsIgnoreCase("status")) {
+        int pct = 100;
+        if (active) {
+          switch (p->getState()) {
+            case PrintClient::State::Offline: value += F("Offline"); break;
+            case PrintClient::State::Operational: value += F("Online"); break;
+            case PrintClient::State::Complete: value += F("Complete"); break;
+            case PrintClient::State::Printing:
+              value += "Printing";
+              pct = (int)p->getPctComplete();
+              break;
+          }
+        } else value += F("Unused");
+        value += '|'; value += pct;
+        return;
+      }
+
+      if (key.equalsIgnoreCase("next")) {
+        if (!active) return;
+        if (p->isPrinting()) Printing::completionTime(value, p->getPrintTimeLeft());
+        return;
+      }
+    }
+
+    void map(const String& key, String& value) {
+      // Map printer related keys
+      if (key.equalsIgnoreCase("next")) {
+        uint32_t delta;
+        String printer, formattedTime;
+        nextCompletion(printer, formattedTime, delta);
+        if (printer.isEmpty()) value += F("No print in progress");
+        value += printer; value += ": "; value += formattedTime;
+        return;
+      }
+
+      // Check for printer-specific keys
+      if (isDigit(key[0]) && key[1] == '.') {
+        int index = (key[0] - '0') - 1;
+        String subkey = key.substring(2);
+        mapPrinterSpecific(subkey, value, index);
+        return;
+      }
+    }
+  } // ----- END: Databroker::Printing namespace
+
+  namespace System {
+    void map(const String& key, String& value) {
+      if (key.equalsIgnoreCase("time")) {
+        char buf[9];
+        time_t theTime = now();
+        sprintf(buf, "%2d|%2d|%2d", hourFormat12(theTime), minute(theTime), second(theTime));
+        value += buf;
+      }
+      else if (key.equalsIgnoreCase("author")) value += F("Joe Pasqua");
+      else if (key.equalsIgnoreCase("heap")) {
         value += F("Heap: Free=");
         value += ESP.getFreeHeap();
         value += ", Frag=";
         value += ESP.getHeapFragmentation();
         value += '%';
-        return;
-      }
-    } else if (prefix.equalsIgnoreCase("W")) {
-      // Map weather-related keys
-      if (name.equalsIgnoreCase("temp")) value += MM::owmClient->weather.readings.temp; return;
-      if (name.equalsIgnoreCase("city")) value += MM::owmClient->weather.location.city; return;
-      if (name.equalsIgnoreCase("desc")) value += MM::owmClient->weather.description.basic; return;
-      if (name.equalsIgnoreCase("ldesc")) value += MM::owmClient->weather.description.longer; return;
-    } else if (prefix.equalsIgnoreCase("P")) {
-      // Map printer related keys
-      if (name.equalsIgnoreCase("next")) {
-        uint32_t delta;
-        String printer, formattedTime;
-        Printing::nextCompletion(printer, formattedTime, delta);
-        if (printer.isEmpty()) value += F("No print in progress");
-        value += printer; value += ": "; value += formattedTime;
-        return;
-      }
-      if (isDigit(name[0]) && name[1] == '.') {
-        int index = (name[0] - '0') - 1;
-        if (index > MM::MaxPrinters) return;
-        PrintClient *p = MM::printer[index];
-        PrinterSettings *ps = &MM::settings.printer[index];
-        name.remove(0, 2);
-        bool active = ps->isActive;
-
-        if (name.equalsIgnoreCase("name")) {
-          if (!ps->nickname.isEmpty()) { value += ps->nickname; }
-          else if (!ps->server.isEmpty()) { value += ps->server; }
-          else value += "Inactive";
-          return;
-        }
-
-        if (name.equalsIgnoreCase("pct")) {
-          if (active && p->getState() >= PrintClient::State::Complete) { value += (int)(p->getPctComplete()); }
-          return;
-        }
-
-        if (name.equalsIgnoreCase("state")) {
-          if (active) {
-            switch (p->getState()) {
-              case PrintClient::State::Offline: value += F("Offline"); break;
-              case PrintClient::State::Operational: value += F("Online"); break;
-              case PrintClient::State::Complete: value += F("Complete"); break;
-              case PrintClient::State::Printing: value += F("Printing"); break;
-            }
-          } else value += F("Unused");
-         return;
-        }
-
-        if (name.equalsIgnoreCase("status")) {
-          int pct = 100;
-          if (active) {
-            switch (p->getState()) {
-              case PrintClient::State::Offline: value += F("Offline"); break;
-              case PrintClient::State::Operational: value += F("Online"); break;
-              case PrintClient::State::Complete: value += F("Complete"); break;
-              case PrintClient::State::Printing:
-                value += "Printing";
-                pct = (int)p->getPctComplete();
-                break;
-            }
-          } else value += F("Unused");
-          value += '|'; value += pct;
-          return;
-        }
-
-        if (name.equalsIgnoreCase("next")) {
-          if (!active) return;
-          if (p->isPrinting()) Printing::completionTime(value, p->getPrintTimeLeft());
-          return;
-        }
       }
     }
-    return;
+  } // ----- END: Databroker::System namespace
+
+
+  namespace Weather {
+    void map(const String& key, String& value) {
+      if (key.equalsIgnoreCase("temp")) value += MM::owmClient->weather.readings.temp;
+      else if (key.equalsIgnoreCase("city")) value += MM::owmClient->weather.location.city;
+      else if (key.equalsIgnoreCase("desc")) value += MM::owmClient->weather.description.basic;
+      else if (key.equalsIgnoreCase("ldesc")) value += MM::owmClient->weather.description.longer;
+    }
+  } // ----- END: Databroker::Weather namespace
+
+
+  // Upon entering this function, value is an empty String
+  void map(const String& key, String& value) {
+    // Keys are of the form: $P.subkey, where P is a prefix character indicating the namespace
+    if (key.length() < 4 || key[0] != '$' || key[2] != '.') return;
+    char prefix = key[1];
+
+    String subkey = key.substring(3);
+
+    switch (prefix) {
+      case 'S': System::map(subkey, value); break;
+      case 'P': Printing::map(subkey, value); break;
+      case 'W': Weather::map(subkey, value); break;
+    }
   }
 };
