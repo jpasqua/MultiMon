@@ -1,4 +1,5 @@
 {
   "type": "blynk",
-  "name": "Blynk Weather"
+  "name": "Blynk Weather",
+  "namespace": "BW"
 }
