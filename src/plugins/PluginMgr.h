@@ -27,6 +27,7 @@ public:
   void    refreshAll(bool force = false);
   uint8_t getPluginCount();
   Plugin* getPlugin(uint8_t index);
+  void    map(const String& key, String& value);
 
 private:
   static const uint8_t MaxPlugins = 4;

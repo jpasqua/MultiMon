@@ -31,7 +31,7 @@ public:
   virtual uint32_t getUIRefreshInterval() = 0;
 
   // Implemented by Plugin class
-  bool init(String& name, String& pluginDir);
+  bool init(const String& name, const String& piNamespace, const String& pluginDir);
     // Called immediately after the Plugin's constructor. Will invoke
     // typeSpecificInit() after _name and _pluginDir are set
   void getForm(String& form);
@@ -40,6 +40,8 @@ public:
     // Return the UI name of the plugin
   String getScreenID() { return _screenID; }
     // Return the name of the associated screen
+  String getNamespace() { return _namespace; }
+    // Return the namespace for the associated data provider (if any)
   bool enabled() { return _enabled; }
     // Is this plugin enabled?
 
@@ -52,9 +54,15 @@ protected:
     // Is this plugin enabled. This may always be true, may be a setting, or may be
     // set based on some operational parameters
   String _screenID;
+    // A string identifier for the associated FlexScreen. This is not meant to be used anywhere
+    // in the GUI or Web UI. It could just be a UUID, but a human readable string has
+    // proven useful for debugging
+  String _namespace;
+    // If this is a custom plugin with an associated data source, the data can be made available
+    // through the DataBroker mechanism. This is the namespace that will be used to access the data
 
 private:
-  static const uint32_t MaxScreenDescriptorSize = 6*1024;
+  static const uint32_t MaxScreenDescriptorSize = 7*1024;
   Basics::ReferenceMapper _mapper;
 };
 

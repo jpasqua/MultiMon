@@ -32,8 +32,9 @@
   inline File FS_open(const char* path, const char* mode) { return SPIFFS.open(path, mode); }
 #pragma GCC diagnostic pop
 
-bool Plugin::init(String& name, String& pluginDir) {
+bool Plugin::init(const String& name, const String& piNamespace, const String& pluginDir) {
   _name = name;
+  _namespace = piNamespace;
   _pluginDir = pluginDir;
   if (!typeSpecificInit()) return false;
 

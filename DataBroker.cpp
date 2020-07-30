@@ -174,6 +174,7 @@ namespace DataBroker {
       case 'S': System::map(subkey, value); break;
       case 'P': Printing::map(subkey, value); break;
       case 'W': Weather::map(subkey, value); break;
+      case 'E': MM::pluginMgr.map(subkey, value); break;
     }
   }
 };

@@ -80,11 +80,11 @@ Log.verbose("Trying to create plugin for %s", pluginPath.c_str());
   if (doc == NULL) return;
   String type = (*doc)[F("type")].as<String>();
   String name = (*doc)[F("name")].as<String>();
+  String piNamespace = (*doc)[F("namespace")].as<String>();
   delete doc;
 
   Plugin *p = NULL;
   if (type.equalsIgnoreCase("generic")) {
-Log.verbose("Creating a new generic plugin");
     p = new GenericPlugin();
   } else if (type.equalsIgnoreCase("blynk")) {
     p = new BlynkPlugin();
@@ -92,7 +92,7 @@ Log.verbose("Creating a new generic plugin");
   if (p == NULL) return;
 
 Log.verbose("Initializing plugin %s", name.c_str());
-  if (!p->init(name, pluginPath)) {
+  if (!p->init(name, piNamespace, pluginPath)) {
     delete p;
     return;
   }
@@ -173,3 +173,19 @@ Plugin* PluginMgr::getPlugin(uint8_t index) {
   if (index > _nPlugins) return NULL;
   return _plugins[index];
 }
+
+void PluginMgr::map(const String& key, String& value) {
+  int indexOfSeparator = key.indexOf('.');
+  String piNamespace = key.substring(0, indexOfSeparator);
+  for (int i = 0; i < _nPlugins; i++) {
+    Plugin *p = _plugins[i];
+    if (p->getNamespace() == piNamespace) {
+      if (p->enabled()) { p->typeSpecificMapper(key.substring(indexOfSeparator+1), value); }
+      return;
+    }
+  }
+}
+
+
+
+
