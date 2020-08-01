@@ -1,5 +1,4 @@
-<!-- link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" -->
-<link rel="stylesheet" href="https://jpasqua.github.io/static/bootstrap-4.4.1-iso.min.css">
+<link rel="stylesheet" href="https://jpasqua.github.io/static/bootstrap-3.3.7-iso.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.10.2/underscore-min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsonform/2.1.6/jsonform.js"></script>
@@ -9,7 +8,9 @@
   .expandable > legend:before { content: '\\25B8'; padding-right: 5px;}
   .expanded > legend:before { content: '\\25BE'; }
 </style>
-<div id="fc" class="bootstrapiso"></div>
+<div class="bootstrap-iso">
+  <div id="fc" class="panel-group"></div>
+</div>
 <script type="text/javascript">
   function doSubmit(values, pID) {
     $('#res_'+pID).text('...');
@@ -36,9 +37,13 @@
   function instantiateForm(name, id, form, vals) {
     if (id == '') return;
     $('#fc').append(
-      "<div class='card m-4 p-2 shadow'><h3>" + name + "</h3>" +
-      "  <form id='FORM_" + id +"'></form>" +
-      "  <p id='res_" + id +"' style='font-size: small;'></p></div>");
+      "<div class='panel panel-primary'>" +
+      "  <div class='panel-heading'>" + name + "</div>" +
+      "  <div class='panel-body'>" +
+      "    <form id='FORM_" + id +"'></form>" +
+      "    <p id='res_" + id +"' style='font-size: small;'></p></div>" +
+      "  </div>" +
+      "</div>");
     var params;
     params = JSON.parse(form);
     params.value = JSON.parse(vals);
