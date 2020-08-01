@@ -17,7 +17,7 @@
 
 namespace MultiMon {
   // ----- Constants
-  static const String VersionString = "0.2.0";
+  static const String VersionString = "0.3.0";
   static const int MaxPrinters = 4;
 
   // ----- State
