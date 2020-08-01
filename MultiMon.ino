@@ -1,6 +1,6 @@
 /*
  * MultiMon:
- *    Use a color touch screen display to monitor for up to 4 OctoPrint servers
+ *    Use a color touch screen display to monitor for up to 4 OctoPrint/Duet3D servers
  *    Also displays time and weather information 
  *                    
  * TO DO:
@@ -329,14 +329,3 @@ void loop() {
     nextStats = millis() + 60 * 1000L;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
