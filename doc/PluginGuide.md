@@ -123,7 +123,7 @@ The elements are as follows:
       * `CLOCK`: This is a composite of three INT values representing an hour, minute, and second. A value of this type should be used with a format such as `%2d:%02d:%02d`, which would display the hour, minute, and seconds. You could also use `%2d:%02d`, which would display only the hour and minute.
       * `STATUS`: This composite type consists of an `INT` and a `STRING`. For example they might be a status code and a message. The associated format must have the `%s` for the message before the `%d` for the code. For example: `"Error %s (%d)"`.
       * A value of this type may also be used in conjunction with the `#progress` format which will display a progress bar.
-* `key`: The name of a data value that should be supplied by the Plugin framework when the screen is displayed. Allowed values are defined by the custom Plugin code ***or*** a system value may be used (see [below]()). For example, a custom Plugin that reads sensor data might have a value called "stress". This name may be used as a key.
+* `key`: The name of a data value that should be supplied by the Plugin framework when the screen is displayed. Allowed values are defined by the custom Plugin code ***or*** a system value may be used (see [below](#datavalues)). For example, a custom Plugin that reads sensor data might have a value called "stress". This name may be used as a key.
 
 <a name="datavalues"></a>
 ## Data Values
