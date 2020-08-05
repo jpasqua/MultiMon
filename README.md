@@ -54,10 +54,14 @@ The directory structure of the project is shown below. You don't need to know th
         [Primary Source files including MultiMon.ino]
         /data
             [HTML page templates for MultiMon]
+            /plugins
+                [See PluginGuide.md]
             /wt
                 [HTML page templates for WebThing]
         /doc
-            [GUI documentation and images for documentation]
+            MultiMonGUI.md
+            PluginGuide.md
+            /images
         /resources
             /TFT_eSPI
                 [Sample User Setups for TFT_eSPI]
@@ -70,7 +74,8 @@ The directory structure of the project is shown below. You don't need to know th
                     [Custom fonts]
                 /images
                     [Custom images]
-            /plugins (experimental)
+            /plugins
+                [See PluginGuide.md]
 
 ````
 
@@ -85,7 +90,7 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 	* Provides the functionality to read, write, and update settings that are shared throughout the application.
 * `MMWebUI`
 	* Implements the Web UI for *MultiMon* which primarily consists of pages that allow the user to view and update the settings of the device. When settings change in the Web UI, it calls back into MultiMon to have those changes reflected. 
-	* **NOTE**: As of version 0.5, the real-time handling of changes is not very thorough. Many changes require a reboot to take effect.
+	* **NOTE**: Currently the real-time handling of changes is not very thorough. Many changes require a reboot to take effect.
 * `GUI` + `Screen`
 	* `GUI` is the primary interface used to cause `Screens` to be displayed and updated, and for user input to be processed.
 	* The heavy lifting for this is done by specialized implementations of the `Screen` class. There is a `TimeScreen`, a `WeatherScreen`, a `DetailScreen` and so on.
@@ -93,6 +98,8 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 		* Displaying itself using the `TFT_eSPI` library.
 		* Updating itself if information changes. To avoid flickering, there is extensive use of the `TFT_eSPI` sprite capabilities.
 		* Accepting and acting on user input in the form of presses on different areas of the screen which it has defined as buttons.
+* `clients`
+	* Client code to access OctoPrint, the Duet3D service, OpenWeatherMap, and anything specific to a plugin.  
 
 <a name="building-multimon"></a>
 ## Building MultiMon
@@ -104,7 +111,11 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 
 This project requires an ESP8266 and a 320x240 touch screen display. It has been tested with a [Wemos D1 Mini](https://docs.wemos.cc/en/latest/d1/d1_mini.html) and a [Wemos D1 Mini 2.4" TFT Shield](https://docs.wemos.cc/en/latest/d1_mini_shiled/tft_2_4.html). They are a nice combination since they require no soldering and only 1 mounting point (the display). However, it should work with virtually any ESP8266 with sufficient storage space and any 320x240 screen with an ILI9341 display controller and an XPT2046 touch screen controller.
 
-If you'd like a larger display, *MultiMon* has also been tested with the 2.8" and 3.2" variants of [this one](https://www.aliexpress.com/item/32960934541.html). Both versions of this display have a single 14-pin header that can be conveniently attached to the D1 Mini using this [daughter board](https://oshpark.com/shared_projects/dopTFnBT).
+If you'd like a larger display, *MultiMon* has also been tested with the 2.8" and 3.2" variants of [this one](https://www.aliexpress.com/item/32960934541.html). Both versions of this display have a single 14-pin header that can be conveniently attached to the D1 Mini using this [adapter board](https://oshpark.com/shared_projects/IhMOtfQC).
+
+![](doc/images/AdapterBoard.jpg)
+
+I started by using this [board](https://oshpark.com/shared_projects/dopTFnBT), but it required that a trace be cut and re-routed to control the display brightness so I created the other.
 
 #### Configuring the `TFT_eSPI` library for your display
 
@@ -131,12 +142,6 @@ The first image shows the back side of the TFT Shield and the jumper area is mar
 
 In this image you can see the area in red from the previous image with the solder bridge applied.
 ![](doc/images/D4Bridge.jpg)
-
-*Note*: If you use the [daughter board](https://oshpark.com/shared_projects/dopTFnBT) mentioned above, the brightness pin is hard-wired to full brightness. If you want to control brightness, you need to cut the trace to pin 7 on the daughter board and then connect a brightness control pin from the D1 Mini to pin 7. It sounds a little scary, but is actually pretty quick and easy. See the red circled area of the image below to see the trace should be cut (coin for scale).
-
-![](doc/images/DBCutTrace.jpg)
-
-
 
 <a name="enclosure"></a>
 ### Enclosure
