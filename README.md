@@ -1,10 +1,10 @@
 # MultiMon - Monitor Multiple 3D Printers
 
-![](doc/images/MultiMon512.png)  
+![](doc/images/MarbleMonitor512.jpg)  
 
 ___
 
-**NOTE**: This project is in its infancy and is a work-in-progress. There are no stable releases. In fact, as of 2020-05-24 it is still being verified that it can be built by anyone other than the author. That verification (and any required changes) should be complete soon. As it becomes stable, I will tag a release version.
+**NOTE**: This project is in its infancy and is a work-in-progress. Consider all releases to be pre-releases until this note goes away.
 ___
 
 This project lets you monitor the activity of up to four 3D Printers which are being controlled with either [OctoPrint](https://octoprint.org) or [Duet3D RepRap software](https://duet3d.dozuki.com/Wiki/Firmware_Overview). The monitor has a Web UI for configuration and a GUI displayed on a color touch screen. In addition to displaying printer status, it can also display weather information. The code is structured so that it is relatively straightforward to add new screens (information pages) with other types of information.
@@ -239,7 +239,7 @@ The rest of the settings are as follows:
 
 <a name="configure-plugins"></a>
 ![](doc/images/ConfigurePlugins.png)  
-Use this menu item to configure the settings for any loaded plugins. The settings will vary completely depending on the type of plugin. You must be asked to configure things like API keys, refresh times, or names of devices. Each configured plugin will have a separate section on the page with it's own "Save" button. Hitting save will save the settings, but not leave the page as you may have other changes you'd like to make. An example of a plugin configuration page is shown below.
+Use this menu item to configure the settings for any loaded plugins. The settings will vary completely depending on the type of plugin. You must be asked to configure things like API keys, refresh times, or names of devices. Each configured plugin will have a separate section on the page with its own "Save" button. Hitting save will save the settings, but not leave the page as you may have other changes you'd like to make. An example of a plugin configuration page is shown below.
 
 ![](doc/images/PluginPage.png)
 
@@ -283,7 +283,7 @@ Similarly you can get a screen shot of whatever is currently displayed on the de
 Finally, the `/dev` page also has a `Request Reboot` button. If you press the button you will be presented with a popup in your browser asking if you are sure. If you confirm, *MultiMon* will go to a "Reboot Screen" that displays a red reboot button and a green cancel button. The user must press and hold the reboot button for 1 second to confirm a reboot. Pressing cancel will resume normal operation. Pressing no button for 1 minute will behave as if the cancel button was pressed.
 
 ## Adding Screens
-To add a news Screen, you need to implment a new subclass of Screen that knows how to display itself (using the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI) library), and how to update itself on a periodic basis if the data it displays changes. The screen must also implement at least minimal navigation capability (i.e. a tap that takes the user to the next screen or back to the home screen). Look at some of the existing screens for examples.
+To add a news Screen, you need to implement a new subclass of Screen that knows how to display itself (using the [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI) library), and how to update itself on a periodic basis if the data it displays changes. The screen must also implement at least minimal navigation capability (i.e. a tap that takes the user to the next screen or back to the home screen). Look at some of the existing screens for examples.
 
 If you'd rather not deal with the graphics library yourself, you can create screens without code using the [plugin](#dev-exp) mechanism described below.
 
@@ -292,7 +292,7 @@ If you'd rather not deal with the graphics library yourself, you can create scre
 <a name="dev-exp"></a>
 ## Plugins
 
-**MultiMon** has he beginnings of a plugin system which allows developers to expand or cusotmize the functionality with little or no code. Please refer to the [Plugin Guide](doc/PluginGuide.md) for details.
+**MultiMon** has he beginnings of a plugin system which allows developers to expand or customize the functionality with little or no code. Please refer to the [Plugin Guide](doc/PluginGuide.md) for details.
 
 
 ## Acknowledgements
