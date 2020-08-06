@@ -1,5 +1,6 @@
 {
   "version": 1,
   "enabled":true,
-  "refreshInterval": 600000
+  "refreshInterval": 60,
+  "riScale": 1000
 }
