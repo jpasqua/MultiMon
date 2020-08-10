@@ -160,7 +160,7 @@ void BlynkPlugin::refresh(bool force) {
     int index = settings.pins[i].indexOf('/');
     int blynkIndex = settings.pins[i].substring(0, index).toInt();
     String rawPin = settings.pins[i].substring(index+1);
-    _pinVals[i] = BlynkClient::readPin(settings.blynkIDs[blynkIndex], rawPin);
+    BlynkClient::readPin(settings.blynkIDs[blynkIndex], rawPin, _pinVals[i]);
   }
   _nextRefresh = millis() + (settings.refreshInterval * settings.riScale);
   GUI::hideUpdatingIcon();
