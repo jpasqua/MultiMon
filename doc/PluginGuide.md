@@ -14,7 +14,7 @@ You can have many instances of the same type of plugin or of different types of 
 
 ### Dependencies
 The Web UI page used to display plugin settings is based on [JSON Form](https://github.com/jsonform/jsonform). It has a number of dependencies on various CSS and Javascript files.
-You do not need to install these files used in the browser. None of this is used directly by MultiMon. This list is providde for information only.
+You do not need to install these files used in the browser. None of this is used directly by MultiMon. This list is provided for information only.
 
 * [JSON Form](https://github.com/jsonform/jsonform)
 * [JQuery](https://github.com/jquery/jquery)
