@@ -256,7 +256,9 @@ Log.verbose("New settings: %s", settings.c_str());
 
       auto mapper =[langTarget](String &key) -> String {
         if (key.equals(F("WEATHER_KEY"))) return MM::settings.owm.key;
-        if (key.equals(F("CITY_NAME")) && MM::settings.owm.enabled) return MM::owmClient->weather.location.city;
+        if (key.equals(F("CITY_NAME")) && MM::settings.owm.enabled) {
+          return MM::owmClient == NULL ? EmptyString : MM::owmClient->weather.location.city;
+        }
         if (key.equals(F("CITY"))) return String(MM::settings.owm.cityID);
         if (key.equals(F("USE_METRIC"))) return checkedOrNot[MM::settings.useMetric];
         if (key == langTarget) return "selected";

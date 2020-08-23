@@ -154,6 +154,7 @@ namespace DataBroker {
 
   namespace Weather {
     void map(const String& key, String& value) {
+      if (MM::owmClient == NULL) return;
       if (key.equalsIgnoreCase("temp")) value += MM::owmClient->weather.readings.temp;
       else if (key.equalsIgnoreCase("city")) value += MM::owmClient->weather.location.city;
       else if (key.equalsIgnoreCase("desc")) value += MM::owmClient->weather.description.basic;
