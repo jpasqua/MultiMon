@@ -30,10 +30,13 @@ The following third party libraries are used within this project. You'll need to
 * [ESPTemplateProcessor](https://github.com/jpasqua/ESPTemplateProcessor)
 * [TFT\_eSPI](https://github.com/Bodmer/TFT_eSPI): Minimum version 2.2.7
 * [TimeLib](https://github.com/PaulStoffregen/Time.git)
-* [JSON Form](https://github.com/jsonform/jsonform)
 * [JSONService](https://github.com/jpasqua/JSONService)
 * [WebThing](https://github.com/jpasqua/WebThing)
 * [WiFiManager](https://github.com/tzapu/WiFiManager)
+
+The following libraries are used in the browser. you do not need to download or install them. They are listed here because if you are doing further development of the broser code, you may need to understand their usage:
+
+* [JSON Form](https://github.com/jsonform/jsonform)
 
 ### Services
 The following services play a role in providing parts of the functionality. You will need to obtain a free API key for each using the provided links:
@@ -89,7 +92,7 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 * `MMSettings`
 	* Provides the functionality to read, write, and update settings that are shared throughout the application.
 * `MMWebUI`
-	* Implements the Web UI for *MultiMon* which primarily consists of pages that allow the user to view and update the settings of the device. When settings change in the Web UI, it calls back into MultiMon to have those changes reflected. 
+	* Implements the Web UI for *MultiMon* which primarily consists of pages that allow the user to view and update the settings of the device. When settings change in the Web UI, it calls back into the core of the code to have those changes reflected. 
 	* **NOTE**: Currently the real-time handling of changes is not very thorough. Many changes require a reboot to take effect.
 * `GUI` + `Screen`
 	* `GUI` is the primary interface used to cause `Screens` to be displayed and updated, and for user input to be processed.
@@ -155,7 +158,7 @@ I have also upload [another model](https://www.thingiverse.com/thing:4460344) fo
 
 <a name="software"></a>
 ### Software
-Building the software for MultiMon is a bit more complex than a typical application because it stores files on the ESP8266 file system. This means that you need to use a plug-in to the Arduino IDE to upload those files to the Arduino. The file structure is described in detail in the [*WebThing*](https://github.com/jpasqua/WebThing) readme file. In this section I will describe the steps involved.
+Building the software for *MultiMon* is a bit more complex than a typical application because it stores files on the ESP8266 file system. This means that you need to use a plug-in to the Arduino IDE to upload those files to the Arduino. The file structure is described in detail in the [*WebThing*](https://github.com/jpasqua/WebThing) readme file. In this section I will describe the steps involved.
 
 1. Download and install the [`ESP8266 Sketch Data Upload`](https://github.com/esp8266/arduino-esp8266fs-plugin) plug-in. Note that installing this plugin is not the same as installing a normal Arduino library. Follow the installation instructions [here](https://github.com/esp8266/arduino-esp8266fs-plugin#installation). If you have installed successfully, you will see a new menu item in the Arduino IDE Tools menu. See the screen shot below.
 2. Copy or link the `wt` directory from [*WebThing*](https://github.com/jpasqua/WebThing) `data` directory to the *MultiMon* `data` directory. When you're done you'll have a `data` directory that contains a number of `HTML` files and a `wt` subdirectory. The `wt` subdirectory will also contain `HTML` files.
@@ -183,7 +186,7 @@ Once you have connected to *MultiMon* with your browser, you'll need to configur
 <a name="configuring-multimon"></a>
 ## Configuring MultiMon
 
-Once connected, you can use the web interface to configure and change settings regarding your printers, how information is displayed, the weather configuration, and more. You get to the settings by selecting an item from the [hamburger menu](https://en.wikipedia.org/wiki/Hamburger_button) in the top left of the web page. The image in the [Home Page](#home-page) section illustrates the overall structure of all of the pages. Before getting to settings that are specific to MultiMon, you need to configure some general information for your web-connected device including a username / password. You do this using the [General Settings](#general-settings) menu item.
+Once connected, you can use the web interface to configure and change settings regarding your printers, how information is displayed, the weather configuration, and more. You get to the settings by selecting an item from the [hamburger menu](https://en.wikipedia.org/wiki/Hamburger_button) in the top left of the web page. The image in the [Home Page](#home-page) section illustrates the overall structure of all of the pages. Before getting to settings that are specific to *MultiMon*, you need to configure some general information for your web-connected device including a username / password. You do this using the [General Settings](#general-settings) menu item.
 
 **Note**: If you have mounted your display in an enclosure in a way that is upside-down relative to the default configuration, you're image will be upside down until you get around to the [Configure Display](#configure-display) menu. This isn't a problem since the configuration will be happening in the Web UI, not on the display, but if it bothers you, you can skip to that step to flip the display orientation and then come back here.
 
@@ -217,7 +220,7 @@ Use this menu item to configure up to four printers. To start you will see four 
 * Password: The password for your OctoPrint / Duet3D server. For Duet3D, only enter this value if you have changed it from the default.
 * API Key: Only displayed/required for OctoPrint printers. Get this from your OctoPrint server as described [here](https://octoclient.zendesk.com/hc/en-us/articles/360007208474-Where-to-Find-the-API-Key).
 
-In addition to configuring each printer, you can set the refresh interval (in seconds) for all printers. For any printer that is actively printing, MultiMon will ask the printer for its status every time that interval elapses. By default, it is 30 seconds.
+In addition to configuring each printer, you can set the refresh interval (in seconds) for all printers. For any printer that is actively printing, *MultiMon* will ask the printer for its status every time that interval elapses. By default, it is 30 seconds.
 
 <a name="configure-display"></a>
 ![](doc/images/ConfigureDisplay.png)  
