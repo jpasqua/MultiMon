@@ -13,7 +13,7 @@
 #define TFT_CS  PIN_D8
 #define TFT_DC  PIN_D4
 #define TFT_RST -1
-#define TFT_LED PIN_D3    // LED backlight brightness. Requires an added wire.
+#define TFT_LED PIN_D0    // LED backlight brightness. Requires an added wire.
                           // Use -1 for no connection (full brightness)
 
 #define TOUCH_CS  PIN_D2
