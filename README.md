@@ -87,7 +87,7 @@ The directory structure of the project is shown below. You don't need to know th
 The primary functional areas of *MultiMon* are given below. You don't need to know this to build and use the project, but if you want to work on it, this will give you an idea of where the different functionality is implemented.
 
 * `MultiMon`
-	* The primary logic for the application. It holds the printer client objects and the settings object which are used throughout the application. `MultiMon` uses the `WebThing` framework and follows the organization it defines for the setup and loop functions.
+	* The primary logic for the application. It holds the printer client objects and the settings object which are used throughout the application. `MultiMon` use the `WebThing` framework and follows the organization it defines for the setup and loop functions.
 	* `MultiMon` calls the `GUI` as part of its main loop to give it time to execute.
 * `MMSettings`
 	* Provides the functionality to read, write, and update settings that are shared throughout the application.
@@ -162,10 +162,9 @@ Building the software for *MultiMon* is a bit more complex than a typical applic
 
 1. Download and install the [`ESP8266 Sketch Data Upload`](https://github.com/esp8266/arduino-esp8266fs-plugin) plug-in. Note that installing this plugin is not the same as installing a normal Arduino library. Follow the installation instructions [here](https://github.com/esp8266/arduino-esp8266fs-plugin#installation). If you have installed successfully, you will see a new menu item in the Arduino IDE Tools menu. See the screen shot below.
 2. Copy or link the `wt` directory from [*WebThing*](https://github.com/jpasqua/WebThing) `data` directory to the *MultiMon* `data` directory. When you're done you'll have a `data` directory that contains a number of `HTML` files and a `wt` subdirectory. The `wt` subdirectory will also contain `HTML` files.
-3. In the directory `data/plugins/4_ovw`, rename `sample.json` to `settings.json`.
-4. You need to reserve some flash memory space for the file system. In the Tools menu of the Arduino IDE you will see a `Flash Size` submenu. Choose `FS: 1MB`.
-5. Now connect your ESP8266 to your computer via USB and select the `ESP8266 Sketch Data Upload` item from the tools menu. You will see all the files in your `data` directory, including those in the `wt` subdirectory being loaded onto your ESP8266.
-6. Finally you can proceed as usual and compile / upload *MultiMon* to your ESP8266.
+3. You need to reserve some flash memory space for the file system. In the Tools menu of the Arduino IDE you will see a `Flash Size` submenu. Choose `FS: 1MB`.
+4. Now connect your ESP8266 to your computer via USB and select the `ESP8266 Sketch Data Upload` item from the tools menu. You will see all the files in your `data` directory, including those in the `wt` subdirectory being loaded onto your ESP8266.
+5. Finally you can proceed as usual and compile / upload *MultiMon* to your ESP8266.
 
 ![](doc/images/ArduinoToolsMenu.png)
 
@@ -267,31 +266,27 @@ The home page for *MultiMon* (see below for screen shot) contains three primary 
 <a name="dev-info"></a>
 ## Operational Info for Developers
 
-Though it is not normally part of the main menu, you can get to an additional page of options by entering the url `http://[MultiMon_Address]/dev` into your browser. If you wish, you can make it part of the main menu by going to `http://[MM_Address]/dev/enableDevMenu?showDevMenu=on`. Behind the scenes this has the effect of adding this line to the settings:
+Though it is not normally part of the main menu, you can get to an additional page of options by entering the url `http://[MultiMon_Adress]/dev` into your browser. If you wish, you can make it part of the main menu by uploading a `settings.json` file with an additional entry. Add the following line at the top level to enable the developer menu:
 
 ````
 ...
   "showDevMenu": true,
 ...
 ````  
-You can disable the dev menu using `http://[MM_Address]/dev/enableDevMenu`.
+To get the current settings file which you can then add to, refer to the [section below](#get-settings).
 
 ### Mock (Simulated) Printer Operation
 
 The `/dev` page allows you to make any one of the printers a "mock" printer meaning that it will produce artificial values that mimic what a real printer might produce. This can be useful for testing, debugging, and tuning the GUI or WebUI. To make any of the configured printers act as a mock printer, just check the associated box and then `Save`. These settings will not take effect until the next time *MultiMon* boots.
 
 <a name="get-settings"></a>
-**Viewing your settings**
+### Capturing the Current Settings
 
-It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings` button which will return a page with the JSON representation of the settings. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`. If you save these settings as a file named `settings.json` and place it in your `data` directory, it can be uploaded to your device using `ESP8266 Sketch Data Uploader`. There is no need to do this, but developers may find it useful to easily switch between batches of settings.
-
-The `/dev` page also has a `View WebThing Settings` button which will return a page with the JSON representation of the WebThing settings. This includes things such as the hostname, API keys, and the web color scheme.
-
-**Screenshots**
+It can sometimes be useful to see all the settings in their JSON representation. The `/dev` page has a `View Settings as JSON` button which will go to a page with the JSON content. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/settings`. If you save these settings as a file named `settings.json` and place it in your `data` directory, it can be uploaded to your device using `ESP8266 Sketch Data Uploader`. There is no need to do this, but developers may find it useful to easily switch between batches of settings.
 
 Similarly you can get a screen shot of whatever is currently displayed on the device using the `Take a screen shot` button. This will display an image in your browser which corresponds to the current content of the display. You can also get to this page directly with the url `http://[MultiMon_Adress]/dev/screenShot`.
 
-**Rebooting**
+### Rebooting
 
 Finally, the `/dev` page also has a `Request Reboot` button. If you press the button you will be presented with a popup in your browser asking if you are sure. If you confirm, *MultiMon* will go to a "Reboot Screen" that displays a red reboot button and a green cancel button. The user must press and hold the reboot button for 1 second to confirm a reboot. Pressing cancel will resume normal operation. Pressing no button for 1 minute will behave as if the cancel button was pressed.
 

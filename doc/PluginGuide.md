@@ -154,9 +154,7 @@ The list of available values for `$S`, `$P`, and `$W` are given in the table bel
 | `$P.next`  | STRING | A composite string giving the name of the printer that will complete a job next and the time at which it will be complete|
 |   |  **Note** | To get data about a specific printer, use a key of the form: `$P.N.key` where `N` is a number form 1-4 which specifies the printer of interest.
 | `$P.N.name`  | STRING | Nickname of the printer. If no nickname was set, the hostname will be returned. This could be in the form of an IP address. |
-| `$P.N.pct`  | INT | If the printer is active and printing, the returned INT will be the percentage complete (0-100). If the printer is either no active or not printing, an empty string will be returned. |
-| `$P.N.next`  | STRING | If the printer is active and printing, the returned STRING will be the day and time that the print will complete. |
-| `$P.N.remaining`  | STRING | If the printer is active and printing, the returned STRING will be hours, minutes, and seconds until the print completes |
+| `$P.N.pct`  | INT | If the printer is active and printer, the returned INT will be the percentage complete (0-100). If the printer is either no active or not printing, an empty string will be returned. |
 | `$P.N.status`  | STATUS | The status of the printer and percent complete (0-100). If there is a print in progress, only the status part of the result will be empty and the percentage will reflect the percent complete. Otherwise the percentage will be 100 and the status will be either "Offline", "Online", or "Complete". |
 
 Any plugin that publishes data should provide a similar list of available data. See the [Blynk Weather Plugin](#bwp) for an example.

@@ -109,13 +109,6 @@ namespace DataBroker {
         if (p->isPrinting()) Printing::completionTime(value, p->getPrintTimeLeft());
         return;
       }
-
-      if (key.equalsIgnoreCase("remaining")) {
-        if (active && p->getState() == PrintClient::State::Printing) {
-          value = WebThing::formattedInterval(p->getPrintTimeLeft(), true, true);
-        }
-        return;
-      }
     }
 
     void map(const String& key, String& value) {

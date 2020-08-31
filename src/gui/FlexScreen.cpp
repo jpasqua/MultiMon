@@ -93,7 +93,7 @@ bool FlexScreen::init(
 
   auto buttonHandler =[&](int id, Button::PressType type) -> void {
     Log.verbose(F("In Flex Screen Button Handler, id = %d, type = %d"), id, type);
-    GUI::displayNextPlugin();
+    GUI::displayHomeScreen();
   };
 
   _mapper = mapper;
@@ -109,7 +109,7 @@ bool FlexScreen::init(
 void FlexScreen::display(bool activating) {
   if (activating) { tft.fillScreen(_bkg); }
   for (int i = 0; i < _nItems; i++) {
-    _items[i].display(_bkg, _mapper);
+    if (activating) { _items[i].display(_bkg, _mapper); }
   }
   lastDisplayTime = lastClockTime = millis();
 }
@@ -175,16 +175,11 @@ void FlexItem::fromJSON(JsonObjectConst& item) {
 }
 
 void FlexItem::display(uint16_t bkg, Basics::ReferenceMapper mapper) {
+  String value;
+  mapper(_key, value);
+
   const char *fmt = _format.c_str();
-
   if (fmt[0] != 0) {
-    String value;
-    mapper(_key, value);
-
-    sprite->setColorDepth(1);
-    sprite->createSprite(_w, _h);
-    sprite->fillSprite(GUI::Mono_Background);
-
     // TO DO: Use snprintf to determine the correct buffer size
     int bufSize = Screen::Width/6 + 1; // Assume 6 pixel spacing is smallest font
     char buf[bufSize];
@@ -230,19 +225,22 @@ void FlexItem::display(uint16_t bkg, Basics::ReferenceMapper mapper) {
         }
         break;
     }
+    sprite->setColorDepth(1);
+    sprite->createSprite(_w, _h);
+    sprite->fillSprite(GUI::Mono_Background);
     if (_gfxFont >= 0) { GUI::Font::setUsingID(_gfxFont, sprite); }
     else { sprite->setTextFont(_font);}
     sprite->setTextColor(GUI::Mono_Foreground);
     sprite->setTextDatum(_datum);
     sprite->drawString(buf, _xOff, _yOff);
-
-    sprite->setBitmapColor(_color, bkg);
-    sprite->pushSprite(_x, _y);
-    sprite->deleteSprite();
   }
 
   for (int i = 0; i < _strokeWidth; i++) {
-    tft.drawRect(_x+i, _y+i, _w-2*i, _h-2*i, _color);
+    sprite->drawRect(i, i, _w-2*i, _h-2*i, GUI::Mono_Foreground);
   }
+
+  sprite->setBitmapColor(_color, bkg);
+  sprite->pushSprite(_x, _y);
+  sprite->deleteSprite();
 }
 

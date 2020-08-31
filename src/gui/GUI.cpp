@@ -39,6 +39,7 @@
 #include "UtilityScreen.h"
 #include "RebootScreen.h"
 #include "SplashScreen.h"
+#include "StatusScreen.h"
 #include "TimeScreen.h"
 #include "WeatherScreen.h"
 #include "WiFiScreen.h"
@@ -53,6 +54,7 @@ namespace GUI {
   TFT_eSprite *sprite = new TFT_eSprite(&tft);
   bool flipped;
   uint8_t brightness = 0;     // 0-100, Will be set to initial value in init()
+  StatusScreen statusScreen;
   DetailScreen detailScreen;
   TimeScreen   timeScreen;
   ConfigScreen configScreen;
@@ -65,7 +67,6 @@ namespace GUI {
   UtilityScreen pluginScreen;
   FlexScreen blynkScreen;
   Screen *curScreen = NULL;
-  int8_t curPlugin = -1;
 
   static const uint8_t MaxFlexScreens = 5;
   FlexScreen* flexScreens[MaxFlexScreens];
@@ -244,6 +245,8 @@ namespace GUI {
 
   void displayWiFiScreen() { display(wiFiScreen); }
 
+  void displayStatusScreen() { display(statusScreen); }
+
   void displayDetailScreen(int index) { detailScreen.setIndex(index); display(detailScreen); }
 
   void displayTimeScreen() { display(timeScreen); }
@@ -261,18 +264,6 @@ namespace GUI {
   void displayForecastScreen() { display(forecastScreen); }
 
   void displayPluginScreen() { display(pluginScreen); }
-  
-  void displayNextPlugin() {
-    uint8_t nPlugins = MultiMon::pluginMgr.getPluginCount();
-    if (nPlugins == 0) return;
-
-    curPlugin = (curPlugin == -1) ? 0 : (curPlugin+1);
-    if (curPlugin == nPlugins) { curPlugin = -1; displayHomeScreen(); }
-    else {
-      Plugin *p = MultiMon::pluginMgr.getPlugin(curPlugin);
-      if (p && p->enabled()) { GUI::displayFlexScreen(p->getScreenID()); }
-    }
-  }
 
   void displayFlexScreen(String screenID)  {
     for (int i = 0; i < nFlexScreens; i++) {

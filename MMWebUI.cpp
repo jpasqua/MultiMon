@@ -232,8 +232,7 @@ Log.verbose("New settings: %s", settings.c_str());
       Log.trace(F("Web Request: /dev/settings"));
       if (!WebUI::authenticationOK()) { return; }
 
-      DynamicJsonDocument *doc = (WebUI::hasArg("wt")) ? WebThing::settings.asJSON() :
-                                                         MultiMon::settings.asJSON();
+      DynamicJsonDocument *doc = MultiMon::settings.asJSON();
       WebUI::sendJSONContent(doc);
       doc->clear();
       delete doc;
@@ -244,16 +243,6 @@ Log.verbose("New settings: %s", settings.c_str());
       if (!WebUI::authenticationOK()) { return; }
 
       WebUI::sendArbitraryContent("image/bmp", GUI::getSizeOfScreenShotAsBMP(), GUI::streamScreenShotAsBMP);
-    }
-
-    void enableDevMenu() {
-      if (!WebUI::authenticationOK()) { return; }
-      Log.trace("Web Request: /dev/enableDevMenu");
-
-      MM::settings.showDevMenu = WebUI::hasArg("showDevMenu");
-      MM::settings.write();
-
-      WebUI::redirectHome();
     }
   }   // ----- END: MMWebUI::Dev
 
@@ -417,7 +406,6 @@ Log.verbose("New settings: %s", settings.c_str());
     WebUI::registerHandler("/dev/settings",           Dev::yieldSettings);
     WebUI::registerHandler("/dev/screenShot",         Dev::yieldScreenShot);
     WebUI::registerHandler("/dev/forceScreen",        Dev::forceScreen);
-    WebUI::registerHandler("/dev/enableDevMenu",      Dev::enableDevMenu);
 
     templateHandler = WebUI::getTemplateHandler();
   }
