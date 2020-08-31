@@ -224,7 +224,7 @@ Log.verbose("New settings: %s", settings.c_str());
         String ssid = "MM-nnnnnn";
         GUI::displayConfigScreen(ssid);
       }
-      else GUI::displayFlexScreen(screen);
+      else GUI::displayFlexScreenByID(screen);
       WebUI::redirectHome();
     }
 
