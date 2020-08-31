@@ -109,7 +109,7 @@ TimeScreen::TimeScreen() {
         GUI::displayDetailScreen(id);
       return;
     }
-    if (type > Button::PressType::NormalPress) { GUI::displayPluginScreen(); return; }
+    if (type > Button::PressType::NormalPress) { GUI::displayUtilityScreen(); return; }
     if (id == ClockAreaIndex) { GUI::displayNextPlugin(); return; }
     if (id == WeatherAreaIndex) { GUI::displayWeatherScreen(); return; }
   };

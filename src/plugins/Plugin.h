@@ -16,6 +16,7 @@
 #include <ArduinoJson.h>
 //                                  Local Includes
 #include "../Basics.h"
+#include "../gui/FlexScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -38,8 +39,8 @@ public:
     // Return a serialized version of the JSON doc representing the screen
   String getName() { return _name; }
     // Return the UI name of the plugin
-  String getScreenID() { return _screenID; }
-    // Return the name of the associated screen
+  FlexScreen* getFlexScreen() { return _flexScreen; }
+    // Return the associated screen
   String getNamespace() { return _namespace; }
     // Return the namespace for the associated data provider (if any)
   bool enabled() { return _enabled; }
@@ -53,10 +54,8 @@ protected:
   bool _enabled;
     // Is this plugin enabled. This may always be true, may be a setting, or may be
     // set based on some operational parameters
-  String _screenID;
-    // A string identifier for the associated FlexScreen. This is not meant to be used anywhere
-    // in the GUI or Web UI. It could just be a UUID, but a human readable string has
-    // proven useful for debugging
+  FlexScreen* _flexScreen;
+    // The associated FlexScreen for the plugin
   String _namespace;
     // If this is a custom plugin with an associated data source, the data can be made available
     // through the DataBroker mechanism. This is the namespace that will be used to access the data
