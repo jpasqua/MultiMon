@@ -6,6 +6,8 @@ MultiMon is designed to monitor up to four printers which are driven by either [
 
 The GUI is organized around the concept of "Screens" of information that are navigated using touches. Touches can either be a press or a long press and typically result in moving to another screen. they may also cause an action to occur, but remain on the current screen.
 
+There are a number of built-in screens (see below), but users can also define plugins which have their own screens. Plugins are accessed by tapping in the main area of the [Home Screen](#time-screen). This will take you to the first plugin. Tapping on a plugin screen takes you to the next plugin, or back to the Home Screen if there are no more. Plugin screens may also be accessed directly from the [Utility Screen](#utility-screen).
+
 MultiMon regularly calls out to the printers to get their status. If a printer is offline, MultiMon checks it every 5-10 minutes to see if it has come back online. If a printer is online, but not printing, MultiMon checks it every 1-3 minutes to see if it has changed. If a printer is actually in the process of printing, MultiMon updates its status every 30 seconds. This is [configurable](../README.md#configure-printers). You can force a refresh sooner using either the Web UI or the [GUI](#utility-screen). You can also change the interval using the Web UI.
 
 These calls can take a second or two depending  on how many printers are being checked and how responsive they are. During these periods the GUI is not responsive. To let the user know when this is happening, the GUI overlays a small info icon in the upper right hand corner of the screen. It is automatically removed when the calls are complete. When the info icon has a green border it means that MultiMon is talking to a printer. When it has an orange border it means that MultiMon is getting weather information.
@@ -85,15 +87,15 @@ The time screen is the the primary/home screen. It provides a clock, overview st
 <a name="printer-status-screen"></a>
 ### Printer Status Screen
 
-The Printer Status Screen gives an overview of the status of each printer. It is very similar to what is shown on the [Time Screen](#time-screen), but also shows each printer's nickname and the time remaining in the print (if a print is active). Below are a couple of examples of what this screen might look like. Note that in the first, weather data is being updated so the Info Icon is being shown.
+The Printer Status Screen gives an overview of the status of each printer. It is very similar to what is shown on the [Time Screen](#time-screen), but also shows each printer's time remaining and completion time (if a print is active). Below is an example of what this screen looks like:
 
-![](images/ss/StatusScreen1.png)
-![](images/ss/StatusScreen2.png)
+![](images/ss/OverviewScreen.png)
+
+This screen is actually a plugin that comes pre-configured with *MultiMon*. It can be removed or modified following the approach given in the [Plugin Guide](PluginGuide.md).
 
 **Actions**:
 
-* Pressing in any printer area will navigate to the [Printer Detail Screen](#printer-detail-screen) for that printer if the printer is actually printing. If not, a press will not cause any action.
-* A long press anywhere on the screen navigates back to the [Home Screen](#home-screen).
+* Pressing anywhere on the screen will move to the next plugin, or back to the [Home Screen](#home-screen) if there are no more plugins.
 
 <a name="printer-detail-screen"></a>
 ### Printer Detail Screen

@@ -1,0 +1,90 @@
+{
+  "items": [
+    { "x": 0,   "y": 0,   "w": 160, "h": 120, "color": "0x00FFFF", "strokeWidth": 2 },
+      {
+        "x": 4, "y": 8, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB12", "color": "e0a0e8", "format": "%s",
+        "type": "String", "key": "$P.1.name"
+      },
+      {
+        "x": 4, "y": 35, "w": 152, "h": 30,
+        "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+        "type": "STATUS", "key": "$P.1.status"
+      },
+      {
+        "x": 4, "y": 72, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0xFFFFFF", "format": "%s",
+        "type": "String", "key": "$P.1.next"
+      },
+      {
+        "x": 4, "y": 93, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0x00FF00", "format": "%s",
+        "type": "String", "key": "$P.1.remaining"
+      },
+    { "x": 160, "y": 0,   "w": 160, "h": 120, "color": "0x00FFFF", "strokeWidth": 2 },
+      {
+        "x": 164, "y": 8, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB12", "color": "e0a0e8", "format": "%s",
+        "type": "String", "key": "$P.2.name"
+      },
+      {
+        "x": 164, "y": 35, "w": 152, "h": 30,
+        "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+        "type": "STATUS", "key": "$P.2.status"
+      },
+      {
+        "x": 164, "y": 72, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0xFFFFFF", "format": "%s",
+        "type": "String", "key": "$P.2.next"
+      },
+      {
+        "x": 164, "y": 93, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0x00FF00", "format": "%s",
+        "type": "String", "key": "$P.2.remaining"
+      },
+    { "x": 0,   "y": 120, "w": 160, "h": 120, "color": "0x00FFFF", "strokeWidth": 2 },
+      {
+        "x": 4, "y": 128, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB12", "color": "e0a0e8", "format": "%s",
+        "type": "String", "key": "$P.3.name"
+      },
+      {
+        "x": 4, "y": 155, "w": 152, "h": 30,
+        "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+        "type": "STATUS", "key": "$P.3.status"
+      },
+      {
+        "x": 4, "y": 192, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0xFFFFFF", "format": "%s",
+        "type": "String", "key": "$P.3.next"
+      },
+      {
+        "x": 4, "y": 213, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0x00FF00", "format": "%s",
+        "type": "String", "key": "$P.3.remaining"
+      },
+    { "x": 160, "y": 120, "w": 160, "h": 120, "color": "0x00FFFF", "strokeWidth": 2 },
+      {
+        "x": 164, "y": 128, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB12", "color": "e0a0e8", "format": "%s",
+        "type": "String", "key": "$P.4.name"
+      },
+      {
+        "x": 164, "y": 155, "w": 152, "h": 30,
+        "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+        "type": "STATUS", "key": "$P.4.status"
+      },
+      {
+        "x": 164, "y": 192, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0xFFFFFF", "format": "%s",
+        "type": "String", "key": "$P.4.next"
+      },
+      {
+        "x": 164, "y": 213, "w": 152,  "h": 22, "xOff": 74, "yOff": 0,
+        "justify": "TC", "font": "SB9", "color": "0x00FF00", "format": "%s",
+        "type": "String", "key": "$P.4.remaining"
+      }
+  ],
+  "bkg": "0x000000",
+  "screenID": "Overview"
+}

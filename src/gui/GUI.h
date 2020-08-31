@@ -74,12 +74,12 @@ namespace GUI {
   void displayForecastScreen();
   void displayRebootScreen();
   void displaySplashScreen();
-  void displayStatusScreen();
   void displayTimeScreen();
   void displayWeatherScreen();
   void displayWiFiScreen();
   void displayPluginScreen();
   void displayFlexScreen(String name);
+  void displayNextPlugin();
 
   /**
    * Overlay the current screen with an icon to indicate that a potentially
