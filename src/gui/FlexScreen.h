@@ -8,7 +8,7 @@
 #include <ArduinoJson.h>
 //                                  Local Includes
 #include "../Basics.h"
-#include "MMScreen.h"
+#include "Screen.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -57,7 +57,8 @@ private:
   FlexItem* _items;             // An array of items on the screen
   uint8_t   _nItems;            // Number of items
   uint16_t  _bkg;               // Background color of the screen
-  String    _screenID;          // String identifier of the screen - must be unique
+  String    _screenID;          // UUID of the screen. Not used in the UI, but human readable
+                                // is helpful for testing / debugging
   uint32_t _refreshInterval;    // How often to refresh the display
   Basics::ReferenceMapper _mapper; // Maps a key from thee screen definition to a value
   uint32_t  lastDisplayTime;    // Last time the display() function ran

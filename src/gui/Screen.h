@@ -1,7 +1,6 @@
 #ifndef Screen_h
 #define Screen_h
 
-#include "GUI.h"
 #include "Button.h"
 
 class Screen {
@@ -26,9 +25,7 @@ public:
     display(true);
   }
 
-  void processInput() {
-    uint16_t tx = 0, ty = 0;
-    bool pressed = GUI::getTouch(&tx, &ty);
+  void processInput(bool pressed, uint16_t tx, uint16_t ty) {
     if (pressed) {
       if (startOfPress == 0) {
         startOfPress = millis();

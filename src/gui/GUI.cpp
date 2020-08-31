@@ -62,14 +62,11 @@ namespace GUI {
   ForecastScreen forecastScreen;
   CalibrationScreen calibrationScreen;
   WiFiScreen wiFiScreen;
-  UtilityScreen pluginScreen;
+  UtilityScreen utilityScreen;
   FlexScreen blynkScreen;
   Screen *curScreen = NULL;
   int8_t curPlugin = -1;
 
-  static const uint8_t MaxFlexScreens = 5;
-  FlexScreen* flexScreens[MaxFlexScreens];
-  uint8_t nFlexScreens = 0;
 
   namespace Internal {
     static const uint16_t InfoIconSize = 32;
@@ -221,8 +218,6 @@ namespace GUI {
     Internal::initInfoIcon();
   }
 
-  uint8_t getTouch(uint16_t *x, uint16_t *y) { return tft.getTouch(x, y); }
-
   void setOrientation(bool flip) {
     if (flip == flipped) return;
     flipped = flip;
@@ -233,7 +228,11 @@ namespace GUI {
   void loop() {
     if (curScreen == NULL) return;
     curScreen->processPeriodicActivity();
-    curScreen->processInput();
+
+    uint16_t tx = 0, ty = 0;
+    bool pressed = tft.getTouch(&tx, &ty);
+    curScreen->processInput(pressed, tx, ty);
+    
     processSchedules();
   }
 
@@ -260,7 +259,7 @@ namespace GUI {
 
   void displayForecastScreen() { display(forecastScreen); }
 
-  void displayPluginScreen() { display(pluginScreen); }
+  void displayUtilityScreen() { display(utilityScreen); }
   
   void displayNextPlugin() {
     uint8_t nPlugins = MultiMon::pluginMgr.getPluginCount();
@@ -270,14 +269,23 @@ namespace GUI {
     if (curPlugin == nPlugins) { curPlugin = -1; displayHomeScreen(); }
     else {
       Plugin *p = MultiMon::pluginMgr.getPlugin(curPlugin);
-      if (p && p->enabled()) { GUI::displayFlexScreen(p->getScreenID()); }
+      if (p && p->enabled()) { GUI::displayFlexScreen(p->getFlexScreen()); }
     }
   }
 
-  void displayFlexScreen(String screenID)  {
-    for (int i = 0; i < nFlexScreens; i++) {
-      if (screenID.equalsIgnoreCase(flexScreens[i]->getScreenID())) {
-        curScreen = flexScreens[i];
+  void displayFlexScreen(FlexScreen* fs)  {
+    curScreen = fs;
+    curScreen->activate();
+  }
+
+  void displayFlexScreenByID(String screenID)  {
+    uint8_t nPlugins = MultiMon::pluginMgr.getPluginCount();
+    for (int i = 0; i < nPlugins; i++) {
+      Plugin *p = MultiMon::pluginMgr.getPlugin(i);
+      if (!p || !p->enabled()) continue;
+      FlexScreen* fs = p->getFlexScreen();
+      if (screenID.equalsIgnoreCase(fs->getScreenID())) {
+        curScreen = fs;
         curScreen->activate();
         return;
       }
@@ -285,24 +293,19 @@ namespace GUI {
     Log.error(F("Requesting a non-existent screen: %s"), screenID.c_str());
   }
 
-  String createFlexScreen(
+  FlexScreen* createFlexScreen(
       JsonDocument &doc,
       uint32_t refreshInterval,
       const Basics::ReferenceMapper &mapper) {
-    if (nFlexScreens == MaxFlexScreens) {
-      Log.warning(F("Maximum number of FlexScreens exceeded"));
-      return "";
-    }
 
-    FlexScreen *flexScreen = new FlexScreen();
+    FlexScreen* flexScreen = new FlexScreen();
     JsonObjectConst descriptor = doc.as<JsonObjectConst>();
     if (!flexScreen->init(descriptor, refreshInterval, mapper)) {
       delete flexScreen;
-      return "";
+      return NULL;
     }
 
-    flexScreens[nFlexScreens++] = flexScreen;
-    return flexScreen->getScreenID();
+    return (flexScreen);
   }
 
   void showUpdatingIcon(uint16_t accentColor) { Internal::showUpdating(accentColor); }

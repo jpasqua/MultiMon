@@ -9,6 +9,7 @@
 #include <ArduinoJson.h>
 //                                  Local Includes
 #include "../Basics.h"
+#include "FlexScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -57,12 +58,10 @@ namespace GUI {
 
   void setBrightness(uint8_t b);
   uint8_t getBrightness();
-
-  uint8_t getTouch(uint16_t *x, uint16_t *y);  // Takes orientation into account
   
   void loop();
 
-  String createFlexScreen(
+  FlexScreen* createFlexScreen(
       JsonDocument &doc,
       uint32_t refreshInterval,
       const Basics::ReferenceMapper &mapper);
@@ -77,8 +76,9 @@ namespace GUI {
   void displayTimeScreen();
   void displayWeatherScreen();
   void displayWiFiScreen();
-  void displayPluginScreen();
-  void displayFlexScreen(String name);
+  void displayUtilityScreen();
+  void displayFlexScreen(FlexScreen* fs);
+  void displayFlexScreenByID(String id);
   void displayNextPlugin();
 
   /**
