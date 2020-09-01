@@ -2,5 +2,6 @@
 data/wt
 data/plugins/*.json
 *settings.json
+!data/plugins/4_ovw/settings.json
 doc/images/source
 resources/image_sources
