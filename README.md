@@ -34,7 +34,7 @@ The following third party libraries are used within this project. You'll need to
 * [WebThing](https://github.com/jpasqua/WebThing)
 * [WiFiManager](https://github.com/tzapu/WiFiManager)
 
-The following libraries are used in the browser. you do not need to download or install them. They are listed here because if you are doing further development of the broser code, you may need to understand their usage:
+The following libraries are used in the browser - you do not need to download or install them. They are listed here because if you are doing further development of the browser code, you may need to understand their usage:
 
 * [JSON Form](https://github.com/jsonform/jsonform)
 
