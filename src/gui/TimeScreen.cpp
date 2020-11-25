@@ -1,7 +1,7 @@
 /*
  * TimeScreen:
- *    This is the "home" screen. It displays the time, online line of wether,
- *    and a status overview for each printer. 
+ *    This is the "home" screen. It displays the time, one line line of
+ *    weather data, and a status overview for each printer. 
  *                    
  * TO DO:
  *
