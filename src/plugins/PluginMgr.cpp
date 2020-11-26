@@ -110,7 +110,7 @@ uint8_t PluginMgr::enumPlugins(String& pluginRoot, String* pluginDirNames) {
   uint8_t lengthOfPIPath = pluginRoot.length();
 
   if (!ESP_FS::beginFileList(pluginRoot)) {
-    Log.warning("The specified plugin path (%s) is not a directory", pluginRoot);
+    Log.warning("The specified plugin path (%s) is not a directory", pluginRoot.c_str());
     return 0;
   }
 
