@@ -168,7 +168,7 @@
     {
       "x": 0,   "y": 168,
       "w": 160,  "h": 26,
-      "xOff": 0, "yOff": 0,
+      "xOff": 0, "yOff": 13,
       "justify": "ML",
       "font": "2",
       "color": "0xFFFFFF",
@@ -178,7 +178,7 @@
     {
       "x": 160,   "y": 168,
       "w": 160,  "h": 26,
-      "xOff": 159, "yOff": 0,
+      "xOff": 159, "yOff": 13,
       "justify": "MR",
       "font": "2",
       "color": "0xFFFFFF",
