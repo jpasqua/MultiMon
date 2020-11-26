@@ -3,8 +3,8 @@
 #define Basics_h_Version 0.3
 
 
-#include "Arduino.h"
-
+#include <Arduino.h>
+#include <functional>
 
 // ----- Low-level Macros
 #define ALLOC(t,n) (t *) malloc((n)*sizeof(t))
