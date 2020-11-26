@@ -22,12 +22,16 @@
 //                                  Core Libraries
 #include <Arduino.h>
 #include <FS.h>
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
           // Arg! The convoluted Arduino compilation process requires these to be
           // included here even though they are used in compilation units that
           // that include them explicitly!!
 //                                  Third Party Libraries
 #include <TFT_eSPI.h>
+#if defined(ESP32)
+  #include <analogWrite.h>
+  #define PWMRANGE 255
+#endif
 //                                  Local Includes
 #include "../../MultiMon.h"
 #include "GUI.h"
