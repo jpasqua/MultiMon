@@ -26,7 +26,7 @@
 #ifndef Button_h
 #define Button_h
 
-#include <TFT_eSPI.h>
+#include <functional>
 
 class Button {
 public:

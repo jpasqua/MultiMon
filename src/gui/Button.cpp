@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ArduinoLog.h>
+#include <TFT_eSPI.h>
 #include "GUI.h"
 #include "Button.h"
 
