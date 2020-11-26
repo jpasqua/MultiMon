@@ -36,6 +36,7 @@ private:
 
   bool validatePluginFiles(String pluginPath);
   void newPlugin(String pluginPath);
+  uint8_t enumPlugins(String& pluginRoot, String* pluginDirNames);
 };
 
 #endif // PluginMgr_h
