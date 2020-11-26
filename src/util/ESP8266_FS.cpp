@@ -35,10 +35,12 @@ namespace ESP_FS {
   #pragma GCC diagnostic pop
 
   static Dir enumRoot;
+
   bool beginFileList(String& path) {
-    enumRoot = FS_openDir(path);
-    return (enumRoot != NULL);
+    enumRoot = ESP_FS::openDir(path);
+    return true;  // Always returns a directory object, even if it is empty
   }
+  
   bool getNextFileName(String &name) {
     if (!enumRoot.next()) return false;
     name = enumRoot.fileName();
