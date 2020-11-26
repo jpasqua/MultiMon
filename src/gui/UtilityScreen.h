@@ -13,7 +13,7 @@
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 #include <FS.h>
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
 //                                  Third Party Libraries
 #include <TimeLib.h>
 //                                  Local Includes
@@ -85,7 +85,7 @@ public:
     GUI::Font::setUsingID(ButtonFont, tft);
     tft.setTextColor(GUI::Color_NormalText);
     tft.setTextDatum(TC_DATUM);
-    String address = WebThing::settings.hostname + " (" + WiFi.localIP().toString() + ")";
+    String address = WebThing::settings.hostname + " (" + WebThing::ipAddrAsString() + ")";
     tft.drawString(address, Screen::XCenter, y);
 
     String name;
