@@ -33,6 +33,8 @@ The following third party libraries are used within this project. You'll need to
 * [JSONService](https://github.com/jpasqua/JSONService)
 * [WebThing](https://github.com/jpasqua/WebThing)
 * [WiFiManager](https://github.com/tzapu/WiFiManager)
+* ESP32 Only
+	* [ESP32_AnalogWrite](https://github.com/ERROPiX/ESP32_AnalogWrite)
 
 The following libraries are used in the browser - you do not need to download or install them. They are listed here because if you are doing further development of the browser code, you may need to understand their usage:
 
@@ -129,9 +131,13 @@ If you use a different display, please refer to the [`TFT_eSPI`](https://github.
 To configure for the D1 Mini TFT Shield or the other display mentioned above, just copy the files listed below into the `TFT_eSPI` directory and uncomment the corresponding line in `User_Setup_Select.h`. By default it assumes the 2.4" TFT Shield.
 
 * `MultiMon/resources/TFT_eSPI/User_Setup_Select.h` &rarr; `library/TFT_eSPI` 
-	+ *Note*: This will overwrite the file in the destination, so you may wish to save the original.
+	+ *Notes*:
+		+ This will overwrite the file in the destination, so you may wish to save the original.
+		+ OR, instead of overwriting this file, simply edit it to add new lines for the setups listed below
+		+ This will ensure that the User_Setup_Select.h most closely matches the version of the library you are using.
 * `MultiMon/resources/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`  &rarr; `library/TFT_eSPI/User_Setups/D1Mini_ILI9341.h`
 * `MultiMon/resources/TFT_eSPI/User_Setups/D1_DB_Mini_ILI9341.h`  &rarr; `library/TFT_eSPI/User_Setups/D1_DB_Mini_ILI9341.h`
+* `MultiMon/resources/TFT_eSPI/User_Setups/ESP32D1Mini_DB_ILI9341.h`  &rarr; `library/TFT_eSPI/User_Setups/ESP32D1Mini_DB_ILI9341.h`
 
 
 #### Enabling brightness control
