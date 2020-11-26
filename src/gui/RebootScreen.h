@@ -11,7 +11,7 @@
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 #include <FS.h>
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
 //                                  Third Party Libraries
 #include <TimeLib.h>
 //                                  Local Includes

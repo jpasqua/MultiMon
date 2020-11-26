@@ -1,4 +1,4 @@
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
 #include <ArduinoLog.h>
 #include <JSONService.h>
 #include "BlynkClient.h"
