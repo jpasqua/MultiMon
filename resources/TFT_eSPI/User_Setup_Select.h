@@ -21,7 +21,8 @@
 
 #include <User_Setup.h>           // Default setup is root library folder
 
-#include <User_Setups/D1Mini_ILI9341.h>    // Setup file configured for ILI9341 on D1 Mini Shield
+#include <User_Setups/ESP32D1Mini_DB_ILI9341.h> // Config for for ILI9341 on ESP32 D1 Mini Daughterboard
+//#include <User_Setups/D1Mini_ILI9341.h>    // Setup file configured for ILI9341 on D1 Mini Shield
 //#include <User_Setups/D1Mini_DB_ILI9341.h> // Setup file configured for 3.2" ILI9341 on D1 Mini Shield
 //#include <User_Setups/Setup7_ST7735_128x128.h>     // Setup file configured for my ST7735 128x128 display
 
