@@ -52,7 +52,6 @@
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 #include <FS.h>
-//#include <ESP8266WiFi.h>
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
 #include <WebUI.h>
@@ -185,9 +184,8 @@ namespace MultiMon {
       WebThing::settings.indicatorLEDPin = WebThingSettings::NoPinAssigned;
         // Don't use the IndicatorLED. We may want that pin for something else.
 
-      if (WebThing::settings.hostname.isEmpty()) {
-        WebThing::settings.hostname = ("MM-" + String(GenericESP::getChipID(), HEX));
-      }
+      WebThing::replaceEmptyHostname("MM-");
+
       WebThing::notifyOnConfigMode(configModeCallback);
       WebThing::notifyConfigChange(baseConfigChange);
       WebThing::setup();
