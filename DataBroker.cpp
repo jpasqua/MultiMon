@@ -9,6 +9,7 @@
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
 #include <TimeLib.h>
+#include <GenericESP.h>
 //                                  Local Includes
 #include "MultiMon.h"
 #include "DataBroker.h"
@@ -150,9 +151,9 @@ namespace DataBroker {
       else if (key.equalsIgnoreCase("author")) value += F("Joe Pasqua");
       else if (key.equalsIgnoreCase("heap")) {
         value += F("Heap: Free=");
-        value += ESP.getFreeHeap();
+        value += GenericESP::getFreeHeap();
         value += ", Frag=";
-        value += ESP.getHeapFragmentation();
+        value += GenericESP::getHeapFragmentation();
         value += '%';
       }
     }

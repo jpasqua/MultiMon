@@ -52,11 +52,12 @@
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 #include <FS.h>
-#include <ESP8266WiFi.h>
+//#include <ESP8266WiFi.h>
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
 #include <WebUI.h>
 #include <WebThingSettings.h>
+#include <GenericESP.h>
 //                                  Local Includes
 #include "MultiMon.h"
 #include "MMSettings.h"
@@ -184,7 +185,9 @@ namespace MultiMon {
       WebThing::settings.indicatorLEDPin = WebThingSettings::NoPinAssigned;
         // Don't use the IndicatorLED. We may want that pin for something else.
 
-      if (WebThing::settings.hostname.isEmpty()) WebThing::settings.hostname = ("MM-" + String(ESP.getChipId(), HEX));
+      if (WebThing::settings.hostname.isEmpty()) {
+        WebThing::settings.hostname = ("MM-" + String(GenericESP::getChipID(), HEX));
+      }
       WebThing::notifyOnConfigMode(configModeCallback);
       WebThing::notifyConfigChange(baseConfigChange);
       WebThing::setup();
@@ -325,7 +328,7 @@ void loop() {
   static uint32_t nextStats = 0;
 
   if (millis() > nextStats) {
-    Log.verbose(F("Heap: free=%d, frag=%d%%"), ESP.getFreeHeap(), ESP.getHeapFragmentation());
+    Log.verbose(F("Heap: free=%d, frag=%d%%"), ESP.getFreeHeap(), GenericESP::getHeapFragmentation());
     nextStats = millis() + 60 * 1000L;
   }
 }
