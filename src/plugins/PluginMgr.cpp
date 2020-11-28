@@ -3,6 +3,12 @@
  *    Finds, instantiates, and manages all Plugins
  *
  * NOTES:
+ * o Because of the way SPIFFS works (or actually because of the way it doesn't work)
+ *   We need to take a circuitous path to finding all the well-formed plugins. We can't
+ *   really enumerate directories (they are a convenient fiction in SPIFFS) nor can we
+ *   depend on the order of enumeration being breadth-first OR depth-first.
+ *   Instead, we just enumerate all the files under pluginRoot and keep track of
+ *   the unique subdirectories
  *
  */
 
@@ -19,6 +25,7 @@
 #include "PluginMgr.h"
 #include "BlynkPlugin.h"
 #include "GenericPlugin.h"
+#include "../util/ESP_FS.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -28,24 +35,9 @@
  *
  *----------------------------------------------------------------------------*/
 
-// SPIFFS is being deprecated which causes warnings at compile time. I have a task to move off
-// of SPIFFS to LittleFS, but in the mean time, I don't want to keep seeing the warnings so
-// I wrapped the SPIFFS calls with pragma's to avoid them
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  inline File FS_open(const char* path, const char* mode) { return SPIFFS.open(path, mode); }
-  inline File FS_open(const String& path, const char* mode) { return SPIFFS.open(path, mode); }
-
-  inline bool FS_exists(const char* path) { return SPIFFS.exists(path); }
-  inline bool FS_exists(const String& path) { return SPIFFS.exists(path); }
-
-  inline Dir FS_openDir(const char* path) { return SPIFFS.openDir(path); }
-  inline Dir FS_openDir(const String& path) { return SPIFFS.openDir(path); }
-#pragma GCC diagnostic pop
-
 DynamicJsonDocument* PluginMgr::getDoc(String filePathString, uint16_t maxFileSize) {
   const char *filePath = filePathString.c_str();
-  File file = FS_open(filePath, "r");
+  File file = ESP_FS::open(filePath, "r");
   if (!file) {
     Log.warning(F("Error opening: %s"), filePath);
     return NULL;
@@ -102,41 +94,29 @@ Log.verbose("completed setting up %s", name.c_str());
 } 
 
 bool PluginMgr::validatePluginFiles(String pluginPath) {
+  Log.verbose("Validating %s", pluginPath.c_str());
   // Make sure all the required files exist, or don't bother going any further
-  if (FS_exists(pluginPath + "/plugin.json") &&
-      FS_exists(pluginPath + "/form.json") &&
-      FS_exists(pluginPath + "/settings.json") &&
-      FS_exists(pluginPath + "/screen.json")) return true;
+  if (ESP_FS::exists(pluginPath + "/plugin.json") &&
+      ESP_FS::exists(pluginPath + "/form.json") &&
+      ESP_FS::exists(pluginPath + "/settings.json") &&
+      ESP_FS::exists(pluginPath + "/screen.json")) return true;
 
   Log.warning(F("For plugin %s, not all json files are present"), pluginPath.c_str());
   return false;
 }
 
-/*------------------------------------------------------------------------------
- *
- * Public Functions
- *
- *----------------------------------------------------------------------------*/
-
-void PluginMgr::loadAll(String pluginRoot) {
-  _nPlugins = 0;
-  String pluginDirNames[MaxPlugins];
+uint8_t PluginMgr::enumPlugins(String& pluginRoot, String* pluginDirNames) {
   uint8_t nPluginsFound = 0;
-
   uint8_t lengthOfPIPath = pluginRoot.length();
-  if (pluginRoot[lengthOfPIPath-1] != '/') { pluginRoot += '/'; lengthOfPIPath++; }
-  // Because of the way SPIFFS works (or actually because of the way it doesn't work)
-  // We need to take a circuitous path to finding all the well-formed plugins. We can't
-  // really enumerate directories (they are a convenient fiction in SPIFFS) nor can we
-  // depend on the order of enumeration being breadth-first OR depth-first.
-  // Instead, we just enumerate all the files under pluginRoot and keep track of
-  // the unique subdirectories
 
-  Dir nextFile = FS_openDir(pluginRoot);
+  if (!ESP_FS::beginFileList(pluginRoot)) {
+    Log.warning("The specified plugin path (%s) is not a directory", pluginRoot.c_str());
+    return 0;
+  }
 
-  while (nPluginsFound < MaxPlugins && nextFile.next()) {
-    String path = nextFile.fileName();
-    int firstSlash = path.indexOf('/', lengthOfPIPath);
+  String path;
+  while (nPluginsFound < MaxPlugins && ESP_FS::getNextFileName(path)) {
+    int firstSlash = path.indexOf('/', lengthOfPIPath+2);
     if (firstSlash == -1) continue; // Not in a subdirectory;
     String pluginDirName = path.substring(lengthOfPIPath, firstSlash);
     int i;
@@ -147,6 +127,21 @@ void PluginMgr::loadAll(String pluginRoot) {
       pluginDirNames[nPluginsFound++] = pluginDirName;
     }
   }
+  return nPluginsFound;
+}
+
+
+/*------------------------------------------------------------------------------
+ *
+ * Public Functions
+ *
+ *----------------------------------------------------------------------------*/
+
+
+void PluginMgr::loadAll(String pluginRoot) {
+  _nPlugins = 0;
+  String  pluginDirNames[MaxPlugins];
+  uint8_t nPluginsFound = enumPlugins(pluginRoot, &pluginDirNames[0]);
 
   // Sort the plugins by name
   for (size_t i = 1; i < nPluginsFound; i++) {

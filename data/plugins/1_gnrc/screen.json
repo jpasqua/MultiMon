@@ -6,7 +6,7 @@
       "type": "String", "key": "$W.city"
     },
     {
-      "x": 136, "y": 0, "w": 48,  "h": 22, "xOff": 38, "yOff": 22,
+      "x": 136, "y": 0, "w": 48,  "h": 22, "xOff": 24, "yOff": 22,
       "justify": "BC", "font": "SB9", "color": "0x00FF00", "format": "%0.0fF",
       "type": "FLOAT", "key": "$W.temp"
     },

@@ -6,7 +6,7 @@
 
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
-#include <ESP8266WiFi.h>
+#include <FS.h>
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
 //                                  Local Includes

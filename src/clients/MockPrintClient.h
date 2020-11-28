@@ -14,7 +14,7 @@ static constexpr float RoomTemp = 21.1f;
 class MockState {
 public:
   void init() {
-    randomSeed(millis() + (ESP.getFreeHeap() * ESP.getHeapFragmentation()));
+    randomSeed(millis());
 
     if (random(0, 20) == 5) {   // A 1-in-20 chance the printer is idle
       setIdle();
