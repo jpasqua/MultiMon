@@ -181,8 +181,6 @@ namespace MultiMon {
       WebThing::settings.hasVoltageSensing = false;
       WebThing::settings.sleepOverridePin = WebThingSettings::NoPinAssigned;
       WebThing::displayPowerOptions(false);               // Don't let the user fool with this.
-      WebThing::settings.indicatorLEDPin = WebThingSettings::NoPinAssigned;
-        // Don't use the IndicatorLED. We may want that pin for something else.
 
       WebThing::replaceEmptyHostname("MM-");
 
