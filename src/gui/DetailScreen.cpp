@@ -51,6 +51,12 @@ static const uint16_t ProgressYOrigin = 100;
 static const uint16_t ProgressHeight = 42;      // ProgressFont->yAdvance;
 static const uint16_t ProgressWidth = Screen::Width - (2 * ProgressXInset);
 
+
+static const auto TimeFont = GUI::Font::FontID::D20;
+static const uint16_t TimeYOrigin = ProgressYOrigin + ProgressHeight + 15;
+static const uint16_t TimeWidth = 100;
+static const uint16_t TimeHeight = 22;
+
 static const auto DetailFont = GUI::Font::FontID::SB9;
 static const uint16_t DetailXInset = 10;
 static const uint16_t DetailYBottomMargin = 4;
@@ -107,6 +113,7 @@ void DetailScreen::display(bool activating) {
     WebThing::formattedInterval(printer->getPrintTimeLeft()),
     activating);
   drawDetailInfo(printer, activating);
+  drawTime(activating);
 
   nextUpdateTime = millis() + (10 * 1000L);
 }
@@ -116,6 +123,7 @@ void DetailScreen::processPeriodicActivity() {
     scrollFileName();
   }
   if (millis() >= nextUpdateTime) { display();  }
+  else { drawTime(false); }
 }
 
 
@@ -156,6 +164,45 @@ void DetailScreen::drawStaticContent(PrintClient *printer, bool force) {
     tft.setTextDatum(TL_DATUM);
     tft.drawString(name, 0, FileNameYOrigin);
   }
+}
+
+void DetailScreen::drawTime(bool force) {
+  static int lastTimeDisplayed = -1;
+  time_t  t = now();
+  int     hr = hour(t);
+  int     min = minute(t);
+
+  int compositeTime = hr * 100 + min;
+  if (!force && (compositeTime == lastTimeDisplayed)) return;
+  else lastTimeDisplayed = compositeTime;
+
+  char timeString[6]; // HH:MM<NULL>
+
+  if (!MultiMon::settings.use24Hour) {
+    if (hr >= 12) { hr -= 12; }
+    if (hr == 0) { hr = 12; }
+  }
+
+  timeString[0] = (hr < 10) ? ' ' : (hr/10 + '0');
+  timeString[1] = '0' + (hr % 10);
+  timeString[2] = ':';
+  timeString[3] = '0' + (min / 10);
+  timeString[4] = '0' + (min % 10);
+  timeString[5] = '\0';
+
+  sprite->setColorDepth(1);
+  sprite->createSprite(TimeWidth, TimeHeight);
+  sprite->fillSprite(GUI::Mono_Background);
+
+  GUI::Font::setUsingID(TimeFont, sprite);
+  sprite->setTextColor(GUI::Mono_Foreground);
+  sprite->setTextDatum(TC_DATUM);
+  sprite->drawString(timeString, TimeWidth/2, 0);
+
+  sprite->setBitmapColor(GUI::Color_Nickname, GUI::Color_Background);
+  uint16_t yPlacement = TimeYOrigin;
+  sprite->pushSprite((Screen::Width-TimeWidth)/2, TimeYOrigin);
+  sprite->deleteSprite();
 }
 
 void DetailScreen::drawProgressBar(

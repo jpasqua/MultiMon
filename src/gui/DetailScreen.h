@@ -25,6 +25,7 @@ private:
   void drawProgressBar(uint16_t x, uint16_t y, uint16_t w, uint16_t h, float pct, String txt, bool force = false);
   void drawStaticContent(PrintClient *printer, bool force = false);
   void drawDetailInfo(PrintClient *printer, bool force = false);
+  void drawTime(bool force = false);
   void scrollFileName();
   void revealFullFileName();
 };
