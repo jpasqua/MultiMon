@@ -68,6 +68,7 @@ public:
     String  key = "";                 // Your API Key from http://openweathermap.org/
     int     cityID =  5372223;        // OpenWeatherMap City ID
     String  language = "en";          // See OpenWeatherMap for list of available languages
+    String  nickname = "";            // If not empty, override the city name with this nickname (e.g. Home)
   } owm;
   
   bool scheduleActive;                // Is the scheduling system active?

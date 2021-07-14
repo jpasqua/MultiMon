@@ -112,6 +112,7 @@ void MMSettings::fromJSON(JsonDocument &doc) {
   owm.key = doc[F("owm")][F("key")].as<String>();
   owm.cityID = doc[F("owm")][F("cityID")];
   owm.language = doc[F("owm")][F("language")].as<String>();
+  owm.nickname = String(doc[F("owm")][F("nickname")]|"");
 
   scheduleActive = doc[F("scheduleActive")];
   morning.hr = doc[F("morning")][F("hr")];
@@ -143,6 +144,7 @@ void MMSettings::toJSON(JsonDocument &doc) {
   doc[F("owm")][F("key")] = owm.key;
   doc[F("owm")][F("cityID")] = owm.cityID;
   doc[F("owm")][F("language")] = owm.language;
+  doc[F("owm")][F("nickname")] = owm.nickname;
 
   doc[F("scheduleActive")] = scheduleActive;
 
@@ -177,6 +179,7 @@ void MMSettings::logSettings() {
   Log.verbose(F("  API Key: %s"), owm.key.c_str());
   Log.verbose(F("  City ID: %d"), owm.cityID);
   Log.verbose(F("  Language: %s"), owm.language.c_str());
+  Log.verbose(F("  City nickname: %s"), owm.nickname.c_str());
   Log.verbose(F("Schedules (active: %T)"), scheduleActive);
   Log.verbose(F("  Morning: [time: %d:%d, %d]"), morning.hr, morning.min, morning.brightness);
   Log.verbose(F("  Evening: [time: %d:%d, %d]"), evening.hr, evening.min, evening.brightness);
