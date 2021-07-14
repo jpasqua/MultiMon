@@ -96,7 +96,9 @@ void WeatherScreen::display(bool activating) {
   GUI::Font::setUsingID(GUI::Font::FontID::SB12, tft);
   tft.setTextColor(GUI::Color_WeatherTxt);
   tft.setTextDatum(TL_DATUM);
-  tft.drawString(MultiMon::owmClient->weather.location.city, XTopAreaInset, YTopArea);
+  String* whichCityName = (MultiMon::settings.owm.nickname.isEmpty()) ?
+    &MultiMon::owmClient->weather.location.city : &MultiMon::settings.owm.nickname;
+  tft.drawString(*whichCityName, XTopAreaInset, YTopArea);
   showTime();
 
   // ----- Draw the central display area

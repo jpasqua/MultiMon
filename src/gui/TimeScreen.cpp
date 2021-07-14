@@ -224,7 +224,10 @@ void TimeScreen::drawWeather(bool force) {
     readout = "No Weather Data";
     return;
   } else {
-    readout = MultiMon::owmClient->weather.location.city;
+    if (MultiMon::settings.owm.nickname.isEmpty())
+      readout = MultiMon::owmClient->weather.location.city;
+    else
+      readout = MultiMon::settings.owm.nickname;
     readout += ": ";
     readout += String((int)(MultiMon::owmClient->weather.readings.temp+0.5));
     readout += (MultiMon::settings.useMetric) ? "C, " : "F, ";
