@@ -13,6 +13,8 @@ function isNumberKey(e) { var h = e.which ? e.which : event.keyCode; return !(h 
   <div id="OWMSettings" style='display:none'>
     <p><label>%CITY_NAME% (<a href='http://openweathermap.org/find' target='_BLANK'><i class='fa fa-search'></i>Search for City ID)</a></label>
       <input class='w3-input w3-border w3-margin-bottom' type='text' name='cityID' value='%CITY%' onkeypress='return isNumberKey(event)'></p>
+    <p><label>City nickname (leave blank to use "official" city name)</a></label>
+      <input class='w3-input w3-border w3-margin-bottom' type='text' name='nickname' value='%NICKNAME%'></p>
     <label><a href='https://openweathermap.org/' target='_BLANK'>OpenWeatherMap API Key</a></label>
     <input class='w3-input w3-border w3-margin-bottom' type='text' name='openWeatherMapApiKey' value='%WEATHER_KEY%' maxlength='60'>
     <p>Weather Language: <select class='w3-option w3-padding' name='language'>

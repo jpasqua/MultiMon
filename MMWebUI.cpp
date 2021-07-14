@@ -85,6 +85,7 @@ namespace MMWebUI {
       MM::settings.owm.key = WebUI::arg(F("openWeatherMapApiKey"));
       MM::settings.owm.cityID = WebUI::arg(F("cityID")).toInt();
       MM::settings.owm.language = WebUI::arg(F("language"));
+      MM::settings.owm.nickname = WebUI::arg(F("nickname"));
 
       MM::settings.write();
       // MM::settings.logSettings();
@@ -270,6 +271,7 @@ Log.verbose("New settings: %s", settings.c_str());
         if (key.equals(F("CITY_NAME")) && MM::settings.owm.enabled) {
           return MM::owmClient == NULL ? EmptyString : MM::owmClient->weather.location.city;
         }
+        if (key.equals(F("NICKNAME"))) return String(MM::settings.owm.nickname);
         if (key.equals(F("CITY"))) return String(MM::settings.owm.cityID);
         if (key.equals(F("USE_METRIC"))) return checkedOrNot[MM::settings.useMetric];
         if (key == langTarget) return "selected";
