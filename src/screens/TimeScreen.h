@@ -1,8 +1,13 @@
+#ifndef TimeScreen_h
+#define TimeScreen_h
+
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 //                                  Third Party Libraries
+//                                  WebThing Includes
+#include <WebThingApp/gui/Screen.h>
 //                                  Local Includes
-#include "MMScreen.h"
+#include "DetailScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
 class TimeScreen : public Screen {
@@ -23,3 +28,5 @@ private:
   void drawNextComplete(bool force = false);
   void drawPrinterNames(bool force = false);
 };
+
+#endif  // TimeScreen_h
