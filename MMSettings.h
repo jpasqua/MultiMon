@@ -11,11 +11,10 @@
 //                                  Core Libraries
 #include <Arduino.h>
 //                                  Third Party Libraries
-#include <ArduinoJSON.h>
-#include <BaseSettings.h>
+//                                  WebThing
+#include <WebThingApp/WTAppSettings.h>
 //                                  Local Includes
 //--------------- End:    Includes ---------------------------------------------
-
 
 static const String Type_Octo = "OctoPrint";
 static const String Type_Duet = "Duet3D";
@@ -40,7 +39,8 @@ public:
   bool mock;
 };
 
-class MMSettings: public BaseSettings {
+
+class MMSettings: public WTAppSettings {
 public:
   // ----- Constructors and methods
   MMSettings();
@@ -48,35 +48,9 @@ public:
   void toJSON(JsonDocument &doc);
   void logSettings();
 
-  // ----- Settings
   static const uint8_t MaxPrinters = 4;
   PrinterSettings printer[MaxPrinters];
   uint32_t printerRefreshInterval = 10;
-
-  // Display Options
-  bool use24Hour = false;             // 23:00 military 24 hour clock
-  bool useMetric = false;
-  bool showDevMenu = false;
-
-  // HW Settings
-  bool     invertDisplay = false;      // true = pins at top | false = pins at the bottom
-  static const int nCalReadings = 5;
-  uint16_t calibrationData[nCalReadings];
-
-  struct {
-    bool    enabled = true;           // Get weather data from OpenWeatherMap?
-    String  key = "";                 // Your API Key from http://openweathermap.org/
-    int     cityID =  5372223;        // OpenWeatherMap City ID
-    String  language = "en";          // See OpenWeatherMap for list of available languages
-    String  nickname = "";            // If not empty, override the city name with this nickname (e.g. Home)
-  } owm;
-  
-  bool scheduleActive;                // Is the scheduling system active?
-  struct {
-    uint8_t hr;                       // Hour that the period starts (24 hour time)
-    uint8_t min;                      // Minute that the period starts
-    uint8_t brightness;               // The brightness level during this period
-  } morning, evening;
 
 private:
   // ----- Constants -----
