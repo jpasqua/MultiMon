@@ -306,7 +306,7 @@ To add a news Screen, you need to implement a new subclass of Screen that knows 
 
 If you'd rather not deal with the graphics library yourself, you can create screens without code using the [plugin](#dev-exp) mechanism described below.
 
-**Implementation Note**: For a fairly [convoluted set of reasons](https://github.com/Bodmer/TFT_eSPI/issues/664), *MultiMon* has a wrapper for the `TFT_eSPI::setFreeFont` function. Though you can call `setFreeFont` directly, it will result in the code size growing significantly. As a result, you should use the wrapper functions (`GUI::Font:setUsingID`).
+**Implementation Note**: For a fairly [convoluted set of reasons](https://github.com/Bodmer/TFT_eSPI/issues/664), *MultiMon* has a wrapper for the `TFT_eSPI::setFreeFont` function. Though you can call `setFreeFont` directly, it will result in the code size growing significantly. As a result, you should use the wrapper functions (`Display::Font:setUsingID`).
 
 <a name="dev-exp"></a>
 ## Plugins
