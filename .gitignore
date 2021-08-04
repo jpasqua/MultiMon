@@ -1,5 +1,6 @@
 .DS_Store
 data/wt
+data/wta
 data/plugins/*.json
 *settings.json
 !data/plugins/4_ovw/settings.json
