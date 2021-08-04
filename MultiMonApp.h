@@ -28,7 +28,7 @@
 //                                  Core Libraries
 //                                  Third Party Libraries
 //                                  WebThing Includes
-#include <WebThingApp/WTAppImpl.h>
+#include <WTAppImpl.h>
 //                                  Local Includes
 #include "MMSettings.h"
 #include "src/screens/DetailScreen.h"

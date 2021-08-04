@@ -5,7 +5,7 @@
 //                                  Core Libraries
 //                                  Third Party Libraries
 //                                  WebThing Includes
-#include <WebThingApp/gui/Screen.h>
+#include <gui/Screen.h>
 //                                  Local Includes
 #include "DetailScreen.h"
 //--------------- End:    Includes ---------------------------------------------

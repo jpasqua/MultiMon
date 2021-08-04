@@ -11,8 +11,8 @@
 //                                  WebThing Includes
 #include <WebThingBasics.h>
 #include <WebUI.h>
-#include <WebThingApp/WebUIHelper.h>
-#include <WebThingApp/gui/Display.h>
+#include <WebUIHelper.h>
+#include <gui/Display.h>
 //                                  Local Includes
 #include "MultiMonApp.h"
 #include "MMWebUI.h"

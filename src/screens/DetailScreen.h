@@ -6,8 +6,8 @@
 #include <Arduino.h>
 //                                  Third Party Libraries
 //                                  WebThing Includes
-#include <WebThingApp/WTApp.h>
-#include <WebThingApp/gui/Screen.h>
+#include <WTApp.h>
+#include <gui/Screen.h>
 //                                  Local Includes
 #include "../clients/PrintClient.h"
 //--------------- End:    Includes ---------------------------------------------

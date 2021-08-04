@@ -4,8 +4,8 @@
 //                                  Third Party Libraries
 #include <TimeLib.h>
 //                                  WebThing Includes
-#include <WebThingApp/gui/Display.h>
-#include <WebThingApp/gui/Theme.h>
+#include <gui/Display.h>
+#include <gui/Theme.h>
 //                                  Local Includes
 #include "SplashScreen.h"
 #include "AppTheme.h"

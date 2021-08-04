@@ -12,7 +12,7 @@
 #include <Arduino.h>
 //                                  Third Party Libraries
 //                                  WebThing
-#include <WebThingApp/WTAppSettings.h>
+#include <WTAppSettings.h>
 //                                  Local Includes
 //--------------- End:    Includes ---------------------------------------------
 

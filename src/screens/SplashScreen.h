@@ -3,7 +3,7 @@
 #include <Arduino.h>
 //                                  Third Party Libraries
 //                                  WebThing Includes
-#include <WebThingApp/gui/Screen.h>
+#include <gui/Screen.h>
 //                                  Local Includes
 //--------------- End:    Includes ---------------------------------------------
 

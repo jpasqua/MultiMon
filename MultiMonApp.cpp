@@ -12,11 +12,11 @@
 //                                  WebThing Includes
 #include <WebUI.h>
 #include <DataBroker.h>
-#include <WebThingApp/gui/ScreenMgr.h>
-#include <WebThingApp/plugins/PluginMgr.h>
-#include <WebThingApp/plugins/common/GenericPlugin.h>
-#include <WebThingApp/plugins/common/BlynkPlugin.h>
-#include <WebThingApp/plugins/common/CryptoPlugin.h>
+#include <gui/ScreenMgr.h>
+#include <plugins/PluginMgr.h>
+#include <plugins/common/GenericPlugin.h>
+#include <plugins/common/BlynkPlugin.h>
+#include <plugins/common/CryptoPlugin.h>
 //                                  Local Includes
 #include "MultiMonApp.h"
 #include "MMSettings.h"

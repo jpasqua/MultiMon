@@ -12,9 +12,9 @@
 #include <TimeLib.h>
 //                                  WebThing Includes
 #include <WebThing.h>
-#include <WebThingApp/gui/Display.h>
-#include <WebThingApp/gui/Theme.h>
-#include <WebThingApp/gui/ScreenMgr.h>
+#include <gui/Display.h>
+#include <gui/Theme.h>
+#include <gui/ScreenMgr.h>
 //                                  Local Includes
 #include "DetailScreen.h"
 #include "../clients/PrintClient.h"

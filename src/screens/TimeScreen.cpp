@@ -2,13 +2,6 @@
  * TimeScreen:
  *    This is the "home" screen. It displays the time, one line line of
  *    weather data, and a status overview for each printer. 
- *                    
- * TO DO:
- *
- * COMPLETE:
- * o Optimize the display function to avoid flashing the screen while also
- *   providing more frequent updates for active pritners. For example,
- *   use sprites, don't update unless things change, etc.
  *
  */
 
@@ -17,10 +10,11 @@
 //                                  Third Party Libraries
 #include <TimeLib.h>
 //                                  WebThing Includes
+#include <GenericESP.h>
 #include <WebThingBasics.h>
-#include <WebThingApp/gui/Display.h>
-#include <WebThingApp/gui/Theme.h>
-#include <WebThingApp/gui/ScreenMgr.h>
+#include <gui/Display.h>
+#include <gui/Theme.h>
+#include <gui/ScreenMgr.h>
 //                                  Local Includes
 #include "../../MMDataSupplier.h"
 #include "../../MultiMonApp.h"
@@ -118,8 +112,8 @@ TimeScreen::TimeScreen() {
       return;
     }
     if (type > Button::PressType::NormalPress) {
-      String subheading = "Testing: ";  // TO DO: replace with EmptyString
-      String subcontent = "1, 2, 3";    // TO DO: replace with EmptyString
+      String subheading = "Heap: Free/Frag = ";
+      String subcontent = String(ESP.getFreeHeap()) + ", " + String(GenericESP::getHeapFragmentation()) + "%"; 
       wtAppImpl->utilityScreen->setSub(subheading, subcontent);
       ScreenMgr::display(mmApp->utilityScreen);
       return;
