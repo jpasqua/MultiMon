@@ -176,6 +176,7 @@ namespace MMWebUI {
     WebUIHelper::init(Internal::CUSTOM_ACTIONS);
 
     WebUI::registerHandler("/",                       Pages::presentHomePage);
+    WebUI::registerHandler("/presentPrinterConfig",   Pages::presentPrinterConfig);
     WebUI::registerHandler("/updatePrinterConfig",    Endpoints::updatePrinterConfig);
     WebUI::registerHandler("/dev",                    Dev::presentDevConfig);
     WebUI::registerHandler("/dev/updateDevData",      Dev::updateDevConfig);
