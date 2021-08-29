@@ -46,30 +46,30 @@ namespace MMWebUI {
   // ----- BEGIN: MMWebUI::Endpoints
   namespace Endpoints {
     void updatePrinterConfig() {
-      if (!WebUI::authenticationOK()) { return; }
+      auto action = []() {
+        for (int i = 0; i < 4; i++) {
+          PrinterSettings* printer = &(mmSettings->printer[i]);
+          bool wasActive = printer->isActive;
+          Internal::updateSinglePrinter(i);
+          if (!wasActive && printer->isActive) mmApp->printerWasActivated(i);
+        }
+        mmSettings->printerRefreshInterval = WebUI::arg(F("refreshInterval")).toInt();
+        wtApp->settings->write();
+        // wtApp->settings->logSettings();
 
-      for (int i = 0; i < 4; i++) {
-        PrinterSettings* printer = &(mmSettings->printer[i]);
-        bool wasActive = printer->isActive;
-        Internal::updateSinglePrinter(i);
-        if (!wasActive && printer->isActive) mmApp->printerWasActivated(i);
-      }
-      mmSettings->printerRefreshInterval = WebUI::arg(F("refreshInterval")).toInt();
-      wtApp->settings->write();
-      // wtApp->settings->logSettings();
-
-      // Act on changed settings...
-      wtAppImpl->configMayHaveChanged();
-      WebUI::redirectHome();
+        // Act on changed settings...
+        wtAppImpl->configMayHaveChanged();
+        WebUI::redirectHome();
+      };
+  
+      WebUIHelper::wrapWebAction("/updatePrinterConfig", action);
     }
+
   }   // ----- END: MMWebUI::Endpoints
 
   // ----- BEGIN: MMWebUI::Dev
   namespace Dev {
     void presentDevConfig() {
-      Log.trace(F("Web Request: Handle Dev Configure"));
-      if (!WebUI::authenticationOK()) { return; }
-
       auto mapper =[](String &key) -> String {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
@@ -84,31 +84,30 @@ namespace MMWebUI {
         return WTBasics::EmptyString;
       };
 
-      WebUI::startPage();
-      WebUIHelper::templateHandler->send("/ConfigDev.html", mapper);
-      WebUI::finishPage();
+      WebUIHelper::wrapWebPage("/presentDevConfig", "/ConfigDev.html", mapper);
     }
 
     void updateDevConfig() {
-      if (!WebUI::authenticationOK()) { return; }
-      PrinterSettings* printer = &(mmSettings->printer[0]);
-      printer[0].mock = WebUI::hasArg(F("_p0_mock"));
-      printer[1].mock = WebUI::hasArg(F("_p1_mock"));
-      printer[2].mock = WebUI::hasArg(F("_p2_mock"));
-      printer[3].mock = WebUI::hasArg(F("_p3_mock"));
+      auto action = []() {
+        wtApp->settings->uiOptions.showDevMenu = WebUI::hasArg("showDevMenu");
 
-      // Save the config, but don't change which printers are mocked until reboot
-      wtApp->settings->write();
-      WebUI::redirectHome();
+        PrinterSettings* printer = &(mmSettings->printer[0]);
+        printer[0].mock = WebUI::hasArg(F("_p0_mock"));
+        printer[1].mock = WebUI::hasArg(F("_p1_mock"));
+        printer[2].mock = WebUI::hasArg(F("_p2_mock"));
+        printer[3].mock = WebUI::hasArg(F("_p3_mock"));
+
+        // Save the config, but don't change which printers are mocked until reboot
+        wtApp->settings->write();
+        WebUI::redirectHome();
+      };
+      WebUIHelper::wrapWebAction("/updateDevConfig", action);
     }
   }   // ----- END: MMWebUI::Dev
 
 
   namespace Pages {
     void presentHomePage() {
-      Log.trace(F("Web Request: Display Home Page"));
-      if (!WebUI::authenticationOK()) { return; }
-
       auto mapper =[](String &key) -> String {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
@@ -137,15 +136,10 @@ namespace MMWebUI {
         return WTBasics::EmptyString;
       };
 
-      WebUI::startPage();
-      WebUIHelper::templateHandler->send("/HomePage.html", mapper);
-      WebUI::finishPage();
+      WebUIHelper::wrapWebPage("/", "/HomePage.html", mapper);
     }
 
     void presentPrinterConfig() {
-      Log.trace(F("Web Request: Handle Printer Configure"));
-      if (!WebUI::authenticationOK()) { return; }
-
       auto mapper =[](String &key) -> String {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
@@ -165,9 +159,7 @@ namespace MMWebUI {
         return WTBasics::EmptyString;
       };
 
-      WebUI::startPage();
-      WebUIHelper::templateHandler->send("/ConfigPrinters.html", mapper);
-      WebUI::finishPage();
+      WebUIHelper::wrapWebPage("/presentPrinterConfig", "/ConfigPrinters.html", mapper);
     }
   }   // ----- END: MMWebUI::Pages
 
