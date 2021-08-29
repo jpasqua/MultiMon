@@ -87,26 +87,13 @@ void MultiMonApp::printerWasActivated(int index) {
 
 /*------------------------------------------------------------------------------
  *
- * Optional WTAppImpl virtual functions
- *
- *----------------------------------------------------------------------------*/
-
-void MultiMonApp::begin() {
-  // Add app-specific code here...
-  WTAppImpl::begin();
-
-}
-
-void MultiMonApp::loop() {
-  // Add app-specific code here...
-  WTAppImpl::loop();
-}
-
-/*------------------------------------------------------------------------------
- *
  * Mandatory WTAppImpl virtual functions
  *
  *----------------------------------------------------------------------------*/
+
+void MultiMonApp::app_loop() {
+  // Add app-specific code here...
+}
 
 void MultiMonApp::app_registerDataSuppliers() {
   DataBroker::registerMapper(MMDataSupplier::printerDataSupplier, MMDataSupplier::PrinterPrefix);

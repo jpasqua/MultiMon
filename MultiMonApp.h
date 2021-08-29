@@ -54,16 +54,13 @@ public:
   TimeScreen*     timeScreen;
   PrintClient*    printer[MaxPrinters];
   
-  // ----- Functions that *may* be provided by subclasses
-  virtual void begin();
-  virtual void loop();
-
   // ----- Functions that *must* be provided by subclasses
   virtual void app_registerDataSuppliers() override;
+  virtual Screen* app_registerScreens() override;
   virtual void app_initWebUI() override;
   virtual void app_initClients() override;
   virtual void app_conditionalUpdate(bool force = false) override;
-  virtual Screen* app_registerScreens() override;
+  virtual void app_loop() override;
 
   // ----- Public functions
   MultiMonApp(MMSettings* settings);
