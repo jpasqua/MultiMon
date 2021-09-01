@@ -24,7 +24,7 @@ namespace MMWebUI {
 
   // ----- BEGIN: MMWebUI::Internal
   namespace Internal {
-    String CUSTOM_ACTIONS =
+    const char CUSTOM_ACTIONS[] PROGMEM =
       "<a class='w3-bar-item w3-button' href='/presentPrinterConfig'>"
       "<i class='fa fa-cog'></i> Configure Printers</a>";
 
