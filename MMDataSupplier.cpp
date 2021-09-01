@@ -105,7 +105,7 @@ namespace MMDataSupplier {
       }
 
       if (key.equalsIgnoreCase("next")) {
-        if (!active) return;
+        if (!active) { return; }
         if (p->isPrinting()) Printing::completionTime(value, p->getPrintTimeLeft());
         return;
       }
@@ -118,23 +118,24 @@ namespace MMDataSupplier {
       }
     }
   }
-    void printerDataSupplier(const String& key, String& value) {
-      // Map printer related keys
-      if (key.equalsIgnoreCase("next")) {
-        uint32_t delta;
-        String printer, formattedTime;
-        Printing::nextCompletion(printer, formattedTime, delta);
-        if (printer.isEmpty()) value += F("No print in progress");
-        value += printer; value += ": "; value += formattedTime;
-        return;
-      }
 
-      // Check for printer-specific keys
-      if (isDigit(key[0]) && key[1] == '.') {
-        int index = (key[0] - '0') - 1;
-        String subkey = key.substring(2);
-        Printing::mapPrinterSpecific(subkey, value, index);
-        return;
-      }
+  void printerDataSupplier(const String& key, String& value) {
+    // Map printer related keys
+    if (key.equalsIgnoreCase("next")) {
+      uint32_t delta;
+      String printer, formattedTime;
+      Printing::nextCompletion(printer, formattedTime, delta);
+      if (printer.isEmpty()) value += F("No print in progress");
+      value += printer; value += ": "; value += formattedTime;
+      return;
     }
+
+    // Check for printer-specific keys
+    if (isDigit(key[0]) && key[1] == '.') {
+      int index = (key[0] - '0') - 1;
+      String subkey = key.substring(2);
+      Printing::mapPrinterSpecific(subkey, value, index);
+      return;
+    }
+  }
 };
