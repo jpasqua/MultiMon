@@ -45,7 +45,7 @@
 
 class MultiMonApp : public WTAppImpl {
 public:
-  static const int MaxPrinters = 4;
+  static constexpr int MaxPrinters = 4;
 
   static void create();
 

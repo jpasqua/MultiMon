@@ -32,46 +32,46 @@ using Display::sprite;
  *
  *----------------------------------------------------------------------------*/
 
-static const uint16_t TitleAreaYOrigin = 0;
-static const auto TitleFont = Display::Font::FontID::SB18;
-static const auto TitleFontHeight = 42;     // TitleFont->yAdvance;
-static const auto TitleAreaHeight = TitleFontHeight;
+static constexpr uint16_t TitleAreaYOrigin = 0;
+static constexpr auto TitleFont = Display::Font::FontID::SB18;
+static constexpr auto TitleFontHeight = 42;     // TitleFont->yAdvance;
+static constexpr auto TitleAreaHeight = TitleFontHeight;
 
-static const uint16_t FileNameYOrigin = TitleAreaYOrigin + TitleAreaHeight;
-static const auto FileNameFont = Display::Font::FontID::SB9;
-static const auto FileNameFontHeight = 22;  // FileNameFont->yAdvance;
+static constexpr uint16_t FileNameYOrigin = TitleAreaYOrigin + TitleAreaHeight;
+static constexpr auto FileNameFont = Display::Font::FontID::SB9;
+static constexpr auto FileNameFontHeight = 22;  // FileNameFont->yAdvance;
 
 // The button that initiates scrolling of the file name covers both the title
 // area and the file name area. The file name area by itself is too small.
-static const uint16_t FileNameButtonX = 0;
-static const uint16_t FileNameButtonY = 0;
-static const uint16_t FileNameButtonWidth = Display::Width;
-static const uint16_t FileNameButtonHeight = 64; // TitleAreaHeight+FileNameFontHeight;
+static constexpr uint16_t FileNameButtonX = 0;
+static constexpr uint16_t FileNameButtonY = 0;
+static constexpr uint16_t FileNameButtonWidth = Display::Width;
+static constexpr uint16_t FileNameButtonHeight = 64; // TitleAreaHeight+FileNameFontHeight;
 
-static const auto ProgressFont = Display::Font::FontID::SB18;
-static const uint16_t ProgressXInset = 4;
-static const uint16_t ProgressXOrigin = ProgressXInset;
-static const uint16_t ProgressYOrigin = 100;
-static const uint16_t ProgressHeight = 42;      // ProgressFont->yAdvance;
-static const uint16_t ProgressWidth = Display::Width - (2 * ProgressXInset);
+static constexpr auto ProgressFont = Display::Font::FontID::SB18;
+static constexpr uint16_t ProgressXInset = 4;
+static constexpr uint16_t ProgressXOrigin = ProgressXInset;
+static constexpr uint16_t ProgressYOrigin = 100;
+static constexpr uint16_t ProgressHeight = 42;      // ProgressFont->yAdvance;
+static constexpr uint16_t ProgressWidth = Display::Width - (2 * ProgressXInset);
 
 
-static const auto TimeFont = Display::Font::FontID::D20;
-static const uint16_t TimeYOrigin = ProgressYOrigin + ProgressHeight + 15;
-static const uint16_t TimeWidth = 100;
-static const uint16_t TimeHeight = 22;
+static constexpr auto TimeFont = Display::Font::FontID::D20;
+static constexpr uint16_t TimeYOrigin = ProgressYOrigin + ProgressHeight + 15;
+static constexpr uint16_t TimeWidth = 100;
+static constexpr uint16_t TimeHeight = 22;
 
-static const auto DetailFont = Display::Font::FontID::SB9;
-static const uint16_t DetailXInset = 10;
-static const uint16_t DetailYBottomMargin = 4;
-static const uint16_t DetailFontHeight = 22;    // DetailFont->yAdvance;
-static const uint16_t DetailWidth = Display::Width;
-static const uint16_t DetailHeight = 2 * DetailFontHeight;
-static const uint16_t DetailXOrigin = 0;
-static const uint16_t DetailYOrigin = Display::Height - DetailHeight - DetailYBottomMargin;
+static constexpr auto DetailFont = Display::Font::FontID::SB9;
+static constexpr uint16_t DetailXInset = 10;
+static constexpr uint16_t DetailYBottomMargin = 4;
+static constexpr uint16_t DetailFontHeight = 22;    // DetailFont->yAdvance;
+static constexpr uint16_t DetailWidth = Display::Width;
+static constexpr uint16_t DetailHeight = 2 * DetailFontHeight;
+static constexpr uint16_t DetailXOrigin = 0;
+static constexpr uint16_t DetailYOrigin = Display::Height - DetailHeight - DetailYBottomMargin;
 
-static const uint8_t FileNameButtonID = 0;
-static const uint8_t FullScreenButtonID = 1;
+static constexpr uint8_t FileNameButtonID = 0;
+static constexpr uint8_t FullScreenButtonID = 1;
 
 /*------------------------------------------------------------------------------
  *
@@ -218,10 +218,10 @@ void DetailScreen::drawProgressBar(
   lastPct = pct;
   lastTxt = txt;
 
-  static const uint8_t BackgroundIndex = 0;
-  static const uint8_t BarIndex = 1;
-  static const uint8_t TextIndex = 2;
-  static const uint8_t BorderIndex = 3;
+  constexpr uint8_t BackgroundIndex = 0;
+  constexpr uint8_t BarIndex = 1;
+  constexpr uint8_t TextIndex = 2;
+  constexpr uint8_t BorderIndex = 3;
   uint16_t cmap[16];
   cmap[BackgroundIndex] = Theme::Color_Background;
   cmap[BarIndex] = Theme::Color_Progress;
@@ -237,8 +237,8 @@ void DetailScreen::drawProgressBar(
   int bw = (pct/100)*(w-2);
   sprite->fillRect(1, 1, bw, (h-2), BarIndex);
 
-  static const uint16_t PctXInset = 10;
-  static const uint16_t TxtXInset = 5;
+  constexpr uint16_t PctXInset = 10;
+  constexpr uint16_t TxtXInset = 5;
   Display::Font::setUsingID(ProgressFont, sprite);
   sprite->setTextColor(TextIndex);
   sprite->setTextDatum(ML_DATUM);

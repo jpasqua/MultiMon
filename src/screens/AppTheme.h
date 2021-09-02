@@ -21,14 +21,14 @@
 //--------------- End:    Includes ---------------------------------------------
 
 namespace AppTheme {
-  static const uint32_t Color_Nickname = 0xE51D;      // Light Purple
-  static const uint32_t Color_UpdatingPrinter = TFT_DARKGREEN;
-  static const uint32_t Color_SplashOcto = TFT_GREEN;
-  static const uint32_t Color_SplashDuet = TFT_BLUE;
-  static const uint32_t Color_SplashRR   = 0x0488;
+  constexpr uint32_t Color_Nickname = 0xE51D;      // Light Purple
+  constexpr uint32_t Color_UpdatingPrinter = TFT_DARKGREEN;
+  constexpr uint32_t Color_SplashOcto = TFT_GREEN;
+  constexpr uint32_t Color_SplashDuet = TFT_BLUE;
+  constexpr uint32_t Color_SplashRR   = 0x0488;
     // RR Logo color is #029346, 565 version of that is 0x0488
-  static const uint32_t Color_SplashD3   = 0x02DF;
-  //static const uint32_t Color_SplashD3   = 0x000E;
+  constexpr uint32_t Color_SplashD3   = 0x02DF;
+  //constexpr uint32_t Color_SplashD3   = 0x000E;
     // Duet3D Logo color is #040073, 565 version of that is 0x000E
 };
 

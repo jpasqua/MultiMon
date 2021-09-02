@@ -22,8 +22,6 @@
  *
  *----------------------------------------------------------------------------*/
 
-const uint32_t  MMSettings::CurrentVersion = 0x0003;
-
 MMSettings::MMSettings() {
   version = MMSettings::CurrentVersion;
   maxFileSize = 2048;

@@ -1,6 +1,6 @@
 #include "PrintClient.h"
 
-static const uint8_t N_Names = 6;
+static constexpr uint8_t N_Names = 6;
 static const char *names[N_Names] = {
   "covid19_headband_all_rc3_0.2mm_PLA.gcode",
   "Box (Bottom Facing USB)_0.2mm_PLA_UXL_2h57m.gcode",

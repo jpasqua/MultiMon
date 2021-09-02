@@ -128,7 +128,7 @@ void DuetClient::dumpToLog() {
  *----------------------------------------------------------------------------*/
 
 bool DuetClient::connect() {
-  static const uint32_t RRConnectJSONSize = 128;
+  constexpr uint32_t RRConnectJSONSize = 128;
   String RRConnectEndpoint = "/rr_connect?password=";
 
   RRConnectEndpoint += (details.pass.isEmpty()) ? "reprap" : details.pass;
@@ -147,7 +147,7 @@ bool DuetClient::connect() {
 }
 
 bool DuetClient::disconnect() {
-  static const uint32_t RRDisonnectJSONSize = 128;
+  constexpr uint32_t RRDisonnectJSONSize = 128;
   static const String RRDisconnectEndpoint = "/rr_disconnect";
 
   DynamicJsonDocument *root = service->issueGET(RRDisconnectEndpoint, RRDisonnectJSONSize);
@@ -166,7 +166,7 @@ bool DuetClient::disconnect() {
 
 void DuetClient::getRRState() {
   static const String RRStateEndpoint = "/rr_status?type=3";
-  static const uint32_t RRStateJSONSize = 3000;
+  constexpr uint32_t RRStateJSONSize = 3000;
 
   DynamicJsonDocument *root = service->issueGET(RRStateEndpoint, RRStateJSONSize);
   if (!root) {
@@ -195,7 +195,7 @@ void DuetClient::getRRState() {
 
 void DuetClient::getFileInfo() {
   static const String FileInfoEndpoint = "/rr_fileinfo";
-  static const uint32_t FileInfoJSONSize = 1024;
+  constexpr uint32_t FileInfoJSONSize = 1024;
 
   DynamicJsonDocument *root = service->issueGET(FileInfoEndpoint, FileInfoJSONSize);
   if (!root) {

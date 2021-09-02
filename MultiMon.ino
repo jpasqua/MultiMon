@@ -22,7 +22,7 @@
 //                                  Core Libraries
 //                                  Third Party Libraries
 //                                  WebThing Includes
-#include <WebThingBasics.h>
+#include <WTBasics.h>
 //                                  Local Includes
 #include HEADER(MainClassName)
 //--------------- End:    Includes ---------------------------------------------

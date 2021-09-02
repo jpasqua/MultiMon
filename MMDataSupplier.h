@@ -16,7 +16,7 @@
 
 
 namespace MMDataSupplier {
-  static const char PrinterPrefix = 'P';
+  constexpr char PrinterPrefix = 'P';
 
   namespace Printing {
     extern void nextCompletion(String &printer, String &formattedTime, uint32_t &delta);

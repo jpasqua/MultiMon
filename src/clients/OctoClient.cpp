@@ -67,7 +67,7 @@ void OctoClient::acknowledgeCompletion() {
 
 void OctoClient::getJobState() {
   static const String JobStateEndpoint = "/api/job";
-  static const uint32_t JobStateJSONSize =
+  constexpr uint32_t JobStateJSONSize =
       JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) +
       2*JSON_OBJECT_SIZE(5) + JSON_OBJECT_SIZE(6) + 710;
 
@@ -101,7 +101,7 @@ void OctoClient::getJobState() {
 
 void OctoClient::getPrinterState() {
   static const String PrinterStateEndpoint = "/api/printer?exclude=sd,history";
-  static const uint32_t PrinterStateJSONSize =
+  constexpr uint32_t PrinterStateJSONSize =
       3*JSON_OBJECT_SIZE(2) + 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(9) + 300;
 
   DynamicJsonDocument *root = service->issueGET(PrinterStateEndpoint, PrinterStateJSONSize);

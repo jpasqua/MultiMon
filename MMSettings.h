@@ -48,12 +48,13 @@ public:
   void toJSON(JsonDocument &doc);
   void logSettings();
 
-  static const uint8_t MaxPrinters = 4;
+  static constexpr uint8_t MaxPrinters = 4;
   PrinterSettings printer[MaxPrinters];
   uint32_t printerRefreshInterval = 10;
 
 private:
   // ----- Constants -----
-  static const uint32_t CurrentVersion;
+  static constexpr uint32_t CurrentVersion = 0x0003;
+
 };
 #endif // MMSettings_h

@@ -11,7 +11,7 @@
 #include <TimeLib.h>
 //                                  WebThing Includes
 #include <GenericESP.h>
-#include <WebThingBasics.h>
+#include <WTBasics.h>
 #include <gui/Display.h>
 #include <gui/Theme.h>
 #include <gui/ScreenMgr.h>
@@ -53,44 +53,44 @@ using Display::sprite;
  *
  *----------------------------------------------------------------------------*/
 
-static const auto WeatherFont = Display::Font::FontID::SB9;
-static const uint16_t WeatherFontHeight = 22;   // WeatherFont->yAdvance;
-static const uint16_t WeatherXOrigin = 0;
-static const uint16_t WeatherYOrigin = 0;
-static const uint16_t WeatherHeight = WeatherFontHeight;
-static const uint16_t WeatherWidth = Display::Width;
+static constexpr auto WeatherFont = Display::Font::FontID::SB9;
+static constexpr uint16_t WeatherFontHeight = 22;   // WeatherFont->yAdvance;
+static constexpr uint16_t WeatherXOrigin = 0;
+static constexpr uint16_t WeatherYOrigin = 0;
+static constexpr uint16_t WeatherHeight = WeatherFontHeight;
+static constexpr uint16_t WeatherWidth = Display::Width;
 
 static int16_t PrinterNameFont = 2; // A small 5x7 font
 
 // NC is short for Next Completion
-static const auto NCFont = Display::Font::FontID::SB9;
-static const uint16_t NCFontHeight = 22;      // NCFont->yAdvance;
-static const uint16_t NCXOrigin = 0;
-static const uint16_t NCYOrigin = WeatherYOrigin + WeatherHeight + 2;
-static const uint16_t NCHeight = NCFontHeight;
-static const uint16_t NCWidth = Display::Width;
+static constexpr auto NCFont = Display::Font::FontID::SB9;
+static constexpr uint16_t NCFontHeight = 22;      // NCFont->yAdvance;
+static constexpr uint16_t NCXOrigin = 0;
+static constexpr uint16_t NCYOrigin = WeatherYOrigin + WeatherHeight + 2;
+static constexpr uint16_t NCHeight = NCFontHeight;
+static constexpr uint16_t NCWidth = Display::Width;
 
 // NOTE: The rightmost frame of ProgressBar[i] overlaps the leftmost frame
 //       of ProgressBar[i+1]
-static const uint16_t PB_FrameSize = 2;                             // Size of the Frame
-static const uint16_t PB_Width = 81;                                // Includes Frame
-static const uint16_t PB_Height = 42;                               // Includes Frame
-static const uint16_t PB_BarWidth = PB_Width - (PB_FrameSize*2);    // Just the bar, no frame
-static const uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the bar, no frame
-static const uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
-static const uint16_t PB_YOrigin = Display::Height - PB_Height;      // Y Origin of all progress bars
-static const uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
-static const auto PB_Font = Display::Font::FontID::SB9;                 // Font for the Progress Bar
+static constexpr uint16_t PB_FrameSize = 2;                             // Size of the Frame
+static constexpr uint16_t PB_Width = 81;                                // Includes Frame
+static constexpr uint16_t PB_Height = 42;                               // Includes Frame
+static constexpr uint16_t PB_BarWidth = PB_Width - (PB_FrameSize*2);    // Just the bar, no frame
+static constexpr uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the bar, no frame
+static constexpr uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
+static constexpr uint16_t PB_YOrigin = Display::Height - PB_Height;      // Y Origin of all progress bars
+static constexpr uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
+static constexpr auto PB_Font = Display::Font::FontID::SB9;                 // Font for the Progress Bar
 
-static const uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
-static const uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
-static const uint16_t ClockWidth = Display::Width;                   // Full width of the screen
-static const uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
-static const auto ClockFont = Display::Font::FontID::D100;
-static const uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
+static constexpr uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
+static constexpr uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
+static constexpr uint16_t ClockWidth = Display::Width;                   // Full width of the screen
+static constexpr uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
+static constexpr auto ClockFont = Display::Font::FontID::D100;
+static constexpr uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
 
-static const int WeatherAreaIndex = 4;
-static const int ClockAreaIndex = 5;
+static constexpr int WeatherAreaIndex = 4;
+static constexpr int ClockAreaIndex = 5;
 
 /*------------------------------------------------------------------------------
  *
