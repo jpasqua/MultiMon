@@ -25,7 +25,7 @@ private:
   void drawClock(bool force = false);
   void drawStatus(bool force = false);
   void drawWeather(bool force = false);
-  void drawNextComplete(bool force = false);
+  void drawSecondLine(bool force = false);
   void drawPrinterNames(bool force = false);
 };
 

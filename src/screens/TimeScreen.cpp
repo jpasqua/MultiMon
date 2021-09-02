@@ -33,7 +33,7 @@ using Display::sprite;
 
       +--------------------------------------------+
       |    City    Temp   Weather Description      |
-      |   [Next Print completion time if avail]    |
+      |  [Next print completion time | forecast]   |
       |              11      2222   33333          |
       |              11 ::  2   2        3         |
       |              11        2       333         |
@@ -149,7 +149,7 @@ void TimeScreen::display(bool activating) {
   drawPrinterNames(activating);
   drawStatus(activating);
   drawWeather(activating);
-  drawNextComplete(activating);
+  drawSecondLine(activating);
   nextUpdateTime = millis() + 10 * 1000L;
 }
 
@@ -251,27 +251,43 @@ void TimeScreen::drawWeather(bool force) {
   sprite->deleteSprite();
 }
 
-void TimeScreen::drawNextComplete(bool force) {
+void TimeScreen::drawSecondLine(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
 
   sprite->setColorDepth(1);
   sprite->createSprite(NCWidth, NCHeight);
   sprite->fillSprite(Theme::Mono_Background);
+  sprite->setTextColor(Theme::Mono_Foreground);
+  sprite->setTextDatum(TC_DATUM);
+  Display::Font::setUsingID(NCFont, sprite);
+
+  uint16_t textColor = Theme::Color_NormalText;
 
   String printerName, formattedTime;
   uint32_t delta;
   MMDataSupplier::Printing::nextCompletion(printerName, formattedTime, delta);
-  if (!printerName.isEmpty()) {
-    Display::Font::setUsingID(NCFont, sprite);
-    sprite->setTextColor(Theme::Mono_Foreground);
-    sprite->setTextDatum(TC_DATUM);
-    sprite->drawString(printerName +": " + formattedTime, NCWidth/2, 0);
+  String text;
+  if (printerName.isEmpty()) {
+    // Nothing to display, so show the forecast for the day
+    Forecast *f = wtApp->owmClient->getForecast();
+    text.reserve(20);
+    text = "High: ";
+    text += String(f[0].hiTemp, 0);
+    text += ", Low: ";
+    text += String(f[0].loTemp, 0);
+  } else {
+    text.reserve(60);
+    text = printerName;
+    text += ": ";
+    text += formattedTime;
+    if (delta < (15*60)) textColor = Theme::Color_AlertGood;
   }
 
-  uint16_t color = delta < (15*60) ? Theme::Color_AlertGood : Theme::Color_NormalText;
-  sprite->setBitmapColor(color, Theme::Color_Background);
+  sprite->drawString(text, NCWidth/2, 0);
+  sprite->setBitmapColor(textColor, Theme::Color_Background);
   sprite->pushSprite(NCXOrigin, NCYOrigin);
   sprite->deleteSprite();
+
 }
 
 void TimeScreen::drawPrinterNames(bool force) {
