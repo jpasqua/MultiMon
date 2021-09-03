@@ -1,5 +1,5 @@
-#ifndef TimeScreen_h
-#define TimeScreen_h
+#ifndef HomeScreen_h
+#define HomeScreen_h
 
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
@@ -10,9 +10,9 @@
 #include "DetailScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
-class TimeScreen : public Screen {
+class HomeScreen : public Screen {
 public:
-  TimeScreen();
+  HomeScreen();
 
   void display(bool activating = false);
 
@@ -29,4 +29,4 @@ private:
   void drawPrinterNames(bool force = false);
 };
 
-#endif  // TimeScreen_h
+#endif  // HomeScreen_h

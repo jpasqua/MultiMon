@@ -116,13 +116,13 @@ void MultiMonApp::app_conditionalUpdate(bool force) {
 Screen* MultiMonApp::app_registerScreens() {
   detailScreen = new DetailScreen();
   splashScreen = new SplashScreen();
-  timeScreen = new TimeScreen();
+  homeScreen = new HomeScreen();
 
   ScreenMgr::registerScreen("Detail", detailScreen);
   ScreenMgr::registerScreen("Splash", splashScreen);
-  ScreenMgr::registerScreen("Time", timeScreen);
+  ScreenMgr::registerScreen("Time", homeScreen);
 
-  ScreenMgr::setAsHomeScreen(timeScreen);
+  ScreenMgr::setAsHomeScreen(homeScreen);
 
   return splashScreen;
 }

@@ -98,7 +98,7 @@ The primary functional areas of *MultiMon* are given below. You don't need to kn
 	* **NOTE**: Currently the real-time handling of changes is not very thorough. Many changes require a reboot to take effect.
 * `GUI` + `Screen`
 	* `GUI` is the primary interface used to cause `Screens` to be displayed and updated, and for user input to be processed.
-	* The heavy lifting for this is done by specialized implementations of the `Screen` class. There is a `TimeScreen`, a `WeatherScreen`, a `DetailScreen` and so on.
+	* The heavy lifting for this is done by specialized implementations of the `Screen` class. There is a `HomeScreen`, a `WeatherScreen`, a `DetailScreen` and so on.
 	* Each screen is responsible for:
 		* Displaying itself using the `TFT_eSPI` library.
 		* Updating itself if information changes. To avoid flickering, there is extensive use of the `TFT_eSPI` sprite capabilities.

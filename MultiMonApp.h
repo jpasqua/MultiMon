@@ -33,7 +33,7 @@
 #include "MMSettings.h"
 #include "src/screens/DetailScreen.h"
 #include "src/screens/SplashScreen.h"
-#include "src/screens/TimeScreen.h"
+#include "src/screens/HomeScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -51,7 +51,7 @@ public:
 
   DetailScreen*	  detailScreen;
   SplashScreen*   splashScreen;
-  TimeScreen*     timeScreen;
+  HomeScreen*     homeScreen;
   PrintClient*    printer[MaxPrinters];
   
   // ----- Functions that *must* be provided by subclasses

@@ -1,5 +1,5 @@
 /*
- * TimeScreen:
+ * HomeScreen:
  *    This is the "home" screen. It displays the time, one line line of
  *    weather data, and a status overview for each printer. 
  *
@@ -18,7 +18,7 @@
 //                                  Local Includes
 #include "../../MMDataSupplier.h"
 #include "../../MultiMonApp.h"
-#include "TimeScreen.h"
+#include "HomeScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
 using Display::tft;
@@ -29,7 +29,7 @@ using Display::sprite;
 // and the clock area is defined to be the space in between
 
 /*
-  ASCII art TimeScreen layout:
+  ASCII art HomeScreen layout:
 
       +--------------------------------------------+
       |    City    Temp   Weather Description      |
@@ -78,13 +78,13 @@ static constexpr uint16_t PB_Height = 42;                               // Inclu
 static constexpr uint16_t PB_BarWidth = PB_Width - (PB_FrameSize*2);    // Just the bar, no frame
 static constexpr uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the bar, no frame
 static constexpr uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
-static constexpr uint16_t PB_YOrigin = Display::Height - PB_Height;      // Y Origin of all progress bars
+static constexpr uint16_t PB_YOrigin = Display::Height - PB_Height;     // Y Origin of all progress bars
 static constexpr uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
-static constexpr auto PB_Font = Display::Font::FontID::SB9;                 // Font for the Progress Bar
+static constexpr auto PB_Font = Display::Font::FontID::SB9;             // Font for the Progress Bar
 
 static constexpr uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
 static constexpr uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
-static constexpr uint16_t ClockWidth = Display::Width;                   // Full width of the screen
+static constexpr uint16_t ClockWidth = Display::Width;                  // Full width of the screen
 static constexpr uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
 static constexpr auto ClockFont = Display::Font::FontID::D100;
 static constexpr uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
@@ -99,10 +99,10 @@ static constexpr int ClockAreaIndex = 5;
  *----------------------------------------------------------------------------*/
 
 
-TimeScreen::TimeScreen() {
+HomeScreen::HomeScreen() {
 
   auto buttonHandler =[this](int id, Button::PressType type) -> void {
-    Log.verbose(F("In TimeScreen Button Handler, id = %d"), id);
+    Log.verbose(F("In HomeScreen Button Handler, id = %d"), id);
     if (id < mmApp->MaxPrinters &&
         mmSettings->printer[id].isActive &&
         mmApp->printer[id]->getState() > PrintClient::State::Operational)
@@ -142,7 +142,7 @@ TimeScreen::TimeScreen() {
     buttonHandler, ClockAreaIndex);
 }
 
-void TimeScreen::display(bool activating) {
+void HomeScreen::display(bool activating) {
   if (activating) { tft.fillScreen(Theme::Color_Background); }
 
   drawClock(activating);
@@ -153,7 +153,7 @@ void TimeScreen::display(bool activating) {
   nextUpdateTime = millis() + 10 * 1000L;
 }
 
-void TimeScreen::processPeriodicActivity() {
+void HomeScreen::processPeriodicActivity() {
   if (millis() >= nextUpdateTime) display();
 }
 
@@ -163,7 +163,7 @@ void TimeScreen::processPeriodicActivity() {
  *
  *----------------------------------------------------------------------------*/
 
-void TimeScreen::drawClock(bool force) {
+void HomeScreen::drawClock(bool force) {
   static int lastTimeDisplayed = -1;
   time_t  t = now();
   int     hr = hour(t);
@@ -209,14 +209,14 @@ void TimeScreen::drawClock(bool force) {
   sprite->deleteSprite();
 }
 
-void TimeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt) {
+void HomeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt) {
   buttons[i].drawProgress(
         pct, txt, PB_Font, PB_FrameSize,
         txtColor, Theme::Color_Border, barColor, Theme::Color_Background,
         WTBasics::EmptyString, true);
 }
 
-void TimeScreen::drawWeather(bool force) {
+void HomeScreen::drawWeather(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
   if (!wtApp->owmClient) { Log.verbose(F("owmClient = NULL")); return; }
   if (!wtApp->settings->owmOptions.enabled) return;
@@ -251,7 +251,7 @@ void TimeScreen::drawWeather(bool force) {
   sprite->deleteSprite();
 }
 
-void TimeScreen::drawSecondLine(bool force) {
+void HomeScreen::drawSecondLine(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
 
   sprite->setColorDepth(1);
@@ -290,7 +290,7 @@ void TimeScreen::drawSecondLine(bool force) {
 
 }
 
-void TimeScreen::drawPrinterNames(bool force) {
+void HomeScreen::drawPrinterNames(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
   uint16_t yPos = PB_YOrigin;
   uint16_t xDelta = Display::Width/mmApp->MaxPrinters;
@@ -306,7 +306,7 @@ void TimeScreen::drawPrinterNames(bool force) {
   }
 }
 
-void TimeScreen::drawStatus(bool force) {
+void HomeScreen::drawStatus(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
   for (int i = 0; i < mmApp->MaxPrinters; i++) {
     PrintClient *printer = mmApp->printer[i];
