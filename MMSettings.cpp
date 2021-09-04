@@ -28,7 +28,7 @@ MMSettings::MMSettings() {
   for (int i = 0; i < MaxPrinters; i++) { printer[i].init(); }
 }
 
-void MMSettings::fromJSON(JsonDocument &doc) {
+void MMSettings::fromJSON(const JsonDocument &doc) {
   JsonArrayConst osArray = doc[F("printerSettings")];
   int i = 0;
   for (JsonObjectConst os : osArray) {

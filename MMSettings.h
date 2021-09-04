@@ -24,7 +24,7 @@ public:
   PrinterSettings();
   void init();
 
-  void fromJSON(JsonObjectConst settings);
+  void fromJSON(const JsonObjectConst settings);
   void toJSON(JsonObject settings) const;
   void logSettings();
 
@@ -44,7 +44,7 @@ class MMSettings: public WTAppSettings {
 public:
   // ----- Constructors and methods
   MMSettings();
-  void fromJSON(JsonDocument &doc) override;
+  void fromJSON(const JsonDocument &doc) override;
   void toJSON(JsonDocument &doc);
   void logSettings();
 
