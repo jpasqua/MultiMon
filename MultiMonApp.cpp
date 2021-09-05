@@ -30,9 +30,9 @@
 //--------------- End:    Includes ---------------------------------------------
 
 
-static const String VersionString = "0.5.0";
-static const String AppName = "MultiMon";
-static const String AppPrefix = "MM-";
+static constexpr const char* VersionString = "0.5.0";
+static constexpr const char* AppName = "MultiMon";
+static constexpr const char* AppPrefix = "MM-";
 
 /*------------------------------------------------------------------------------
  *
