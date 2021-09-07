@@ -24,7 +24,7 @@ namespace MMWebUI {
 
   // ----- BEGIN: MMWebUI::Internal
   namespace Internal {
-    const char CUSTOM_ACTIONS[] PROGMEM =
+    const char APP_MENU_ITEMS[] PROGMEM =
       "<a class='w3-bar-item w3-button' href='/presentPrinterConfig'>"
       "<i class='fa fa-cog'></i> Configure Printers</a>";
 
@@ -70,7 +70,7 @@ namespace MMWebUI {
   // ----- BEGIN: MMWebUI::Dev
   namespace Dev {
     void presentDevConfig() {
-      auto mapper =[](const String &key, String& val) -> void {
+      auto mapper =[](const String& key, String& val) -> void {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           PrinterSettings* printer = &(mmSettings->printer[i]);
@@ -105,11 +105,12 @@ namespace MMWebUI {
 
   namespace Pages {
     void presentHomePage() {
-      auto mapper =[](const String &key, String& val) -> void {
+      auto mapper =[](const String& key, String& val) -> void {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           PrinterSettings* printer = &(mmSettings->printer[i]);
           const char* subkey = &(key.c_str()[4]); // Get rid of the prefix; e.g. _P1_
+
           if (printer->isActive) {
             if (strcmp(subkey, "VIS") == 0) val = "block";
             else if (strcmp(subkey, "HOST") == 0) val = printer->server;
@@ -121,6 +122,7 @@ namespace MMWebUI {
           } else {
             if (strcmp(subkey, "VIS") == 0) val = "none";
           }
+
           return;
         }
 
@@ -137,7 +139,7 @@ namespace MMWebUI {
     }
 
     void presentPrinterConfig() {
-      auto mapper =[](const String &key, String& val) -> void {
+      auto mapper =[](const String& key, String& val) -> void {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           PrinterSettings* printer = &(mmSettings->printer[i]);
@@ -166,7 +168,7 @@ namespace MMWebUI {
 
 
   void init() {
-    WebUIHelper::init(Internal::CUSTOM_ACTIONS);
+    WebUIHelper::init(Internal::APP_MENU_ITEMS);
 
     WebUI::registerHandler("/",                       Pages::presentHomePage);
     WebUI::registerHandler("/presentPrinterConfig",   Pages::presentPrinterConfig);
