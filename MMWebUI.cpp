@@ -24,9 +24,9 @@ namespace MMWebUI {
 
   // ----- BEGIN: MMWebUI::Internal
   namespace Internal {
-    const char APP_MENU_ITEMS[] PROGMEM =
+    const __FlashStringHelper* APP_MENU_ITEMS = FPSTR(
       "<a class='w3-bar-item w3-button' href='/presentPrinterConfig'>"
-      "<i class='fa fa-cog'></i> Configure Printers</a>";
+      "<i class='fa fa-cog'></i> Configure Printers</a>");
 
     void updateSinglePrinter(int i) {
       PrinterSettings* printer = &(mmSettings->printer[i]);
