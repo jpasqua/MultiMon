@@ -70,18 +70,15 @@ namespace MMWebUI {
   // ----- BEGIN: MMWebUI::Dev
   namespace Dev {
     void presentDevConfig() {
-      auto mapper =[](String &key) -> String {
+      auto mapper =[](const String &key, String& val) -> void {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           PrinterSettings* printer = &(mmSettings->printer[i]);
-          key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
-          if (key.equals(F("NICK"))) return printer->nickname;
-          if (key.equals(F("MOCK"))) {
-            return WebUIHelper::checkedOrNot[printer->mock];
-          }
-          if (key.equals(F("SERVER"))) return printer->server;
+          const char* subkey = &(key.c_str()[4]); // Get rid of the prefix; e.g. _P1_
+          if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
+          else if (strcmp(subkey, "MOCK") == 0)  val = WebUIHelper::checkedOrNot[printer->mock];
+          else if (strcmp(subkey, "SERVER") == 0) val = printer->server;
         }
-        return WTBasics::EmptyString;
       };
 
       WebUIHelper::wrapWebPage("/presentDevConfig", "/ConfigDev.html", mapper);
@@ -108,55 +105,59 @@ namespace MMWebUI {
 
   namespace Pages {
     void presentHomePage() {
-      auto mapper =[](String &key) -> String {
+      auto mapper =[](const String &key, String& val) -> void {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           PrinterSettings* printer = &(mmSettings->printer[i]);
-          key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
+          const char* subkey = &(key.c_str()[4]); // Get rid of the prefix; e.g. _P1_
           if (printer->isActive) {
-            if (key.equals(F("VIS"))) return "block";
-            if (key.equals(F("HOST"))) return printer->server;
-            if (key.equals(F("PORT"))) return String(printer->port);
-            if (key.equals(F("AUTH"))) {
-              if (!printer->user.isEmpty()) return printer->user + ':' + printer->pass + '@';
-              else return WTBasics::EmptyString;
+            if (strcmp(subkey, "VIS") == 0) val = "block";
+            else if (strcmp(subkey, "HOST") == 0) val = printer->server;
+            else if (strcmp(subkey, "PORT") == 0) val.concat(printer->port);
+            else if (strcmp(subkey, "AUTH") == 0 && !printer->user.isEmpty()) {
+              val += printer->user;  val += ':'; val += printer->pass; val += '@';
             }
-            if (key.equals(F("NICK"))) return  printer->nickname;
+            else if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
           } else {
-            if (key.equals(F("VIS"))) return "none";
+            if (strcmp(subkey, "VIS") == 0) val = "none";
           }
+          return;
         }
+
         if (key.equals(F("CITYID"))) {
-          if (wtApp->settings->owmOptions.enabled) return String(wtApp->settings->owmOptions.cityID);
-          else return String("5380748");  // Palo Alto, CA, USA
+          if (wtApp->settings->owmOptions.enabled) val = wtApp->settings->owmOptions.cityID;
+          else val.concat("5380748");  // Palo Alto, CA, USA
         }
-        if (key.equals(F("WEATHER_KEY"))) return wtApp->settings->owmOptions.key;
-        if (key.equals(F("UNITS"))) return wtApp->settings->uiOptions.useMetric ? "metric" : "imperial";
-        if (key.equals(F("BRIGHT"))) return String(Display::getBrightness());
-        return WTBasics::EmptyString;
+        else if (key.equals(F("WEATHER_KEY"))) val = wtApp->settings->owmOptions.key;
+        else if (key.equals(F("UNITS"))) val = wtApp->settings->uiOptions.useMetric ? "metric" : "imperial";
+        else if (key.equals(F("BRIGHT"))) val.concat(Display::getBrightness());
       };
 
       WebUIHelper::wrapWebPage("/", "/HomePage.html", mapper);
     }
 
     void presentPrinterConfig() {
-      auto mapper =[](String &key) -> String {
+      auto mapper =[](const String &key, String& val) -> void {
         if (key.startsWith("_P")) {
           int i = (key.charAt(2) - '0');
           PrinterSettings* printer = &(mmSettings->printer[i]);
-          key.remove(0, 4); // Get rid of the prefix; e.g. _P1_
+          const char* subkey = &(key.c_str()[4]); // Get rid of the prefix; e.g. _P1_
           String type = "T_" + printer->type;
-          if (key.equals(F("ENABLED"))) return WebUIHelper::checkedOrNot[printer->isActive];
-          if (key.equals(F("KEY"))) return printer->apiKey;
-          if (key.equals(F("HOST"))) return  printer->server;
-          if (key.equals(F("PORT"))) return String(printer->port);
-          if (key.equals(F("USER"))) return  printer->user;
-          if (key.equals(F("PASS"))) return  printer->pass;
-          if (key.equals(F("NICK"))) return  printer->nickname;
-          if (key == type) return "selected";
+          if (strcmp(subkey, "ENABLED") == 0) val = WebUIHelper::checkedOrNot[printer->isActive];
+          else if (strcmp(subkey, "KEY") == 0) val = printer->apiKey;
+          else if (strcmp(subkey, "HOST") == 0) val =  printer->server;
+          else if (strcmp(subkey, "PORT") == 0) val.concat(printer->port);
+          else if (strcmp(subkey, "USER") == 0) val = printer->user;
+          else if (strcmp(subkey, "PASS") == 0) val = printer->pass;
+          else if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
+          else if (strcmp(subkey, "T_") == 0) {
+            subkey = &subkey[2];
+            if (strcmp(subkey, printer->type.c_str()) == 0) val = "selected";
+          }
+          return;
         }
-        if (key.equals(F("RFRSH"))) return String(mmSettings->printerRefreshInterval);
-        return WTBasics::EmptyString;
+
+        if (key.equals(F("RFRSH"))) val.concat(mmSettings->printerRefreshInterval);
       };
 
       WebUIHelper::wrapWebPage("/presentPrinterConfig", "/ConfigPrinters.html", mapper);
