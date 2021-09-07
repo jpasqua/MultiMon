@@ -34,7 +34,7 @@ function UserAction() {
              console.log("setBrigness result = "+this.responseText);
          }
     };
-    xhttp.open("GET", "/setBrightness?brightness="+brightness, true);
+    xhttp.open("GET", "/setBrightness?value="+brightness, true);
     xhttp.send();
 }
 </script>
