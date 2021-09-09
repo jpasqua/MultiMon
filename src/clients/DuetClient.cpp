@@ -148,7 +148,7 @@ bool DuetClient::connect() {
 
 bool DuetClient::disconnect() {
   constexpr uint32_t RRDisonnectJSONSize = 128;
-  static const String RRDisconnectEndpoint = "/rr_disconnect";
+  constexpr const char* RRDisconnectEndpoint = "/rr_disconnect";
 
   DynamicJsonDocument *root = service->issueGET(RRDisconnectEndpoint, RRDisonnectJSONSize);
   if (!root) {
@@ -165,7 +165,7 @@ bool DuetClient::disconnect() {
 }
 
 void DuetClient::getRRState() {
-  static const String RRStateEndpoint = "/rr_status?type=3";
+  constexpr const char* RRStateEndpoint = "/rr_status?type=3";
   constexpr uint32_t RRStateJSONSize = 3000;
 
   DynamicJsonDocument *root = service->issueGET(RRStateEndpoint, RRStateJSONSize);
@@ -194,7 +194,7 @@ void DuetClient::getRRState() {
 }
 
 void DuetClient::getFileInfo() {
-  static const String FileInfoEndpoint = "/rr_fileinfo";
+  constexpr const char* FileInfoEndpoint = "/rr_fileinfo";
   constexpr uint32_t FileInfoJSONSize = 1024;
 
   DynamicJsonDocument *root = service->issueGET(FileInfoEndpoint, FileInfoJSONSize);
