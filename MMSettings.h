@@ -16,8 +16,8 @@
 //                                  Local Includes
 //--------------- End:    Includes ---------------------------------------------
 
-static const String Type_Octo = "OctoPrint";
-static const String Type_Duet = "Duet3D";
+static constexpr const char* Type_Octo = "OctoPrint";
+static constexpr const char* Type_Duet = "Duet3D";
 
 class PrinterSettings {
 public:
