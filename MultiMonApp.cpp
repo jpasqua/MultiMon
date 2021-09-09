@@ -40,7 +40,7 @@ static constexpr const char* AppPrefix = "MM-";
  *
  *----------------------------------------------------------------------------*/
 
-Plugin* pluginFactory(String& type) {
+Plugin* pluginFactory(const String& type) {
   Plugin *p = NULL;
   if      (type.equalsIgnoreCase("generic")) { p = new GenericPlugin(); }
   else if (type.equalsIgnoreCase("blynk"))   { p = new BlynkPlugin();   }
@@ -196,12 +196,12 @@ void MultiMonApp::activatePrinter(int i) {
         ps->type.c_str(), ps->server.c_str());
     MockPrintClient *mc = new MockPrintClient();
     printer[i] = mc;
-  } else if (ps->type == Type_Octo) {
+  } else if (ps->type.equals(Type_Octo)) {
     Log.verbose(F("Setting up an OctoClient for %s: "), ps->server.c_str());
     OctoClient *oc = new OctoClient();
     oc->init(ps->apiKey, printerIPs[i], ps->port, ps->user, ps->pass);
     printer[i] = oc;
-  } else if (ps->type == Type_Duet) {
+  } else if (ps->type.equals(Type_Duet)) {
     Log.verbose(F("Setting up an DuetClient for %s: "), ps->server.c_str());
     DuetClient *dc = new DuetClient();
     dc->init(printerIPs[i], ps->port, ps->pass);
