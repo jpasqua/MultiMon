@@ -115,7 +115,7 @@ HomeScreen::HomeScreen() {
       String subheading = "Heap: Free/Frag = ";
       String subcontent = String(ESP.getFreeHeap()) + ", " + String(GenericESP::getHeapFragmentation()) + "%"; 
       wtAppImpl->utilityScreen->setSub(subheading, subcontent);
-      ScreenMgr::display(mmApp->utilityScreen);
+      ScreenMgr::display(wtAppImpl->utilityScreen);
       return;
     }
     if (id == ClockAreaIndex) { wtAppImpl->pluginMgr.displayPlugin(0); return; }
