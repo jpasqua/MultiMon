@@ -62,7 +62,7 @@ namespace MMWebUI {
         WebUI::redirectHome();
       };
   
-      WebUIHelper::wrapWebAction("/updatePrinterConfig", action);
+      WebUI::wrapWebAction("/updatePrinterConfig", action);
     }
 
   }   // ----- END: MMWebUI::Endpoints
@@ -81,7 +81,7 @@ namespace MMWebUI {
         }
       };
 
-      WebUIHelper::wrapWebPage("/presentDevConfig", "/ConfigDev.html", mapper);
+      WebUI::wrapWebPage("/presentDevConfig", "/ConfigDev.html", mapper);
     }
 
     void updateDevConfig() {
@@ -98,7 +98,7 @@ namespace MMWebUI {
         wtApp->settings->write();
         WebUI::redirectHome();
       };
-      WebUIHelper::wrapWebAction("/updateDevConfig", action);
+      WebUI::wrapWebAction("/updateDevConfig", action);
     }
   }   // ----- END: MMWebUI::Dev
 
@@ -135,7 +135,7 @@ namespace MMWebUI {
         else if (key.equals(F("BRIGHT"))) val.concat(Display::getBrightness());
       };
 
-      WebUIHelper::wrapWebPage("/", "/HomePage.html", mapper);
+      WebUI::wrapWebPage("/", "/HomePage.html", mapper);
     }
 
     void presentPrinterConfig() {
@@ -162,7 +162,7 @@ namespace MMWebUI {
         if (key.equals(F("RFRSH"))) val.concat(mmSettings->printerRefreshInterval);
       };
 
-      WebUIHelper::wrapWebPage("/presentPrinterConfig", "/ConfigPrinters.html", mapper);
+      WebUI::wrapWebPage("/presentPrinterConfig", "/ConfigPrinters.html", mapper);
     }
   }   // ----- END: MMWebUI::Pages
 
