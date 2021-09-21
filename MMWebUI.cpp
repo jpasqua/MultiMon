@@ -9,7 +9,6 @@
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
 //                                  WebThing Includes
-#include <WTBasics.h>
 #include <WebUI.h>
 #include <WebUIHelper.h>
 #include <gui/Display.h>

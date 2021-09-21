@@ -11,7 +11,7 @@
 #include <TimeLib.h>
 //                                  WebThing Includes
 #include <GenericESP.h>
-#include <WTBasics.h>
+#include <BPABasics.h>
 #include <gui/Display.h>
 #include <gui/Theme.h>
 #include <gui/ScreenMgr.h>
@@ -213,7 +213,7 @@ void HomeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, fl
   buttons[i].drawProgress(
         pct, txt, PB_Font, PB_FrameSize,
         txtColor, Theme::Color_Border, barColor, Theme::Color_Background,
-        WTBasics::EmptyString, true);
+        Basics::EmptyString, true);
 }
 
 void HomeScreen::drawWeather(bool force) {
