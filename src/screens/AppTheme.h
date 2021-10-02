@@ -3,7 +3,7 @@
  *     Define theme elements that are specific to this app
  *
  * NOTES:
- * o ScreenMgr::Theme defines many common colors and fonts that are used by
+ * o ScreenMgr.Theme defines many common colors and fonts that are used by
  *   the implementation of Screen objects.
  * o An app-specific screen may want to use thematic elements that are
  *   not generic. Those can be defined here in the AppTheme namespace.

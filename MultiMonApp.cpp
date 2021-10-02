@@ -118,11 +118,11 @@ Screen* MultiMonApp::app_registerScreens() {
   splashScreen = new SplashScreen();
   homeScreen = new HomeScreen();
 
-  ScreenMgr::registerScreen("Detail", detailScreen);
-  ScreenMgr::registerScreen("Splash", splashScreen);
-  ScreenMgr::registerScreen("Time", homeScreen);
+  ScreenMgr.registerScreen("Detail", detailScreen);
+  ScreenMgr.registerScreen("Splash", splashScreen);
+  ScreenMgr.registerScreen("Time", homeScreen);
 
-  ScreenMgr::setAsHomeScreen(homeScreen);
+  ScreenMgr.setAsHomeScreen(homeScreen);
 
   return splashScreen;
 }
@@ -164,14 +164,14 @@ void MultiMonApp::refreshPrinterData(bool force) {
           break;
       }
       if (force || ((millis() -  lastUpdateTime[i])) > threshold) {
-        ScreenMgr::showUpdatingIcon(AppTheme::Color_UpdatingPrinter);
+        ScreenMgr.activityIcon.show(AppTheme::Color_UpdatingPrinter);
         printer[i]->updateState();
         lastUpdateTime[i] = millis();
         printer[i]->dumpToLog();
       }
     }
   }
-  ScreenMgr::hideUpdatingIcon();
+  ScreenMgr.activityIcon.hide();
 }
 
 void MultiMonApp::activatePrinter(int i) {

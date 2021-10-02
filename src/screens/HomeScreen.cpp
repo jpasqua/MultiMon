@@ -21,11 +21,9 @@
 #include "HomeScreen.h"
 //--------------- End:    Includes ---------------------------------------------
 
-using Display::tft;
-using Display::sprite;
 
 // ----- Coordinates of the various graphical elements
-// The weather area is on top, the buttons are on the bottom,
+// The weather area is on top, the labels are on the bottom,
 // and the clock area is defined to be the space in between
 
 /*
@@ -53,22 +51,22 @@ using Display::sprite;
  *
  *----------------------------------------------------------------------------*/
 
-static constexpr auto WeatherFont = Display::Font::FontID::SB9;
+static constexpr auto WeatherFont = Display.fonts.FontID::SB9;
 static constexpr uint16_t WeatherFontHeight = 22;   // WeatherFont->yAdvance;
 static constexpr uint16_t WeatherXOrigin = 0;
 static constexpr uint16_t WeatherYOrigin = 0;
 static constexpr uint16_t WeatherHeight = WeatherFontHeight;
-static constexpr uint16_t WeatherWidth = Display::Width;
+static constexpr uint16_t WeatherWidth = Display.Width;
 
 static int16_t PrinterNameFont = 2; // A small 5x7 font
 
 // NC is short for Next Completion
-static constexpr auto NCFont = Display::Font::FontID::SB9;
+static constexpr auto NCFont = Display.fonts.FontID::SB9;
 static constexpr uint16_t NCFontHeight = 22;      // NCFont->yAdvance;
 static constexpr uint16_t NCXOrigin = 0;
 static constexpr uint16_t NCYOrigin = WeatherYOrigin + WeatherHeight + 2;
 static constexpr uint16_t NCHeight = NCFontHeight;
-static constexpr uint16_t NCWidth = Display::Width;
+static constexpr uint16_t NCWidth = Display.Width;
 
 // NOTE: The rightmost frame of ProgressBar[i] overlaps the leftmost frame
 //       of ProgressBar[i+1]
@@ -78,19 +76,22 @@ static constexpr uint16_t PB_Height = 42;                               // Inclu
 static constexpr uint16_t PB_BarWidth = PB_Width - (PB_FrameSize*2);    // Just the bar, no frame
 static constexpr uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the bar, no frame
 static constexpr uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
-static constexpr uint16_t PB_YOrigin = Display::Height - PB_Height;     // Y Origin of all progress bars
+static constexpr uint16_t PB_YOrigin = Display.Height - PB_Height;     // Y Origin of all progress bars
 static constexpr uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
-static constexpr auto PB_Font = Display::Font::FontID::SB9;             // Font for the Progress Bar
+static constexpr auto PB_Font = Display.fonts.FontID::SB9;             // Font for the Progress Bar
 
 static constexpr uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
 static constexpr uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
-static constexpr uint16_t ClockWidth = Display::Width;                  // Full width of the screen
+static constexpr uint16_t ClockWidth = Display.Width;                  // Full width of the screen
 static constexpr uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
-static constexpr auto ClockFont = Display::Font::FontID::D100;
+static constexpr auto ClockFont = Display.fonts.FontID::D100;
 static constexpr uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
 
-static constexpr int WeatherAreaIndex = 4;
-static constexpr int ClockAreaIndex = 5;
+static constexpr uint8_t FirstProgressBar = 0;
+static constexpr uint8_t N_ProgressBars   = 4;
+static constexpr uint8_t WeatherAreaLabel = FirstProgressBar + N_ProgressBars;
+static constexpr uint8_t ClockAreaLabel   = WeatherAreaLabel + 1;
+static constexpr uint8_t N_Labels         = ClockAreaLabel + 1;
 
 /*------------------------------------------------------------------------------
  *
@@ -101,49 +102,44 @@ static constexpr int ClockAreaIndex = 5;
 
 HomeScreen::HomeScreen() {
 
-  auto buttonHandler =[this](int id, Button::PressType type) -> void {
+  buttonHandler = [this](uint8_t id, PressType type) -> void {
     Log.verbose(F("In HomeScreen Button Handler, id = %d"), id);
     if (id < mmApp->MaxPrinters &&
         mmSettings->printer[id].isActive &&
         mmApp->printer[id]->getState() > PrintClient::State::Operational)
     {
       mmApp->detailScreen->setIndex(id);
-      ScreenMgr::display(mmApp->detailScreen);
+      ScreenMgr.display(mmApp->detailScreen);
       return;
     }
-    if (type > Button::PressType::NormalPress) {
+    if (type > PressType::Normal) {
       String subheading = "Heap: Free/Frag = ";
       String subcontent = String(ESP.getFreeHeap()) + ", " + String(GenericESP::getHeapFragmentation()) + "%"; 
       wtAppImpl->utilityScreen->setSub(subheading, subcontent);
-      ScreenMgr::display(wtAppImpl->utilityScreen);
+      ScreenMgr.display(wtAppImpl->utilityScreen);
       return;
     }
-    if (id == ClockAreaIndex) { wtAppImpl->pluginMgr.displayPlugin(0); return; }
-    if (id == WeatherAreaIndex) { ScreenMgr::display(mmApp->weatherScreen); return; }
+    if (id == ClockAreaLabel) { wtAppImpl->pluginMgr.displayPlugin(0); return; }
+    if (id == WeatherAreaLabel) { ScreenMgr.display(mmApp->weatherScreen); return; }
   };
 
-  nButtons = mmApp->MaxPrinters + 2;  // The weather area, the clock face, and the printer status areas
-                                        // are each a button.
-  buttons = new Button[nButtons];
-  uint16_t x = PB_XOrigin;
+  labels = new Label[(nLabels = N_Labels)];
+
+  Region r {PB_XOrigin, PB_YOrigin, PB_Width, PB_Height};
   for (int i = 0; i < mmApp->MaxPrinters; i++) {
-    buttons[i].init(x, PB_YOrigin, PB_Width, PB_Height, buttonHandler, i);
-    x += PB_Width - PB_FrameSize;
+    labels[i].init(r, i);
+    r.x += PB_Width - PB_FrameSize;
   }
 
   // Because the weather area is slim and at the top of the screen, we make a bigger button
   // right in the middle to make it easier to touch. It overlaps the Clock button area
   // but has priority as it is earlier in the button list
-  buttons[WeatherAreaIndex].init(
-    0, WeatherYOrigin, Display::Width, /*WeatherHeight*/50,
-    buttonHandler, WeatherAreaIndex);
-  buttons[ClockAreaIndex].init(
-    0, ClockYOrigin, Display::Width, ClockHeight,
-    buttonHandler, ClockAreaIndex);
+  labels[WeatherAreaLabel].init(0, WeatherYOrigin, Display.Width, 50, WeatherAreaLabel);
+  labels[ClockAreaLabel].init(0, ClockYOrigin, Display.Width, ClockHeight, ClockAreaLabel);
 }
 
 void HomeScreen::display(bool activating) {
-  if (activating) { tft.fillScreen(Theme::Color_Background); }
+  if (activating) { Display.tft.fillScreen(Theme::Color_Background); }
 
   drawClock(activating);
   drawPrinterNames(activating);
@@ -168,6 +164,7 @@ void HomeScreen::drawClock(bool force) {
   time_t  t = now();
   int     hr = hour(t);
   int     min = minute(t);
+  auto&   sprite = Display.sprite;
 
   int compositeTime = hr * 100 + min;
   if (!force && (compositeTime == lastTimeDisplayed)) return;
@@ -191,7 +188,7 @@ void HomeScreen::drawClock(bool force) {
   sprite->createSprite(ClockWidth, ClockFontHeight);
   sprite->fillSprite(Theme::Mono_Background);
 
-  Display::Font::setUsingID(ClockFont, sprite);
+  Display.fonts.setUsingID(ClockFont, sprite);
   sprite->setTextColor(Theme::Mono_Foreground);
   // With this large font some manual "kerning" is required to make it fit
   uint16_t baseline = ClockFontHeight-1;
@@ -210,17 +207,17 @@ void HomeScreen::drawClock(bool force) {
 }
 
 void HomeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt) {
-  buttons[i].drawProgress(
+  labels[i].drawProgress(
         pct, txt, PB_Font, PB_FrameSize,
         txtColor, Theme::Color_Border, barColor, Theme::Color_Background,
         Basics::EmptyString, true);
 }
 
-void HomeScreen::drawWeather(bool force) {
-  (void)force;  // We don't use this parameter. Avoid a warning...
+void HomeScreen::drawWeather(bool) {
   if (!wtApp->owmClient) { Log.verbose(F("owmClient = NULL")); return; }
   if (!wtApp->settings->owmOptions.enabled) return;
   String readout;
+  auto& sprite = Display.sprite;
 
   sprite->setColorDepth(1);
   sprite->createSprite(WeatherWidth, WeatherHeight);
@@ -241,7 +238,7 @@ void HomeScreen::drawWeather(bool force) {
     readout += (wtApp->settings->uiOptions.useMetric) ? "C, " : "F, ";
     readout += wtApp->owmClient->weather.description.longer;
   }
-  Display::Font::setUsingID(WeatherFont, sprite);
+  Display.fonts.setUsingID(WeatherFont, sprite);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(MC_DATUM);
   sprite->drawString(readout, WeatherWidth/2, WeatherHeight/2);
@@ -251,15 +248,15 @@ void HomeScreen::drawWeather(bool force) {
   sprite->deleteSprite();
 }
 
-void HomeScreen::drawSecondLine(bool force) {
-  (void)force;  // We don't use this parameter. Avoid a warning...
+void HomeScreen::drawSecondLine(bool) {
+  auto& sprite = Display.sprite;
 
   sprite->setColorDepth(1);
   sprite->createSprite(NCWidth, NCHeight);
   sprite->fillSprite(Theme::Mono_Background);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(TC_DATUM);
-  Display::Font::setUsingID(NCFont, sprite);
+  Display.fonts.setUsingID(NCFont, sprite);
 
   uint16_t textColor = Theme::Color_NormalText;
 
@@ -290,11 +287,12 @@ void HomeScreen::drawSecondLine(bool force) {
 
 }
 
-void HomeScreen::drawPrinterNames(bool force) {
-  (void)force;  // We don't use this parameter. Avoid a warning...
+void HomeScreen::drawPrinterNames(bool) {
+  auto& tft = Display.tft;
   uint16_t yPos = PB_YOrigin;
-  uint16_t xDelta = Display::Width/mmApp->MaxPrinters;
+  uint16_t xDelta = Display.Width/mmApp->MaxPrinters;
   uint16_t xPos = 0 + xDelta/2;
+
   tft.setTextDatum(BC_DATUM);
   tft.setTextColor(Theme::Color_NormalText);
   for (int i = 0; i < mmApp->MaxPrinters; i++) {

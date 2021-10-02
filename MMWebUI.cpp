@@ -131,7 +131,7 @@ namespace MMWebUI {
         }
         else if (key.equals(F("WEATHER_KEY"))) val = wtApp->settings->owmOptions.key;
         else if (key.equals(F("UNITS"))) val = wtApp->settings->uiOptions.useMetric ? "metric" : "imperial";
-        else if (key.equals(F("BRIGHT"))) val.concat(Display::getBrightness());
+        else if (key.equals(F("BRIGHT"))) val.concat(Display.getBrightness());
       };
 
       WebUI::wrapWebPage("/", "/HomePage.html", mapper);

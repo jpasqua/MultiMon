@@ -23,9 +23,6 @@
 //--------------- End:    Includes ---------------------------------------------
 
 
-using Display::tft;
-using Display::sprite;
-
 /*------------------------------------------------------------------------------
  *
  * CONSTANTS
@@ -33,45 +30,43 @@ using Display::sprite;
  *----------------------------------------------------------------------------*/
 
 static constexpr uint16_t TitleAreaYOrigin = 0;
-static constexpr auto TitleFont = Display::Font::FontID::SB18;
+static constexpr auto TitleFont = Display.fonts.FontID::SB18;
 static constexpr auto TitleFontHeight = 42;     // TitleFont->yAdvance;
 static constexpr auto TitleAreaHeight = TitleFontHeight;
 
 static constexpr uint16_t FileNameYOrigin = TitleAreaYOrigin + TitleAreaHeight;
-static constexpr auto FileNameFont = Display::Font::FontID::SB9;
+static constexpr auto FileNameFont = Display.fonts.FontID::SB9;
 static constexpr auto FileNameFontHeight = 22;  // FileNameFont->yAdvance;
 
 // The button that initiates scrolling of the file name covers both the title
 // area and the file name area. The file name area by itself is too small.
-static constexpr uint16_t FileNameButtonX = 0;
-static constexpr uint16_t FileNameButtonY = 0;
-static constexpr uint16_t FileNameButtonWidth = Display::Width;
-static constexpr uint16_t FileNameButtonHeight = 64; // TitleAreaHeight+FileNameFontHeight;
+static constexpr Region   FileNameRegion {0, 0, Display.Width, 64};
 
-static constexpr auto ProgressFont = Display::Font::FontID::SB18;
+static constexpr auto     ProgressFont = Display.fonts.FontID::SB18;
 static constexpr uint16_t ProgressXInset = 4;
 static constexpr uint16_t ProgressXOrigin = ProgressXInset;
 static constexpr uint16_t ProgressYOrigin = 100;
 static constexpr uint16_t ProgressHeight = 42;      // ProgressFont->yAdvance;
-static constexpr uint16_t ProgressWidth = Display::Width - (2 * ProgressXInset);
+static constexpr uint16_t ProgressWidth = Display.Width - (2 * ProgressXInset);
 
 
-static constexpr auto TimeFont = Display::Font::FontID::D20;
+static constexpr auto TimeFont = Display.fonts.FontID::D20;
 static constexpr uint16_t TimeYOrigin = ProgressYOrigin + ProgressHeight + 15;
 static constexpr uint16_t TimeWidth = 100;
 static constexpr uint16_t TimeHeight = 22;
 
-static constexpr auto DetailFont = Display::Font::FontID::SB9;
+static constexpr auto DetailFont = Display.fonts.FontID::SB9;
 static constexpr uint16_t DetailXInset = 10;
 static constexpr uint16_t DetailYBottomMargin = 4;
 static constexpr uint16_t DetailFontHeight = 22;    // DetailFont->yAdvance;
-static constexpr uint16_t DetailWidth = Display::Width;
+static constexpr uint16_t DetailWidth = Display.Width;
 static constexpr uint16_t DetailHeight = 2 * DetailFontHeight;
 static constexpr uint16_t DetailXOrigin = 0;
-static constexpr uint16_t DetailYOrigin = Display::Height - DetailHeight - DetailYBottomMargin;
+static constexpr uint16_t DetailYOrigin = Display.Height - DetailHeight - DetailYBottomMargin;
 
-static constexpr uint8_t FileNameButtonID = 0;
-static constexpr uint8_t FullScreenButtonID = 1;
+static constexpr uint8_t FileNameLabel = 0;
+static constexpr uint8_t FullScreenButtonID = FileNameLabel + 1;
+static constexpr uint8_t N_Labels = FullScreenButtonID + 1;
 
 /*------------------------------------------------------------------------------
  *
@@ -80,25 +75,23 @@ static constexpr uint8_t FullScreenButtonID = 1;
  *----------------------------------------------------------------------------*/
 
 DetailScreen::DetailScreen() {
-  auto buttonHandler =[&](int id, Button::PressType type) -> void {
+  buttonHandler = [this](uint8_t id, PressType type) -> void {
     Log.verbose(F("In DetailScreen ButtonHandler, id = %d"), id);
-    if (id == FileNameButtonID) {  // The file name was tapped
+    if (id == FileNameLabel) {  // The file name was tapped
       revealFullFileName();
       return;
     }
 
     PrintClient *p = mmApp->printer[index];
-    if (type > Button::PressType::NormalPress && p->getState() == PrintClient::State::Complete) {
+    if (type > PressType::Normal && p->getState() == PrintClient::State::Complete) {
       p->acknowledgeCompletion();
     }
-    ScreenMgr::displayHomeScreen();
+    ScreenMgr.displayHomeScreen();
   };
 
-  buttons = new Button[(nButtons = 2)];
-  buttons[0].init(
-      FileNameButtonX, FileNameButtonY, FileNameButtonWidth, FileNameButtonHeight,
-      buttonHandler, FileNameButtonID);
-  buttons[1].init(0, 0, Display::Width, Display::Height, buttonHandler, FullScreenButtonID);
+  labels = new Label[(nLabels = N_Labels)];
+  labels[0].init(FileNameRegion, FileNameLabel);
+  labels[1].init(0, 0, Display.Width, Display.Height, FullScreenButtonID);
 }
 
 void DetailScreen::setIndex(int i) { index = i; }
@@ -108,7 +101,7 @@ void DetailScreen::display(bool activating) {
 
   if (activating) {
     scrollIndex = -1; // We're doing an inital display, so we aren't scrolling
-    tft.fillScreen(Theme::Color_Background);
+    Display.tft.fillScreen(Theme::Color_Background);
     drawStaticContent(printer, activating);
   }
 
@@ -148,22 +141,22 @@ inline void DetailScreen::appendDate(time_t theTime, String &target) {
   if (!wtApp->settings->uiOptions.use24Hour) target += isAM(theTime) ? "AM" : "PM";
 }
 
-void DetailScreen::drawStaticContent(PrintClient *printer, bool force) {
-  (void)force;  // We don't use this parameter. Avoid a warning...
+void DetailScreen::drawStaticContent(PrintClient *printer, bool) {
+  auto& tft = Display.tft;
 
   // ----- Display the nickname
   tft.setTextDatum(TC_DATUM);
-  Display::Font::setUsingID(TitleFont, tft);
+  Display.fonts.setUsingID(TitleFont, tft);
   tft.setTextColor(AppTheme::Color_Nickname);
-  tft.drawString(mmSettings->printer[index].nickname, Display::XCenter, 5);
+  tft.drawString(mmSettings->printer[index].nickname, Display.XCenter, 5);
 
   String name = printer->getFilename();
-  Display::Font::setUsingID(DetailFont, tft); // Set font BEFORE measuring width
+  Display.fonts.setUsingID(DetailFont, tft); // Set font BEFORE measuring width
   nameWidth = tft.textWidth(name);        // Remember width in case we need to scroll
   tft.setTextColor(Theme::Color_DimText);
-  if (nameWidth < Display::Width)  {
+  if (nameWidth < Display.Width)  {
     tft.setTextDatum(TC_DATUM);
-    tft.drawString(name, Display::XCenter, FileNameYOrigin);
+    tft.drawString(name, Display.XCenter, FileNameYOrigin);
   } else {
     tft.setTextDatum(TL_DATUM);
     tft.drawString(name, 0, FileNameYOrigin);
@@ -175,6 +168,7 @@ void DetailScreen::drawTime(bool force) {
   time_t  t = now();
   int     hr = hour(t);
   int     min = minute(t);
+  auto&   sprite = Display.sprite;
 
   int compositeTime = hr * 100 + min;
   if (!force && (compositeTime == lastTimeDisplayed)) return;
@@ -198,20 +192,22 @@ void DetailScreen::drawTime(bool force) {
   sprite->createSprite(TimeWidth, TimeHeight);
   sprite->fillSprite(Theme::Mono_Background);
 
-  Display::Font::setUsingID(TimeFont, sprite);
+  Display.fonts.setUsingID(TimeFont, sprite);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(TC_DATUM);
   sprite->drawString(timeString, TimeWidth/2, 0);
 
   sprite->setBitmapColor(AppTheme::Color_Nickname, Theme::Color_Background);
-  sprite->pushSprite((Display::Width-TimeWidth)/2, TimeYOrigin);
+  sprite->pushSprite((Display.Width-TimeWidth)/2, TimeYOrigin);
   sprite->deleteSprite();
 }
 
 void DetailScreen::drawProgressBar(
-    uint16_t x, uint16_t y, uint16_t w, uint16_t h, float pct, String txt, bool force) {
+    uint16_t x, uint16_t y, uint16_t w, uint16_t h, float pct, String txt, bool force)
+{
   static float  lastPct = -1;
   static String lastTxt = "";
+  auto& sprite = Display.sprite;
 
   if (pct == 100.0f && lastPct != 100.0f) force = true; // Special case, we want 100% at the end
   if ((pct - lastPct < 1) && (txt == lastTxt) && !force) return;
@@ -239,7 +235,7 @@ void DetailScreen::drawProgressBar(
 
   constexpr uint16_t PctXInset = 10;
   constexpr uint16_t TxtXInset = 5;
-  Display::Font::setUsingID(ProgressFont, sprite);
+  Display.fonts.setUsingID(ProgressFont, sprite);
   sprite->setTextColor(TextIndex);
   sprite->setTextDatum(ML_DATUM);
   sprite->drawString(String((int)(pct)) + "%", PctXInset, (h/2));
@@ -251,12 +247,12 @@ void DetailScreen::drawProgressBar(
 }
 
 void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
-  (void)force;  // We don't use this parameter. Avoid a warning...
+  auto& sprite = Display.sprite;
 
   sprite->setColorDepth(1);
-  sprite->createSprite(Display::Width, DetailHeight);
+  sprite->createSprite(Display.Width, DetailHeight);
   sprite->fillSprite(Theme::Mono_Background);
-  Display::Font::setUsingID(DetailFont, sprite);
+  Display.fonts.setUsingID(DetailFont, sprite);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(TL_DATUM);
 
@@ -268,10 +264,10 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
 
   printer->getToolTemps(actual, target);
   temp = "E0: " + String(actual, 1) + " / " + String(target, 1);
-  sprite->drawString(temp, Display::XCenter+DetailXInset, 0);
+  sprite->drawString(temp, Display.XCenter+DetailXInset, 0);
 
   // ----- Display the elapsed Time
-  Display::Font::setUsingID(DetailFont, sprite);
+  Display.fonts.setUsingID(DetailFont, sprite);
   sprite->setTextDatum(TL_DATUM);
   sprite->setTextColor(Theme::Color_NormalText);
   String elapsed = "Done: " + WebThing::formattedInterval(printer->getElapsedTime());
@@ -283,7 +279,7 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
     est = "Est: ";
     appendDate(now() + printer->getPrintTimeLeft(), est);
   }
-  sprite->drawString(est, Display::XCenter+DetailXInset, DetailFontHeight);
+  sprite->drawString(est, Display.XCenter+DetailXInset, DetailFontHeight);
 
   sprite->setBitmapColor(Theme::Color_NormalText, Theme::Color_Background);
   sprite->pushSprite(DetailXOrigin, DetailYOrigin);
@@ -291,16 +287,17 @@ void DetailScreen::drawDetailInfo(PrintClient *printer, bool force) {
 }
 
 void DetailScreen::scrollFileName() {
+  auto& sprite = Display.sprite;
   sprite->setColorDepth(1);
-  sprite->createSprite(Display::Width, DetailHeight);
+  sprite->createSprite(Display.Width, DetailHeight);
   sprite->fillSprite(Theme::Mono_Background);
-  Display::Font::setUsingID(DetailFont, sprite);
+  Display.fonts.setUsingID(DetailFont, sprite);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(TL_DATUM);
 
   uint32_t extraDelay = 0;
   String name = mmApp->printer[index]->getFilename();
-  if (scrollIndex == nameWidth - Display::Width) { delta = -delta; extraDelay = 500; }
+  if (scrollIndex == nameWidth - Display.Width) { delta = -delta; extraDelay = 500; }
   sprite->drawString(name, -scrollIndex, 0);
   sprite->setBitmapColor(Theme::Color_DimText, Theme::Color_Background);
   sprite->pushSprite(0, FileNameYOrigin);
@@ -311,7 +308,7 @@ void DetailScreen::scrollFileName() {
 }
 
 void DetailScreen::revealFullFileName() {
-  if (nameWidth <= Display::Width) return; // It's already revealed
+  if (nameWidth <= Display.Width) return; // It's already revealed
   if (scrollIndex != -1) {  // We're already scrolling, finish
     scrollIndex = 0;
     delta = -1;
