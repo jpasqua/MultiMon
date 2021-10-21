@@ -51,7 +51,7 @@
  *
  *----------------------------------------------------------------------------*/
 
-static constexpr auto WeatherFont = Display.fonts.FontID::SB9;
+static constexpr auto WeatherFont = Display.FontID::SB9;
 static constexpr uint16_t WeatherFontHeight = 22;   // WeatherFont->yAdvance;
 static constexpr uint16_t WeatherXOrigin = 0;
 static constexpr uint16_t WeatherYOrigin = 0;
@@ -61,7 +61,7 @@ static constexpr uint16_t WeatherWidth = Display.Width;
 static int16_t PrinterNameFont = 2; // A small 5x7 font
 
 // NC is short for Next Completion
-static constexpr auto NCFont = Display.fonts.FontID::SB9;
+static constexpr auto NCFont = Display.FontID::SB9;
 static constexpr uint16_t NCFontHeight = 22;      // NCFont->yAdvance;
 static constexpr uint16_t NCXOrigin = 0;
 static constexpr uint16_t NCYOrigin = WeatherYOrigin + WeatherHeight + 2;
@@ -78,13 +78,13 @@ static constexpr uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just 
 static constexpr uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
 static constexpr uint16_t PB_YOrigin = Display.Height - PB_Height;     // Y Origin of all progress bars
 static constexpr uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
-static constexpr auto PB_Font = Display.fonts.FontID::SB9;             // Font for the Progress Bar
+static constexpr auto PB_Font = Display.FontID::SB9;             // Font for the Progress Bar
 
 static constexpr uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
 static constexpr uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
 static constexpr uint16_t ClockWidth = Display.Width;                  // Full width of the screen
 static constexpr uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
-static constexpr auto ClockFont = Display.fonts.FontID::D100;
+static constexpr auto ClockFont = Display.FontID::D100;
 static constexpr uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
 
 static constexpr uint8_t FirstProgressBar = 0;
@@ -115,12 +115,12 @@ HomeScreen::HomeScreen() {
     if (type > PressType::Normal) {
       String subheading = "Heap: Free/Frag = ";
       String subcontent = String(ESP.getFreeHeap()) + ", " + String(GenericESP::getHeapFragmentation()) + "%"; 
-      wtAppImpl->utilityScreen->setSub(subheading, subcontent);
-      ScreenMgr.display(wtAppImpl->utilityScreen);
+      wtAppImpl->screens.utilityScreen->setSub(subheading, subcontent);
+      ScreenMgr.display(wtAppImpl->screens.utilityScreen);
       return;
     }
     if (id == ClockAreaLabel) { wtAppImpl->pluginMgr.displayPlugin(0); return; }
-    if (id == WeatherAreaLabel) { ScreenMgr.display(mmApp->weatherScreen); return; }
+    if (id == WeatherAreaLabel) { ScreenMgr.display(mmApp->screens.weatherScreen); return; }
   };
 
   labels = new Label[(nLabels = N_Labels)];
@@ -188,7 +188,7 @@ void HomeScreen::drawClock(bool force) {
   sprite->createSprite(ClockWidth, ClockFontHeight);
   sprite->fillSprite(Theme::Mono_Background);
 
-  Display.fonts.setUsingID(ClockFont, sprite);
+  Display.setSpriteFont(ClockFont);
   sprite->setTextColor(Theme::Mono_Foreground);
   // With this large font some manual "kerning" is required to make it fit
   uint16_t baseline = ClockFontHeight-1;
@@ -238,7 +238,7 @@ void HomeScreen::drawWeather(bool) {
     readout += (wtApp->settings->uiOptions.useMetric) ? "C, " : "F, ";
     readout += wtApp->owmClient->weather.description.longer;
   }
-  Display.fonts.setUsingID(WeatherFont, sprite);
+  Display.setSpriteFont(WeatherFont);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(MC_DATUM);
   sprite->drawString(readout, WeatherWidth/2, WeatherHeight/2);
@@ -256,7 +256,7 @@ void HomeScreen::drawSecondLine(bool) {
   sprite->fillSprite(Theme::Mono_Background);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(TC_DATUM);
-  Display.fonts.setUsingID(NCFont, sprite);
+  Display.setSpriteFont(NCFont);
 
   uint16_t textColor = Theme::Color_NormalText;
 

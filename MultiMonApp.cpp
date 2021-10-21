@@ -164,14 +164,14 @@ void MultiMonApp::refreshPrinterData(bool force) {
           break;
       }
       if (force || ((millis() -  lastUpdateTime[i])) > threshold) {
-        ScreenMgr.activityIcon.show(AppTheme::Color_UpdatingPrinter);
+        ScreenMgr.showActivityIcon(AppTheme::Color_UpdatingPrinter);
         printer[i]->updateState();
         lastUpdateTime[i] = millis();
         printer[i]->dumpToLog();
       }
     }
   }
-  ScreenMgr.activityIcon.hide();
+  ScreenMgr.hideActivityIcon();
 }
 
 void MultiMonApp::activatePrinter(int i) {

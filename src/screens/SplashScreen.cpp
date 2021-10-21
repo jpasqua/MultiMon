@@ -31,7 +31,7 @@ void SplashScreen::display(bool) {
       Display.XCenter+6, 10, Duet3DMono, Duet3DMono_Width, Duet3DMono_Height,
       Theme::Color_SplashBkg, AppTheme::Color_SplashD3);
 
-  Display.fonts.setUsingID(Display.fonts.FontID::SBO24, tft);
+  Display.setFont(Display.FontID::SBO24);
   tft.setTextColor(Theme::Color_SplashText);
   tft.setTextDatum(BC_DATUM);
   tft.drawString(wtApp->appName, Display.XCenter, Display.Height-1);
