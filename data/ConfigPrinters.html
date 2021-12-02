@@ -134,9 +134,21 @@
   </div>
   <hr>
   <label>Refresh Interval</label><input class='w3-input w3-border w3-margin-bottom' type='text' name='refreshInterval' value='%RFRSH%' maxlength='5' onkeypress='return isNumberKey(event)'>
+  <div id='mock_printers' class='w3-card-2 w3-round-large' style='display:none'>
+    <header class="w3-container w3-light-grey">
+      <h3>Mock?</h3>
+    </header>
+    <div class='w3-container w3-margin-bottom'>
+      <p><input name='_p0_mock' class='w3-check' type='checkbox' %_P0_MOCK%> %_P0_NICK% (%_P0_HOST%)</p>
+      <p><input name='_p1_mock' class='w3-check' type='checkbox' %_P1_MOCK%> %_P1_NICK% (%_P1_HOST%)</p>
+      <p><input name='_p2_mock' class='w3-check' type='checkbox' %_P2_MOCK%> %_P2_NICK% (%_P2_HOST%)</p>
+      <p><input name='_p3_mock' class='w3-check' type='checkbox' %_P3_MOCK%> %_P3_NICK% (%_P3_HOST%)</p>
+    </div>
+  </div>
   <button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Save</button>
 </form>
 <script>
+  if (%SHOW_DEV%) document.getElementById('mock_printers').style.display = 'block';
   duetOrOcto(document.getElementsByName('_p0_type')[0], '_P0_');
   duetOrOcto(document.getElementsByName('_p1_type')[0], '_P1_');
   duetOrOcto(document.getElementsByName('_p2_type')[0], '_P2_');

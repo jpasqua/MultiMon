@@ -53,11 +53,18 @@ namespace MMWebUI {
           if (!wasActive && printer->isActive) mmApp->printerWasActivated(i);
         }
         mmSettings->printerRefreshInterval = WebUI::arg(F("refreshInterval")).toInt();
-        wtApp->settings->write();
-        // wtApp->settings->logSettings();
+
+        if (wtApp->settings->uiOptions.showDevMenu) {
+          PrinterSettings* printer = &(mmSettings->printer[0]);
+          printer[0].mock = WebUI::hasArg(F("_p0_mock"));
+          printer[1].mock = WebUI::hasArg(F("_p1_mock"));
+          printer[2].mock = WebUI::hasArg(F("_p2_mock"));
+          printer[3].mock = WebUI::hasArg(F("_p3_mock"));
+        }
 
         // Act on changed settings...
         wtAppImpl->configMayHaveChanged();
+        wtApp->settings->write();
         WebUI::redirectHome();
       };
   
@@ -65,41 +72,6 @@ namespace MMWebUI {
     }
 
   }   // ----- END: MMWebUI::Endpoints
-
-  // ----- BEGIN: MMWebUI::Dev
-  namespace Dev {
-    void presentDevConfig() {
-      auto mapper =[](const String& key, String& val) -> void {
-        if (key.startsWith("_P")) {
-          int i = (key.charAt(2) - '0');
-          PrinterSettings* printer = &(mmSettings->printer[i]);
-          const char* subkey = &(key.c_str()[4]); // Get rid of the prefix; e.g. _P1_
-          if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
-          else if (strcmp(subkey, "MOCK") == 0)  val = WebUIHelper::checkedOrNot[printer->mock];
-          else if (strcmp(subkey, "SERVER") == 0) val = printer->server;
-        }
-      };
-
-      WebUI::wrapWebPage("/presentDevConfig", "/ConfigDev.html", mapper);
-    }
-
-    void updateDevConfig() {
-      auto action = []() {
-        wtApp->settings->uiOptions.showDevMenu = WebUI::hasArg("showDevMenu");
-
-        PrinterSettings* printer = &(mmSettings->printer[0]);
-        printer[0].mock = WebUI::hasArg(F("_p0_mock"));
-        printer[1].mock = WebUI::hasArg(F("_p1_mock"));
-        printer[2].mock = WebUI::hasArg(F("_p2_mock"));
-        printer[3].mock = WebUI::hasArg(F("_p3_mock"));
-
-        // Save the config, but don't change which printers are mocked until reboot
-        wtApp->settings->write();
-        WebUI::redirectHome();
-      };
-      WebUI::wrapWebAction("/updateDevConfig", action);
-    }
-  }   // ----- END: MMWebUI::Dev
 
 
   namespace Pages {
@@ -151,14 +123,14 @@ namespace MMWebUI {
           else if (strcmp(subkey, "USER") == 0) val = printer->user;
           else if (strcmp(subkey, "PASS") == 0) val = printer->pass;
           else if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
+          else if (strcmp(subkey, "MOCK") == 0)  val = WebUIHelper::checkedOrNot[printer->mock];
           else if (strcmp(subkey, "T_") == 0) {
             subkey = &subkey[2];
             if (strcmp(subkey, printer->type.c_str()) == 0) val = "selected";
-          }
-          return;
+          } 
         }
-
-        if (key.equals(F("RFRSH"))) val.concat(mmSettings->printerRefreshInterval);
+        else if (key.equals("SHOW_DEV")) val = wtApp->settings->uiOptions.showDevMenu ? "true" : "false";
+        else if (key.equals(F("RFRSH"))) val.concat(mmSettings->printerRefreshInterval);
       };
 
       WebUI::wrapWebPage("/presentPrinterConfig", "/ConfigPrinters.html", mapper);
