@@ -276,8 +276,15 @@ void HomeScreen::drawSecondLine(bool) {
     text.reserve(60);
     text = printerName;
     text += ": ";
-    text += formattedTime;
-    if (delta < (15*60)) textColor = Theme::Color_AlertGood;
+    delta /= 60;
+    if (delta <= 15) {
+      textColor = Theme::Color_AlertGood;
+      text += ((delta == 0) ? 1 : delta);
+      text += " minute";
+      if (delta != 1) text += 's';
+    } else {
+      text += formattedTime;
+    }
   }
 
   sprite->drawString(text, NCWidth/2, 0);
