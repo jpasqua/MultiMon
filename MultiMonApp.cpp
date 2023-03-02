@@ -105,6 +105,7 @@ void MultiMonApp::app_initWebUI() {
 
 void MultiMonApp::app_initClients() {
   for (int i = 0; i < MaxPrinters; i++) {
+    printer[i] = NULL;
     activatePrinter(i);
   }
 }
