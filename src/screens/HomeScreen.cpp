@@ -120,7 +120,12 @@ HomeScreen::HomeScreen() {
       return;
     }
     if (id == ClockAreaLabel) { wtAppImpl->pluginMgr.displayPlugin(0); return; }
-    if (id == WeatherAreaLabel) { ScreenMgr.display(mmApp->screens.weatherScreen); return; }
+    if (id == WeatherAreaLabel) {
+      if (wtApp->owmClient && wtApp->settings->owmOptions.enabled) {
+        ScreenMgr.display(mmApp->screens.weatherScreen);
+      }
+      return;
+    }
   };
 
   labels = new Label[(nLabels = N_Labels)];
@@ -214,9 +219,7 @@ void HomeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, fl
 }
 
 void HomeScreen::drawWeather(bool) {
-  if (!wtApp->owmClient) { Log.verbose(F("owmClient = NULL")); return; }
-  if (!wtApp->settings->owmOptions.enabled) return;
-  String readout;
+  String readout("No weather data available");
   auto& sprite = Display.sprite;
 
   sprite->setColorDepth(1);
@@ -224,20 +227,23 @@ void HomeScreen::drawWeather(bool) {
   sprite->fillSprite(Theme::Mono_Background);
 
   uint32_t textColor = Theme::Color_NormalText;
-  if (wtApp->owmClient->weather.dt == 0) {
-    textColor = Theme::Color_AlertError;
-    readout = "No Weather Data";
-    return;
-  } else {
-    if (wtApp->settings->owmOptions.nickname.isEmpty())
-      readout = wtApp->owmClient->weather.location.city;
-    else
-      readout = wtApp->settings->owmOptions.nickname;
-    readout += ": ";
-    readout += String((int)(wtApp->owmClient->weather.readings.temp+0.5));
-    readout += (wtApp->settings->uiOptions.useMetric) ? "C, " : "F, ";
-    readout += wtApp->owmClient->weather.description.longer;
+  if (wtApp->owmClient && wtApp->settings->owmOptions.enabled) {
+    if (wtApp->owmClient->weather.dt == 0) {
+      textColor = Theme::Color_AlertError;
+      readout = "No Weather Data";
+      return;
+    } else {
+      if (wtApp->settings->owmOptions.nickname.isEmpty())
+        readout = wtApp->owmClient->weather.location.city;
+      else
+        readout = wtApp->settings->owmOptions.nickname;
+      readout += ": ";
+      readout += String((int)(wtApp->owmClient->weather.readings.temp+0.5));
+      readout += (wtApp->settings->uiOptions.useMetric) ? "C, " : "F, ";
+      readout += wtApp->owmClient->weather.description.longer;
+    }
   }
+
   Display.setSpriteFont(WeatherFont);
   sprite->setTextColor(Theme::Mono_Foreground);
   sprite->setTextDatum(MC_DATUM);
@@ -265,13 +271,15 @@ void HomeScreen::drawSecondLine(bool) {
   MMDataSupplier::Printing::nextCompletion(printerName, formattedTime, delta);
   String text;
   if (printerName.isEmpty()) {
-    // Nothing to display, so show the forecast for the day
-    Forecast *f = wtApp->owmClient->getForecast();
-    text.reserve(20);
-    text = "High: ";
-    text += String(f[0].hiTemp, 0);
-    text += ", Low: ";
-    text += String(f[0].loTemp, 0);
+    // Nothing to display, so show the forecast if available
+    if (wtApp->owmClient && wtApp->settings->owmOptions.enabled) {
+      Forecast *f = wtApp->owmClient->getForecast();
+      text.reserve(20);
+      text = "High: ";
+      text += String(f[0].hiTemp, 0);
+      text += ", Low: ";
+      text += String(f[0].loTemp, 0);
+    }
   } else {
     text.reserve(60);
     text = printerName;
