@@ -18,22 +18,22 @@
     {
       "x": 0,  "y": 22, "w": 80,  "h": 22, "xOff": 79, "yOff": 11,
       "justify": "MR", "font": "2", "color": "0xFFFFFF", "format": "%s: ",
-      "type": "STRING", "key": "$E.BW.NN1"
+      "type": "STRING", "key": "$E.AW.NN1"
     },
     {
       "x": 80,  "y": 22, "w": 80,  "h": 22, "xOff": 0, "yOff": 11,
       "justify": "ML", "font": "2", "color": "0x00FF00", "format": "%0.0fF",
-      "type": "FLOAT", "key": "$E.BW.0/V0"
+      "type": "FLOAT", "key": "$E.AW.0.temp"
     },
     {
       "x": 160,  "y": 22, "w": 80,  "h": 22, "xOff": 79, "yOff": 11,
       "justify": "MR", "font": "2", "color": "0xFFFFFF", "format": "%s: ",
-      "type": "STRING", "key": "$E.BW.NN2"
+      "type": "STRING", "key": "$E.AW.NN2"
     },
     {
       "x": 240,  "y": 22, "w": 80,  "h": 22, "xOff": 0, "yOff": 11,
       "justify": "ML", "font": "2", "color": "0x00FF00", "format": "%0.0fF",
-      "type": "FLOAT", "key": "$E.BW.1/V0"
+      "type": "FLOAT", "key": "$E.AW.1.temp"
     },
     {
       "x": 0, "y": 44, "w": 320,  "h":79, "xOff": 160, "yOff": 39,

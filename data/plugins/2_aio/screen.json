@@ -59,7 +59,7 @@
       "color": "0x00FF00",
       "format": "%0.1fF",
       "type": "FLOAT",
-      "key": "0/V0"
+      "key": "0.temp"
     },
     {
       "x": 203,  "y": 64,
@@ -70,7 +70,7 @@
       "color": "0x00FF00",
       "format": "%0.1fF",
       "type": "FLOAT",
-      "key": "1/V0"
+      "key": "1.temp"
     },
     {
       "x": 0,   "y": 90,
@@ -90,7 +90,7 @@
       "color": "0xFFFFFF",
       "format": "%.0f%%",
       "type": "FLOAT",
-      "key": "0/V1"
+      "key": "0.humidity"
     },
     {
       "x": 203,  "y": 90,
@@ -101,7 +101,7 @@
       "color": "0xFFFFFF",
       "format": "%.0f%%",
       "type": "FLOAT",
-      "key": "1/V1"
+      "key": "1.humidity"
     },
     {
       "x": 0,   "y": 116,
@@ -121,7 +121,7 @@
       "color": "0xFFFFFF",
       "format": "%.2f",
       "type": "FLOAT",
-      "key": "0/V2"
+      "key": "0.barometer"
     },
     {
       "x": 203,  "y": 116,
@@ -132,38 +132,7 @@
       "color": "0xFFFFFF",
       "format": "%.2f",
       "type": "FLOAT",
-      "key": "1/V2"
-    },
-    {
-      "x": 0,   "y": 142,
-      "w": 86,  "h": 26,
-      "xOff": 85, "yOff": 13,
-      "justify": "MR",
-      "font": "2",
-      "color": "0xFFFFFF",
-      "format": "Battery:"
-    },
-    {
-      "x": 86,  "y": 142,
-      "w": 117,  "h": 26,
-      "xOff": 58, "yOff": 13,
-      "justify": "MC",
-      "font": "S9",
-      "color": "0xFF0000",
-      "format": "%.2fV",
-      "type": "FLOAT",
-      "key": "0/V7"
-    },
-    {
-      "x": 203,  "y": 142,
-      "w": 117,  "h": 26,
-      "xOff": 58, "yOff": 13,
-      "justify": "MC",
-      "font": "S9",
-      "color": "0xFF0000",
-      "format": "%.2fV",
-      "type": "FLOAT",
-      "key": "1/V7"
+      "key": "1.barometer"
     },
     {
       "x": 0,   "y": 168,
@@ -173,7 +142,7 @@
       "font": "2",
       "color": "0xFFFFFF",
       "format": "%s",
-      "key": "0/V8"
+      "key": "0.wthrtime"
     },  
     {
       "x": 160,   "y": 168,
@@ -183,7 +152,7 @@
       "font": "2",
       "color": "0xFFFFFF",
       "format": "%s",
-      "key": "1/V8"
+      "key": "1.wthrtime"
     },
     {
       "x": 100, "y": 218, "w": 120,  "h": 22, "xOff": 60, "yOff": 11,
@@ -192,5 +161,5 @@
     }             
   ],
   "bkg": "0x000000",
-  "screenID": "BlynkW"
+  "screenID": "AIO_W"
 }
