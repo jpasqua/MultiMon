@@ -4,13 +4,12 @@
       "type": "boolean",
       "title": "Enabled"
     },
-    },
     "username": {
-      "title": "ADAFruitIO User Name",
+      "title": "AdafruitIO User Name",
       "type": "string"
     },
     "key": {
-      "title": "ADAFruitIO Key",
+      "title": "AdafruitIO Key",
       "type": "string"
     },
     "groups": {
@@ -56,7 +55,7 @@
       "inlinetitle": " Enable AdafruitIO Weather"
     },
     "username",
-    "key"
+    "key",
     "groups",
     "nicknames",
     "refreshInterval",
