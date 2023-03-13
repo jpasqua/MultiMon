@@ -15,7 +15,7 @@
 #include <gui/ScreenMgr.h>
 #include <plugins/PluginMgr.h>
 #include <plugins/common/GenericPlugin.h>
-#include <plugins/common/BlynkPlugin.h>
+#include <plugins/common/AIOPlugin.h>
 #include <plugins/common/CryptoPlugin.h>
 //                                  Local Includes
 #include "MultiMonApp.h"
@@ -30,7 +30,7 @@
 //--------------- End:    Includes ---------------------------------------------
 
 
-static constexpr const char* VersionString = "0.5.0";
+static constexpr const char* VersionString = "0.5.1";
 static constexpr const char* AppName = "MultiMon";
 static constexpr const char* AppPrefix = "MM-";
 
@@ -43,7 +43,7 @@ static constexpr const char* AppPrefix = "MM-";
 Plugin* pluginFactory(const String& type) {
   Plugin *p = NULL;
   if      (type.equalsIgnoreCase("generic")) { p = new GenericPlugin(); }
-  else if (type.equalsIgnoreCase("blynk"))   { p = new BlynkPlugin();   }
+  else if (type.equalsIgnoreCase("aio")) { p = new AIOPlugin(); }
   // else if (type.equalsIgnoreCase("crypto"))  { p = new CryptoPlugin();  }
   
   if (p == NULL) {
