@@ -67,9 +67,7 @@ void OctoClient::acknowledgeCompletion() {
 
 void OctoClient::getJobState() {
   constexpr const char* JobStateEndpoint = "/api/job";
-  constexpr uint32_t JobStateJSONSize =
-      JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(3) +
-      2*JSON_OBJECT_SIZE(5) + JSON_OBJECT_SIZE(6) + 710;
+  constexpr uint32_t JobStateJSONSize = 1024; // from https://arduinojson.org/v6/assistant/
 
   DynamicJsonDocument *root = service->issueGET(JobStateEndpoint, JobStateJSONSize);
   if (!root) {
@@ -101,8 +99,7 @@ void OctoClient::getJobState() {
 
 void OctoClient::getPrinterState() {
   constexpr const char* PrinterStateEndpoint = "/api/printer?exclude=sd,history";
-  constexpr uint32_t PrinterStateJSONSize =
-      3*JSON_OBJECT_SIZE(2) + 2*JSON_OBJECT_SIZE(3) + JSON_OBJECT_SIZE(9) + 300;
+  constexpr uint32_t PrinterStateJSONSize = 1024; // from https://arduinojson.org/v6/assistant/
 
   DynamicJsonDocument *root = service->issueGET(PrinterStateEndpoint, PrinterStateJSONSize);
   if (!root) {
