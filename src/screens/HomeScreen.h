@@ -21,7 +21,9 @@ public:
 private:
   uint32_t nextUpdateTime = UINT32_MAX;
 
-  void drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt = "");
+  void drawProgressBar(
+      int i, uint16_t barColor, uint16_t txtColor,
+      float pct, String txt, bool showPct);
   void drawClock(bool force = false);
   void drawStatus(bool force = false);
   void drawWeather(bool force = false);

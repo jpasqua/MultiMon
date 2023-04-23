@@ -76,15 +76,15 @@ static constexpr uint16_t PB_Height = 42;                               // Inclu
 static constexpr uint16_t PB_BarWidth = PB_Width - (PB_FrameSize*2);    // Just the bar, no frame
 static constexpr uint16_t PB_BarHeight = PB_Height - (PB_FrameSize*2);  // Just the bar, no frame
 static constexpr uint16_t PB_XOrigin = 1;                               // X of origin of 1st progress bar
-static constexpr uint16_t PB_YOrigin = Display.Height - PB_Height;     // Y Origin of all progress bars
+static constexpr uint16_t PB_YOrigin = Display.Height - PB_Height;      // Y Origin of all progress bars
 static constexpr uint16_t PBLabelsYOrigin = PB_YOrigin-10;              // Space for teeny label + pad
-static constexpr auto PB_Font = Display.FontID::SB9;             // Font for the Progress Bar
+static constexpr auto     PB_Font = Display.FontID::SB9;                // Font for the Progress Bar
 
 static constexpr uint16_t ClockXOrigin = 0;                             // Starts at left edge of screen
 static constexpr uint16_t ClockYOrigin = NCYOrigin + NCHeight;          // Starts below the NextCompletion area
-static constexpr uint16_t ClockWidth = Display.Width;                  // Full width of the screen
+static constexpr uint16_t ClockWidth = Display.Width;                   // Full width of the screen
 static constexpr uint16_t ClockHeight = PBLabelsYOrigin-ClockYOrigin;   // The space between the other 2 areas
-static constexpr auto ClockFont = Display.FontID::D100;
+static constexpr auto     ClockFont = Display.FontID::D100;
 static constexpr uint16_t ClockFontHeight = 109;    // ClockFont->yAdvance;
 
 static constexpr uint8_t FirstProgressBar = 0;
@@ -211,11 +211,13 @@ void HomeScreen::drawClock(bool force) {
   sprite->deleteSprite();
 }
 
-void HomeScreen::drawProgressBar(int i, uint16_t barColor, uint16_t txtColor, float pct, String txt) {
+void HomeScreen::drawProgressBar(
+    int i, uint16_t barColor, uint16_t txtColor,
+    float pct, String txt, bool showPct) {
   labels[i].drawProgress(
         pct, txt, PB_Font, PB_FrameSize,
         txtColor, Theme::Color_Border, barColor, Theme::Color_Background,
-        Basics::EmptyString, true);
+        showPct, true);
 }
 
 void HomeScreen::drawWeather(bool) {
@@ -325,18 +327,20 @@ void HomeScreen::drawStatus(bool force) {
     PrintClient *printer = mmApp->printer[i];
 
     if (!mmSettings->printer[i].isActive) {
-      drawProgressBar(i, Theme::Color_Inactive, Theme::Color_NormalText, 1.0, "Unused");
+      drawProgressBar(i, Theme::Color_Inactive, Theme::Color_NormalText, 1.0, "Unused", false);
     } else {
       switch (mmApp->printer[i]->getState()) {
         case PrintClient::State::Offline:
-          drawProgressBar(i, Theme::Color_Offline, Theme::Color_NormalText, 1.0, "Offline");
+          drawProgressBar(i, Theme::Color_Offline, Theme::Color_NormalText, 1.0, "Offline", false);
           break;
         case PrintClient::State::Operational:
-          drawProgressBar(i, Theme::Color_Online, Theme::Color_Background, 1.0, "Online");
+          drawProgressBar(i, Theme::Color_Online, Theme::Color_Background, 1.0, "Online", false);
           break;
         case PrintClient::State::Complete:
         case PrintClient::State::Printing:
-          drawProgressBar(i, Theme::Color_Progress, Theme::Color_NormalText, printer->getPctComplete()/100.0);
+          drawProgressBar(
+              i, Theme::Color_Progress, Theme::Color_NormalText,
+              printer->getPctComplete()/100.0, "", true);
           break;
       }
     }
