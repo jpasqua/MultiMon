@@ -47,7 +47,7 @@
     },
     {
       "x": 100, "y": 132, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.1.status"
     },
     {
@@ -62,7 +62,7 @@
     },
     {
       "x": 100, "y": 153, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.2.status"
     },
     {
@@ -77,7 +77,7 @@
     },
     {
       "x": 100, "y": 174, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.3.status"
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "x": 100, "y": 195, "w": 110, "h": 22,
-      "font": "S9", "color": "0x008800", "format": "#progress|Printing", "strokeWidth": 1,
+      "font": "S9", "color": "0x008800", "format": "#progress", "strokeWidth": 1,
       "type": "STATUS", "key": "$P.4.status"
     },
     {

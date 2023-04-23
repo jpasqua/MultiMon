@@ -88,19 +88,17 @@ namespace MMDataSupplier {
       }
 
       if (key.equalsIgnoreCase("status")) {
-        int pct = 100;
         if (active) {
           switch (p->getState()) {
             case PrintClient::State::Offline: value += F("Offline"); break;
             case PrintClient::State::Operational: value += F("Online"); break;
             case PrintClient::State::Complete: value += F("Complete"); break;
             case PrintClient::State::Printing:
-              value += "Printing";
-              pct = (int)p->getPctComplete();
+              value += F("Printing|");
+              value += ((int)p->getPctComplete());
               break;
           }
         } else value += F("Unused");
-        value += '|'; value += pct;
         return;
       }
 
