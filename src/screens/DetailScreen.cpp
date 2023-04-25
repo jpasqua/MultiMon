@@ -17,7 +17,6 @@
 #include <gui/ScreenMgr.h>
 //                                  Local Includes
 #include "DetailScreen.h"
-#include "../clients/PrintClient.h"
 #include "../../MultiMonApp.h"
 #include "AppTheme.h"
 //--------------- End:    Includes ---------------------------------------------
@@ -82,7 +81,7 @@ DetailScreen::DetailScreen() {
       return;
     }
 
-    PrintClient *p = mmApp->printer[index];
+    PrintClient *p = mmApp->printerGroup->getPrinter(index);
     if (type > PressType::Normal && p->getState() == PrintClient::State::Complete) {
       p->acknowledgeCompletion();
     }
@@ -97,7 +96,7 @@ DetailScreen::DetailScreen() {
 void DetailScreen::setIndex(int i) { index = i; }
 
 void DetailScreen::display(bool activating) {
-  PrintClient *printer = mmApp->printer[index];
+  PrintClient *printer = mmApp->printerGroup->getPrinter(index);
 
   if (activating) {
     scrollIndex = -1; // We're doing an inital display, so we aren't scrolling
@@ -296,7 +295,7 @@ void DetailScreen::scrollFileName() {
   sprite->setTextDatum(TL_DATUM);
 
   uint32_t extraDelay = 0;
-  String name = mmApp->printer[index]->getFilename();
+  String name = mmApp->printerGroup->getPrinter(index)->getFilename();
   if (scrollIndex == nameWidth - Display.Width) { delta = -delta; extraDelay = 500; }
   sprite->drawString(name, -scrollIndex, 0);
   sprite->setBitmapColor(Theme::Color_DimText, Theme::Color_Background);

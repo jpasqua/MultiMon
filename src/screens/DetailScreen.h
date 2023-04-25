@@ -5,11 +5,11 @@
 //                                  Core Libraries
 #include <Arduino.h>
 //                                  Third Party Libraries
+#include <BPA_PrintClient.h>
 //                                  WebThing Includes
 #include <WTApp.h>
 #include <gui/Screen.h>
 //                                  Local Includes
-#include "../clients/PrintClient.h"
 //--------------- End:    Includes ---------------------------------------------
 
 class DetailScreen : public Screen {

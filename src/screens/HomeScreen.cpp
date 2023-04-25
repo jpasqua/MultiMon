@@ -16,7 +16,6 @@
 #include <gui/Theme.h>
 #include <gui/ScreenMgr.h>
 //                                  Local Includes
-#include "../../MMDataSupplier.h"
 #include "../../MultiMonApp.h"
 #include "HomeScreen.h"
 //--------------- End:    Includes ---------------------------------------------
@@ -104,13 +103,15 @@ HomeScreen::HomeScreen() {
 
   buttonHandler = [this](uint8_t id, PressType type) -> void {
     Log.verbose(F("In HomeScreen Button Handler, id = %d"), id);
-    if (id < mmApp->MaxPrinters &&
-        mmSettings->printer[id].isActive &&
-        mmApp->printer[id]->getState() > PrintClient::State::Operational)
-    {
-      mmApp->detailScreen->setIndex(id);
-      ScreenMgr.display(mmApp->detailScreen);
-      return;
+    if (id < mmApp->MaxPrinters) {
+      PrintClient* p = mmApp->printerGroup->getPrinter(id);
+      if (mmSettings->printer[id].isActive &&
+          p->getState() > PrintClient::State::Operational)
+      {
+        mmApp->detailScreen->setIndex(id);
+        ScreenMgr.display(mmApp->detailScreen);
+        return;
+      }
     }
     if (type > PressType::Normal) {
       String subheading = "Heap: Free/Frag = ";
@@ -270,7 +271,7 @@ void HomeScreen::drawSecondLine(bool) {
 
   String printerName, formattedTime;
   uint32_t delta;
-  MMDataSupplier::Printing::nextCompletion(printerName, formattedTime, delta);
+  mmApp->printerGroup->nextCompletion(printerName, formattedTime, delta);
   String text;
   if (printerName.isEmpty()) {
     // Nothing to display, so show the forecast if available
@@ -323,13 +324,13 @@ void HomeScreen::drawPrinterNames(bool) {
 
 void HomeScreen::drawStatus(bool force) {
   (void)force;  // We don't use this parameter. Avoid a warning...
-  for (int i = 0; i < mmApp->MaxPrinters; i++) {
-    PrintClient *printer = mmApp->printer[i];
+  for (uint8_t i = 0; i < mmApp->MaxPrinters; i++) {
+    PrintClient *printer = mmApp->printerGroup->getPrinter(i);
 
     if (!mmSettings->printer[i].isActive) {
       drawProgressBar(i, Theme::Color_Inactive, Theme::Color_NormalText, 1.0, "Unused", false);
     } else {
-      switch (mmApp->printer[i]->getState()) {
+      switch (printer->getState()) {
         case PrintClient::State::Offline:
           drawProgressBar(i, Theme::Color_Offline, Theme::Color_NormalText, 1.0, "Offline", false);
           break;
