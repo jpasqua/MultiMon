@@ -50,9 +50,12 @@ public:
 
   static void create();
 
+  // CUSTOM: Screens implemented by this app
   DetailScreen*	  detailScreen;
   SplashScreen*   splashScreen;
   HomeScreen*     homeScreen;
+
+  // CUSTOM: Data defined by this app which is available to the whole app
   PrinterGroup*   printerGroup;
   
   // ----- Functions that *must* be provided by subclasses
