@@ -74,4 +74,15 @@ public:
   void showPrinterActivity(bool busy);
 };
 
+
+/*------------------------------------------------------------------------------
+ *
+ * Sanity Checks
+ *
+ *----------------------------------------------------------------------------*/
+
+#if DEVICE_TYPE != DEVICE_TYPE_TOUCH
+  #error ERROR: DEVICE_TYPE must be DEVICE_TYPE_TOUCH
+#endif
+
 #endif	// MultiMonApp_h
