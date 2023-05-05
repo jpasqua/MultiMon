@@ -9,6 +9,10 @@
 //                                  Core Libraries
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
+#include <BPA_PrintClient.h>
+#include <BPA_DuetClient.h>
+#include <BPA_MockPrintClient.h>
+#include <BPA_OctoClient.h>
 //                                  WebThing Includes
 #include <WebUI.h>
 #include <DataBroker.h>
@@ -21,12 +25,7 @@
 #include "MultiMonApp.h"
 #include "MMSettings.h"
 #include "MMWebUI.h"
-#include "MMDataSupplier.h"
 #include "src/screens/AppTheme.h"
-#include "src/clients/PrintClient.h"
-#include "src/clients/DuetClient.h"
-#include "src/clients/MockPrintClient.h"
-#include "src/clients/OctoClient.h"
 //--------------- End:    Includes ---------------------------------------------
 
 
@@ -81,7 +80,7 @@ MultiMonApp::MultiMonApp(MMSettings* settings) :
 
 void MultiMonApp::printerWasActivated(int index) {
   // TO DO: May need to cache the IP!!!
-  activatePrinter(index);
+  printerGroup->activatePrinter(index);
 }
 
 
@@ -96,7 +95,9 @@ void MultiMonApp::app_loop() {
 }
 
 void MultiMonApp::app_registerDataSuppliers() {
-  DataBroker::registerMapper(MMDataSupplier::printerDataSupplier, MMDataSupplier::PrinterPrefix);
+  DataBroker::registerMapper(
+      [this](const String& key,String& val) { this->printerGroup->dataSupplier(key, val); },
+      PrinterGroup::DataProviderPrefix);
 }
 
 void MultiMonApp::app_initWebUI() {
@@ -104,14 +105,18 @@ void MultiMonApp::app_initWebUI() {
 }
 
 void MultiMonApp::app_initClients() {
+  printerGroup = new PrinterGroup(
+    MaxPrinters, mmSettings->printer,
+    mmSettings->printerRefreshInterval,
+    // std::bind(&MultiMonApp::showPrinterActivity, this, std::placeholders::_1));
+    [this](bool busy){this->showPrinterActivity(busy);});
   for (int i = 0; i < MaxPrinters; i++) {
-    printer[i] = NULL;
-    activatePrinter(i);
+    printerGroup->activatePrinter(i);
   }
 }
 
 void MultiMonApp::app_conditionalUpdate(bool force) {
-  refreshPrinterData(force);
+  printerGroup->refreshPrinterData(force);
 }
 
 Screen* MultiMonApp::app_registerScreens() {
@@ -128,87 +133,15 @@ Screen* MultiMonApp::app_registerScreens() {
   return splashScreen;
 }
 
+
 /*------------------------------------------------------------------------------
  *
  * MultiMonApp Private Functions
  *
  *----------------------------------------------------------------------------*/
 
-void MultiMonApp::cachePrinterIP(int i) {
-  IPAddress printerIP;
-  int result = WiFi.hostByName(mmSettings->printer[i].server.c_str(), printerIP) ;
-  if (result == 1) {
-    printerIPs[i] = printerIP.toString().c_str();
-  } else {
-    printerIPs[i] = "";
-  }
+void MultiMonApp::showPrinterActivity(bool busy) {
+ if (busy) ScreenMgr.showActivityIcon(AppTheme::Color_UpdatingPrinter);
+ else ScreenMgr.hideActivityIcon();
 }
 
-void MultiMonApp::refreshPrinterData(bool force) {
-  static uint32_t lastUpdateTime[MaxPrinters] = {0, 0, 0, 0};
-
-  for (int i = 0; i < MaxPrinters; i++) {
-    if (mmSettings->printer[i].isActive) {
-      uint32_t threshold = UINT32_MAX;
-      // Randomize the refresh times a little so we aren't do all the updates
-      // at once which can cause the UI to become unresponsive
-      switch (printer[i]->getState()) {
-        case PrintClient::State::Offline:
-          threshold = (random(5*60, 10*60) * 1000L);  // 5 to 10 minutes
-          break;
-        case PrintClient::State::Operational: 
-        case PrintClient::State::Complete:
-          threshold = (random(1*60, 3*60) * 1000L);   // 1 to 3 minutes
-          break;
-        case PrintClient::State::Printing:
-          threshold = (mmSettings->printerRefreshInterval * 1000L);  // O(10 seconds)
-          break;
-      }
-      if (force || ((millis() -  lastUpdateTime[i])) > threshold) {
-        ScreenMgr.showActivityIcon(AppTheme::Color_UpdatingPrinter);
-        printer[i]->updateState();
-        lastUpdateTime[i] = millis();
-        printer[i]->dumpToLog();
-      }
-    }
-  }
-  ScreenMgr.hideActivityIcon();
-}
-
-void MultiMonApp::activatePrinter(int i) {
-  PrinterSettings *ps = &mmSettings->printer[i];
-  if (!ps->isActive) return;
-
-  cachePrinterIP(i);
-  if (printerIPs[i].isEmpty()) {
-    Log.warning(F("Unable to resolve server address for %s"), ps->server.c_str());
-    ps->isActive = false;
-    return;
-  }
-
-  if (printer[i] != NULL) {
-    Log.warning(F("Trying to activate a printer this is already active: %s"), ps->server.c_str());
-    return;
-  }
-
-  if (ps->mock) {
-    Log.verbose(
-        "Setting up a MockPrintClient of type %s for %s",
-        ps->type.c_str(), ps->server.c_str());
-    MockPrintClient *mc = new MockPrintClient();
-    printer[i] = mc;
-  } else if (ps->type.equals(Type_Octo)) {
-    Log.verbose(F("Setting up an OctoClient for %s: "), ps->server.c_str());
-    OctoClient *oc = new OctoClient();
-    oc->init(ps->apiKey, printerIPs[i], ps->port, ps->user, ps->pass);
-    printer[i] = oc;
-  } else if (ps->type.equals(Type_Duet)) {
-    Log.verbose(F("Setting up an DuetClient for %s: "), ps->server.c_str());
-    DuetClient *dc = new DuetClient();
-    dc->init(printerIPs[i], ps->port, ps->pass);
-    printer[i] = dc;
-  } else {
-    Log.warning(F("Bad printer type: %s"), ps->type.c_str());
-    ps->isActive = false;
-  }
-}

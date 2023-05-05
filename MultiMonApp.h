@@ -27,6 +27,7 @@
 //--------------- Begin:  Includes ---------------------------------------------
 //                                  Core Libraries
 //                                  Third Party Libraries
+#include <BPA_PrinterGroup.h>
 //                                  WebThing Includes
 #include <WTAppImpl.h>
 //                                  Local Includes
@@ -49,10 +50,13 @@ public:
 
   static void create();
 
+  // CUSTOM: Screens implemented by this app
   DetailScreen*	  detailScreen;
   SplashScreen*   splashScreen;
   HomeScreen*     homeScreen;
-  PrintClient*    printer[MaxPrinters];
+
+  // CUSTOM: Data defined by this app which is available to the whole app
+  PrinterGroup*   printerGroup;
   
   // ----- Functions that *must* be provided by subclasses
   virtual void app_registerDataSuppliers() override;
@@ -67,11 +71,18 @@ public:
   void printerWasActivated(int index);
 
  private:
-  String printerIPs[MaxPrinters];
-
-  void cachePrinterIP(int i);
-  void refreshPrinterData(bool force = false);
-  void activatePrinter(int i);
+  void showPrinterActivity(bool busy);
 };
+
+
+/*------------------------------------------------------------------------------
+ *
+ * Sanity Checks
+ *
+ *----------------------------------------------------------------------------*/
+
+#if DEVICE_TYPE != DEVICE_TYPE_TOUCH
+  #error ERROR: DEVICE_TYPE must be DEVICE_TYPE_TOUCH
+#endif
 
 #endif	// MultiMonApp_h
