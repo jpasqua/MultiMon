@@ -9,6 +9,7 @@
 //                                  Third Party Libraries
 #include <ArduinoLog.h>
 //                                  WebThing Includes
+#include <WebThing.h>
 #include <WebUI.h>
 #include <WebUIHelper.h>
 #include <gui/Display.h>
@@ -54,7 +55,7 @@ namespace MMWebUI {
         }
         mmSettings->printerRefreshInterval = WebUI::arg(F("refreshInterval")).toInt();
 
-        if (wtApp->settings->uiOptions.showDevMenu) {
+        if (WebThing::settings.showDevMenu) {
           PrinterSettings* printer = &(mmSettings->printer[0]);
           printer[0].mock = WebUI::hasArg(F("_p0_mock"));
           printer[1].mock = WebUI::hasArg(F("_p1_mock"));
@@ -128,7 +129,7 @@ namespace MMWebUI {
             if (strcmp(subkey, printer->type.c_str()) == 0) val = "selected";
           } 
         }
-        else if (key.equals("SHOW_DEV")) val = wtApp->settings->uiOptions.showDevMenu ? "true" : "false";
+        else if (key.equals("SHOW_DEV")) val = WebThing::settings.showDevMenu ? "true" : "false";
         else if (key.equals(F("RFRSH"))) val.concat(mmSettings->printerRefreshInterval);
       };
 
