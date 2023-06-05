@@ -110,7 +110,7 @@
       "justify": "MR",
       "font": "2",
       "color": "0xFFFFFF",
-      "format": "Barometer:"
+      "format": "AQI:"
     },
     {
       "x": 86,  "y": 116,
@@ -119,9 +119,9 @@
       "justify": "MC",
       "font": "S12",
       "color": "0xFFFFFF",
-      "format": "%.2f",
-      "type": "FLOAT",
-      "key": "0.barometer"
+      "format": "%d",
+      "type": "INT",
+      "key": "0.aqi"
     },
     {
       "x": 203,  "y": 116,
@@ -130,29 +130,9 @@
       "justify": "MC",
       "font": "S12",
       "color": "0xFFFFFF",
-      "format": "%.2f",
-      "type": "FLOAT",
-      "key": "1.barometer"
-    },
-    {
-      "x": 0,   "y": 168,
-      "w": 160,  "h": 26,
-      "xOff": 0, "yOff": 13,
-      "justify": "ML",
-      "font": "2",
-      "color": "0xFFFFFF",
-      "format": "%s",
-      "key": "0.wthrtime"
-    },  
-    {
-      "x": 160,   "y": 168,
-      "w": 160,  "h": 26,
-      "xOff": 159, "yOff": 13,
-      "justify": "MR",
-      "font": "2",
-      "color": "0xFFFFFF",
-      "format": "%s",
-      "key": "1.wthrtime"
+      "format": "%d",
+      "type": "INT",
+      "key": "1.aqi"
     },
     {
       "x": 100, "y": 218, "w": 120,  "h": 22, "xOff": 60, "yOff": 11,

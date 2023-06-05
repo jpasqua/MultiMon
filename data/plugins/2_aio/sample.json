@@ -1,15 +1,21 @@
 {
   "version": 1,
   "enabled":true,
-  "blynkIDs": [
-    "LongStringOfNumbersAndLetters1",
-    "LongStringOfNumbersAndLetters2"
+  "username": "username_here",
+  "key": "API_KEY_HERE",
+  "groups": [
+    "backyard-weather-station",
+    "office-weather-station"
   ],
-  "nicknames": ["Garage", "Backyard"],
+  "nicknames": ["Backyard", "Office"],
   "refreshInterval": 10,
-  "pins": [
-    "0/V0", "0/V1", "0/V2", "0/V7", "0/V8",
-    "1/V0", "1/V1", "1/V2", "1/V7", "1/V8"
+  "feeds": [
+    "0.temp",
+    "0.humidity",
+    "0.barometer",
+    "1.temp",
+    "1.humidity",
+    "1.barometer",
    ],
   "riScale": 60000
 }
