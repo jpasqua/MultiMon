@@ -29,7 +29,7 @@
 //--------------- End:    Includes ---------------------------------------------
 
 
-static constexpr const char* VersionString = "0.5.1";
+static constexpr const char* VersionString = "0.5.5";
 static constexpr const char* AppName = "MultiMon";
 static constexpr const char* AppPrefix = "MM-";
 
