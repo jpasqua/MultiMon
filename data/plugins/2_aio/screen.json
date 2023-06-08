@@ -135,8 +135,8 @@
       "key": "1.aqi"
     },
     {
-      "x": 100, "y": 218, "w": 120,  "h": 22, "xOff": 60, "yOff": 11,
-      "justify": "MC", "font": "D20", "color": "0xc354ff", "format": "%02d:%02d:%02d",
+      "x": 0, "y": 168, "w": 320,  "h": 72, "xOff": 160, "yOff": 36,
+      "justify": "MC", "font": "SB24", "color": "0xc354ff", "format": "%02d:%02d",
       "type": "CLOCK", "key": "$S.time"
     }             
   ],
