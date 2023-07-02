@@ -1,7 +1,7 @@
 {
   "version": 1,
   "enabled":true,
-  "username": "username_here",
+  "username": "jpasqua",
   "key": "API_KEY_HERE",
   "groups": [
     "backyard-weather-station",
