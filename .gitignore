@@ -6,3 +6,5 @@ data/plugins/*.json
 !data/plugins/4_ovw/settings.json
 doc/images/source
 resources/image_sources
+*.zip
+*.tar
