@@ -1,29 +1,109 @@
-<div class='w3-cell-row' style='width:100\%'>
-  <h2>Printers</h2>
-</div>
-<div class='w3-cell-row' style='width:100\%; display: %_P0_VIS%'>
-  <div class='w3-cell w3-container' style='width:100\%'>
-    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P0_AUTH%%_P0_HOST%:%_P0_PORT%'>Connect to %_P0_NICK%</a>
-  </div>
-</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
 
-<div class='w3-cell-row' style='width:100\%; display: %_P1_VIS%'>
-  <div class='w3-cell w3-container' style='width:100\%'>
-    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P1_AUTH%%_P1_HOST%:%_P1_PORT%'>Connect to %_P1_NICK%</a>
-  </div>
-</div>
+<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .printer-card {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+    word-break: break-all;
+    font-size: 15px;
+  }
+  
+  .progress-bar {
+    width: 100\%;
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .progress-bar-inner {
+    height: 100\%;
+    background-color: #4CAF50;
+    width: 0;
+    transition: width 0.3s ease-in-out;
+  }
+  
+  .progress-label {
+    position: absolute;
+    top: 50\%;
+    left: 50\%;
+    transform: translate(-50\%, -50\%);
+    color: #000;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+  }
 
-<div class='w3-cell-row' style='width:100\%; display: %_P2_VIS%'>
-  <div class='w3-cell w3-container' style='width:100\%'>
-    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P2_AUTH%%_P2_HOST%:%_P2_PORT%'>Connect to %_P2_NICK%</a>
-  </div>
-</div>
+</style>
 
-<div class='w3-cell-row' style='width:100\%; display: %_P3_VIS%'>
-  <div class='w3-cell w3-container' style='width:100\%'>
-    <a onclick="window.open(this.href,'_blank');return false;" href='http://%_P3_AUTH%%_P3_HOST%:%_P3_PORT%'>Connect to %_P3_NICK%</a>
-  </div>
-</div>
+<h2>Printer Status</h2>
+<div id="PRINTER_AREA" class='grid-container'> </div>
+
+<script>
+  function ackPrinter(index) {
+    let xmlhttp = new XMLHttpRequest();
+    let endpoint = '/ackPrinterDone?pi=' + index;
+    xmlhttp.open('GET', endpoint);
+    xmlhttp.onreadystatechange=function(){
+      if (xmlhttp.readyState === 4) {
+        if (xmlhttp.status === 200) { location.reload(); }
+        else { alert('Error processing request'); }
+      }
+    };
+    xmlhttp.send();
+  }
+
+  function fillPrinterFields(printerInfo, onElement) {
+    $(onElement).append("<div class='printer-card'></div>");
+    let theContainer = $(onElement).children().last();
+    let content = "<b><a href='"; content += printerInfo.url + "'>" + printerInfo.name + "</a></b>";
+    if (printerInfo.hasOwnProperty("pct")) {
+      content += "<div class='progress-bar'> <div class='progress-bar-inner' style='width: ";
+      content += printerInfo.pct;
+      content += "\%;'></div><span class='progress-label'>";
+      content += printerInfo.pct;
+      content += "\%</span></div>";
+      if (printerInfo.pct == 100) {
+        content += "<span onclick='ackPrinter(";
+        content += printerInfo.i;
+        content += ");' style='cursor: pointer; color:blue'>Complete</span>";
+      } else {
+        content += printerInfo.completeAt;
+        content += " (" + Math.floor(printerInfo.remaining/60) + "H:" + printerInfo.remaining\%60 + "M)"
+      }
+      content += "<br><small>";
+      content += printerInfo.file;
+      content += "</small></p>";
+    }
+    $(theContainer).append(content);
+  }
+
+    let printerInfo = JSON.parse('%PRINTER_INFO%');
+    printerInfo.forEach(function(cur, index) { cur.i = index; });
+    printerInfo = printerInfo.sort((p1, p2) => {
+      if (p1.remaining === undefined && p2.remaining === undefined) return 0;
+      if (p1.remaining === undefined) return 1;
+      if (p2.remaining === undefined) return -1;
+      return (p1.remaining - p2.remaining);
+    });
+    printerInfo.forEach(function(cur, index) {
+      if (!cur.hasOwnProperty("name")) return;  // Skip empty (inactive) printers
+      if (cur.hasOwnProperty('file')) cur.file = cur.file.replace(/\\.gcode$/i, "");
+      fillPrinterFields(cur, "#PRINTER_AREA");
+    });
+</script>
 
 
 <div class='w3-cell-row' style='width:100\%'>
@@ -31,7 +111,6 @@
 </div>
 
 <div id="openweathermap-widget-11"></div>
-<script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'></script>
 
 <script>
 window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];

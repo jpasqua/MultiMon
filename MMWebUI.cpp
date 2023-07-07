@@ -78,26 +78,13 @@ namespace MMWebUI {
   namespace Pages {
     void presentHomePage() {
       auto mapper =[](const String& key, String& val) -> void {
-        if (key.startsWith("_P")) {
-          int i = (key.charAt(2) - '0');
-          PrinterSettings* printer = &(mmSettings->printer[i]);
-          const char* subkey = &(key.c_str()[4]); // Get rid of the prefix; e.g. _P1_
-
-          if (printer->isActive) {
-            if (strcmp(subkey, "VIS") == 0) val = "block";
-            else if (strcmp(subkey, "HOST") == 0) val = printer->server;
-            else if (strcmp(subkey, "PORT") == 0) val.concat(printer->port);
-            else if (strcmp(subkey, "AUTH") == 0 && !printer->user.isEmpty()) {
-              val += printer->user;  val += ':'; val += printer->pass; val += '@';
-            }
-            else if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
-          } else {
-            if (strcmp(subkey, "VIS") == 0) val = "none";
-          }
-
+        // ----- Printer-related items
+        if (key.equals(F("PRINTER_INFO"))) {
+          mmApp->printerGroup->printerInfo(val);
           return;
         }
 
+        // ----- Weather-related items
         if (key.equals(F("CITYID"))) {
           if (wtApp->settings->owmOptions.enabled) val = wtApp->settings->owmOptions.cityID;
           else val.concat("5380748");  // Palo Alto, CA, USA
