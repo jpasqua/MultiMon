@@ -86,6 +86,9 @@
       content += "<br><small>";
       content += printerInfo.file;
       content += "</small></p>";
+    } else {
+      content += "<div class='progress-bar'> <div class='progress-bar-inner' style='width: 0\%;'></div>";
+      content += "<span class='progress-label'><small><i>No Print In Progress</i></small></span></div>";
     }
     $(theContainer).append(content);
   }
