@@ -45,6 +45,35 @@ namespace MMWebUI {
 
   // ----- BEGIN: MMWebUI::Endpoints
   namespace Endpoints {
+    void ackPrinterDone() {
+      auto action = [&]() {
+        if (!mmApp->printerGroup) {
+          Log.warning("ackPrinterDone: printerGroup is null");
+          WebUI::sendStringContent("text/plain", "printer index out of range", "400 Bad Request");
+          return;
+        }
+
+        int printerIndex = WebUI::arg("pi").toInt();
+        if (printerIndex < 0 || printerIndex >= mmApp->printerGroup->numberOfPrinters()) {
+          Log.warning("ackPrinterDone: index out of range: %d vs %d",
+            printerIndex, mmApp->printerGroup->numberOfPrinters());
+          WebUI::sendStringContent("text/plain", "printer index out of range", "400 Bad Request");
+          return;
+        }
+
+        auto printer = mmApp->printerGroup->getPrinter(printerIndex);
+        if (printer) {
+          printer->acknowledgeCompletion();
+          WebUI::sendStringContent("text/plain", "Printer Completion Acknowledged");
+        } else {
+          Log.warning("ackPrinterDone: no printer for index %d", printerIndex);
+          WebUI::sendStringContent("text/plain", "printer index out of range", "400 Bad Request");
+        }
+      };
+
+      WebUI::wrapWebAction("/ackPrinterDone", action);
+    }
+    
     void updatePrinterConfig() {
       auto action = []() {
         for (int i = 0; i < 4; i++) {
@@ -111,10 +140,7 @@ namespace MMWebUI {
           else if (strcmp(subkey, "PASS") == 0) val = printer->pass;
           else if (strcmp(subkey, "NICK") == 0) val = printer->nickname;
           else if (strcmp(subkey, "MOCK") == 0)  val = WebUIHelper::checkedOrNot[printer->mock];
-          else if (strcmp(subkey, "T_") == 0) {
-            subkey = &subkey[2];
-            if (strcmp(subkey, printer->type.c_str()) == 0) val = "selected";
-          } 
+          else if (type.equals(subkey)) { val = "selected"; } 
         }
         else if (key.equals("SHOW_DEV")) val = WebThing::settings.showDevMenu ? "true" : "false";
         else if (key.equals(F("RFRSH"))) val.concat(mmSettings->printerRefreshInterval);
@@ -131,6 +157,7 @@ namespace MMWebUI {
     WebUI::registerHandler("/",                       Pages::presentHomePage);
     WebUI::registerHandler("/presentPrinterConfig",   Pages::presentPrinterConfig);
     WebUI::registerHandler("/updatePrinterConfig",    Endpoints::updatePrinterConfig);
+    WebUI::registerHandler("/ackPrinterDone",         Endpoints::ackPrinterDone);
   }
 
 }
