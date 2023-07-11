@@ -36,9 +36,13 @@ namespace MMWebUI {
       printer->server = WebUI::arg(prefix + "server");
       printer->port = WebUI::arg(prefix + "port").toInt();
       printer->user =  WebUI::arg(prefix + "user");
-      printer->pass =  WebUI::arg(prefix + "pass");
       printer->nickname =  WebUI::arg(prefix + "nick");
       printer->type =  WebUI::arg(prefix + "type");
+      if (printer->type.equals("Duet3D")) {
+        printer->pass =  WebUI::arg(prefix + "duet_pass");
+      } else {
+        printer->pass =  WebUI::arg(prefix + "pass");
+      }
     }
   } // ----- END: MMWebUI::Internal
 
