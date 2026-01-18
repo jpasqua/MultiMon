@@ -272,6 +272,7 @@ void HomeScreen::drawSecondLine(bool) {
   String printerName, formattedTime;
   uint32_t delta;
   mmApp->printerGroup->nextCompletion(printerName, formattedTime, delta);
+Serial.printf("Printer: %s, Complete At: %s, Remaining: %d\n", printerName.c_str(), formattedTime.c_str(), delta);
   String text;
   if (printerName.isEmpty()) {
     // Nothing to display, so show the forecast if available
@@ -289,8 +290,10 @@ void HomeScreen::drawSecondLine(bool) {
     text += ": ";
     delta /= 60;
     if (delta <= 15) {
+Serial.printf("Less than or equal to 15 minutes remaining: %d\n", delta);
       textColor = Theme::Color_AlertGood;
-      text += ((delta == 0) ? 1 : delta);
+      if (delta == 0) delta = 1;  // We're still printing so delta must have been rounded down to 0
+      text += delta;
       text += " minute";
       if (delta != 1) text += 's';
     } else {
